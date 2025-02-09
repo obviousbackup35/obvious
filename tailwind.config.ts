@@ -24,6 +24,10 @@ export default {
 					'0%': { opacity: '0' },
 					'100%': { opacity: '1' }
 				},
+				'fade-in-logo': {
+					'0%': { opacity: '0' },
+					'100%': { opacity: '1' }
+				},
 				'accordion-down': {
 					from: { height: '0' },
 					to: { height: 'var(--radix-accordion-content-height)' }
