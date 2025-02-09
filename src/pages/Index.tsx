@@ -80,6 +80,22 @@ const Index = () => {
             });
           }, 50);
         }
+      } else if (event.deltaY < 0 && showBlackScreen) {
+        setShowBlackScreen(false);
+        
+        // Fade in audio
+        if (audioRef.current) {
+          const fadeInterval = setInterval(() => {
+            setAudioVolume(prev => {
+              const newVolume = Math.min(1, prev + 0.05);
+              audioRef.current!.volume = newVolume;
+              if (newVolume === 1) {
+                clearInterval(fadeInterval);
+              }
+              return newVolume;
+            });
+          }, 50);
+        }
       }
     };
 
