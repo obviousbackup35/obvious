@@ -22,18 +22,22 @@ const Index = () => {
       onTouchStart={handleClick}
     >
       <div 
-        className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat opacity-0 animate-[fade-in_4000ms_ease-in-out_forwards] z-0" 
+        className={`absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat z-0 transition-opacity duration-1000 ${
+          isPlaying ? 'opacity-0' : 'opacity-100'
+        }`}
         style={{ backgroundImage: 'url("/fundo.webp")' }}
       />
       <video
         muted
         loop
         playsInline
-        className="absolute inset-0 w-full h-full object-cover z-10"
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+          isPlaying ? 'opacity-100' : 'opacity-0'
+        }`}
         src="/loft-video.webm"
       />
       <div 
-        className="absolute inset-0 flex items-center justify-center opacity-0 animate-[fade-in_4000ms_ease-in-out_forwards_2000ms] z-20"
+        className="absolute inset-0 flex items-center justify-center opacity-0 animate-[fade-in_4000ms_ease-in-out_forwards] z-20"
       >
         <img
           src="/logo.svg"
