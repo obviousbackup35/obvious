@@ -10,6 +10,7 @@ const Index = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const video1Ref = useRef<HTMLVideoElement>(null);
   const video2Ref = useRef<HTMLVideoElement>(null);
+  const fadeIntervalRef = useRef<NodeJS.Timeout | null>(null);
   
   const handleClick = useCallback((event: React.MouseEvent | React.TouchEvent) => {
     const videos = event.currentTarget.querySelectorAll('video');
@@ -64,17 +65,28 @@ const Index = () => {
     if (!isPlaying) return;
 
     const handleWheel = (event: WheelEvent) => {
+      // Clear any existing fade interval
+      if (fadeIntervalRef.current) {
+        clearInterval(fadeIntervalRef.current);
+        fadeIntervalRef.current = null;
+      }
+
       if (event.deltaY > 0 && !showBlackScreen) {
         setShowBlackScreen(true);
         
         // Fade out audio
         if (audioRef.current) {
-          const fadeInterval = setInterval(() => {
+          fadeIntervalRef.current = setInterval(() => {
             setAudioVolume(prev => {
+              if (!audioRef.current) return prev;
               const newVolume = Math.max(0, prev - 0.05);
-              audioRef.current!.volume = newVolume;
+              audioRef.current.volume = newVolume;
+              
               if (newVolume === 0) {
-                clearInterval(fadeInterval);
+                if (fadeIntervalRef.current) {
+                  clearInterval(fadeIntervalRef.current);
+                  fadeIntervalRef.current = null;
+                }
               }
               return newVolume;
             });
@@ -85,12 +97,17 @@ const Index = () => {
         
         // Fade in audio
         if (audioRef.current) {
-          const fadeInterval = setInterval(() => {
+          fadeIntervalRef.current = setInterval(() => {
             setAudioVolume(prev => {
+              if (!audioRef.current) return prev;
               const newVolume = Math.min(1, prev + 0.05);
-              audioRef.current!.volume = newVolume;
+              audioRef.current.volume = newVolume;
+              
               if (newVolume === 1) {
-                clearInterval(fadeInterval);
+                if (fadeIntervalRef.current) {
+                  clearInterval(fadeIntervalRef.current);
+                  fadeIntervalRef.current = null;
+                }
               }
               return newVolume;
             });
@@ -100,7 +117,13 @@ const Index = () => {
     };
 
     window.addEventListener('wheel', handleWheel);
-    return () => window.removeEventListener('wheel', handleWheel);
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+      if (fadeIntervalRef.current) {
+        clearInterval(fadeIntervalRef.current);
+        fadeIntervalRef.current = null;
+      }
+    };
   }, [isPlaying, showBlackScreen]);
   
   return (
