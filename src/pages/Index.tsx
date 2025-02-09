@@ -1,5 +1,6 @@
 
 import { useState, useEffect, useCallback } from "react";
+import { Volume2, VolumeX } from "lucide-react";
 import { VideoPlayer } from "@/components/video-player/VideoPlayer";
 import { VideoOverlay } from "@/components/video-player/VideoOverlay";
 import { Logo } from "@/components/video-player/Logo";
@@ -9,6 +10,7 @@ import { useAudioFade } from "@/hooks/useAudioFade";
 const Index = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isBackgroundLoaded, setIsBackgroundLoaded] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
   const { activeVideo, video1Ref, video2Ref, handleTimeUpdate } = useVideoTransition();
   const { showBlackScreen, audioRef, audioVolume } = useAudioFade(isPlaying);
   
@@ -23,6 +25,30 @@ const Index = () => {
       setIsPlaying(true);
     }
   }, [isPlaying, audioRef, audioVolume]);
+
+  const toggleAudio = useCallback((event: React.MouseEvent) => {
+    event.stopPropagation(); // Previne que o click chegue ao container pai
+    setIsMuted(prev => !prev);
+    
+    if (audioRef.current) {
+      const fadeStep = 0.05;
+      const fadeInterval = 50;
+      const targetVolume = isMuted ? 1 : 0;
+      let currentVolume = audioRef.current.volume;
+
+      const fade = setInterval(() => {
+        if (isMuted) { // Aumentando o volume
+          currentVolume = Math.min(1, currentVolume + fadeStep);
+          audioRef.current!.volume = currentVolume;
+          if (currentVolume >= 1) clearInterval(fade);
+        } else { // Diminuindo o volume
+          currentVolume = Math.max(0, currentVolume - fadeStep);
+          audioRef.current!.volume = currentVolume;
+          if (currentVolume <= 0) clearInterval(fade);
+        }
+      }, fadeInterval);
+    }
+  }, [isMuted, audioRef]);
 
   useEffect(() => {
     const backgroundImage = new Image();
@@ -51,6 +77,18 @@ const Index = () => {
       onClick={handleClick}
       onTouchStart={handleClick}
     >
+      {isPlaying && (
+        <button
+          onClick={toggleAudio}
+          className="absolute top-4 right-4 z-50 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors"
+        >
+          {isMuted ? (
+            <VolumeX className="w-6 h-6 text-white" />
+          ) : (
+            <Volume2 className="w-6 h-6 text-white" />
+          )}
+        </button>
+      )}
       <audio
         ref={audioRef}
         src="/background-music.mp3"
