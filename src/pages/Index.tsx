@@ -1,8 +1,9 @@
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 const Index = () => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
   console.log("Tentando carregar logo de:", "/logo.svg");
   
   const handleClick = (event: React.MouseEvent | React.TouchEvent) => {
@@ -10,6 +11,9 @@ const Index = () => {
     if (video) {
       if (!isPlaying) {
         video.play();
+        if (audioRef.current) {
+          audioRef.current.play();
+        }
         setIsPlaying(true);
       }
     }
@@ -21,6 +25,11 @@ const Index = () => {
       onClick={handleClick}
       onTouchStart={handleClick}
     >
+      <audio
+        ref={audioRef}
+        src="/background-music.mp3"
+        loop
+      />
       <div 
         className={`absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat z-0 transition-opacity duration-1000 ${
           isPlaying ? 'opacity-0' : 'opacity-100'
