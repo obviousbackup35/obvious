@@ -9,7 +9,7 @@ const Index = () => {
         style={{ backgroundImage: 'url("/fundo.webp")' }}
       />
       <div 
-        className="absolute inset-0 flex items-center justify-center z-20"
+        className="absolute inset-0 flex items-center justify-center opacity-0 animate-[fade-in_4000ms_ease-in-out_forwards_2000ms] z-20"
       >
         <img
           src="/logo.svg"
