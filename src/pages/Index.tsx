@@ -8,6 +8,14 @@ const Index = () => {
         className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat opacity-0 animate-[fade-in_4000ms_ease-in-out_forwards] z-0" 
         style={{ backgroundImage: 'url("/fundo.webp")' }}
       />
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover z-10"
+        src="/loft-video.webm"
+      />
       <div 
         className="absolute inset-0 flex items-center justify-center opacity-0 animate-[fade-in_4000ms_ease-in-out_forwards_2000ms] z-20"
       >
