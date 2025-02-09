@@ -68,6 +68,8 @@ const Index = () => {
     if (!isPlaying) return;
 
     const handleWheel = (event: WheelEvent) => {
+      event.preventDefault();
+      
       if (fadeIntervalRef.current) {
         clearInterval(fadeIntervalRef.current);
       }
@@ -78,7 +80,7 @@ const Index = () => {
       if (event.deltaY > 0 && !showBlackScreen) {
         setShowBlackScreen(true);
         
-        fadeIntervalRef.current = setInterval(() => {
+        const startFadeOut = () => {
           const newVolume = Math.max(0, currentVolumeRef.current - fadeStep);
           currentVolumeRef.current = newVolume;
           
@@ -92,11 +94,14 @@ const Index = () => {
               clearInterval(fadeIntervalRef.current);
             }
           }
-        }, fadeInterval);
+        };
+
+        fadeIntervalRef.current = setInterval(startFadeOut, fadeInterval);
+        startFadeOut(); // Inicia o fade imediatamente
       } else if (event.deltaY < 0 && showBlackScreen) {
         setShowBlackScreen(false);
         
-        fadeIntervalRef.current = setInterval(() => {
+        const startFadeIn = () => {
           const newVolume = Math.min(1, currentVolumeRef.current + fadeStep);
           currentVolumeRef.current = newVolume;
           
@@ -110,11 +115,14 @@ const Index = () => {
               clearInterval(fadeIntervalRef.current);
             }
           }
-        }, fadeInterval);
+        };
+
+        fadeIntervalRef.current = setInterval(startFadeIn, fadeInterval);
+        startFadeIn(); // Inicia o fade imediatamente
       }
     };
 
-    window.addEventListener('wheel', handleWheel);
+    window.addEventListener('wheel', handleWheel, { passive: false });
     return () => {
       window.removeEventListener('wheel', handleWheel);
       if (fadeIntervalRef.current) {
