@@ -40,9 +40,9 @@ const Index = () => {
     }
   };
   
-  // Se os assets ainda não carregaram, mostramos uma div vazia preta
+  // Se os assets ainda não carregaram, mostramos uma div vazia branca
   if (!assetsLoaded) {
-    return <div className="bg-black w-full h-screen" />;
+    return <div className="bg-white w-full h-screen" />;
   }
   
   return (
