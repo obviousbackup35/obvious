@@ -5,6 +5,8 @@ const Index = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isBackgroundLoaded, setIsBackgroundLoaded] = useState(false);
   const [activeVideo, setActiveVideo] = useState(1);
+  const [showBlackScreen, setShowBlackScreen] = useState(false);
+  const [audioVolume, setAudioVolume] = useState(1);
   const audioRef = useRef<HTMLAudioElement>(null);
   const video1Ref = useRef<HTMLVideoElement>(null);
   const video2Ref = useRef<HTMLVideoElement>(null);
@@ -57,6 +59,33 @@ const Index = () => {
       video2?.removeEventListener('timeupdate', handleTimeUpdate);
     };
   }, [isPlaying, activeVideo]);
+
+  useEffect(() => {
+    if (!isPlaying) return;
+
+    const handleWheel = (event: WheelEvent) => {
+      if (event.deltaY > 0 && !showBlackScreen) {
+        setShowBlackScreen(true);
+        
+        // Fade out audio
+        if (audioRef.current) {
+          const fadeInterval = setInterval(() => {
+            setAudioVolume(prev => {
+              const newVolume = Math.max(0, prev - 0.05);
+              audioRef.current!.volume = newVolume;
+              if (newVolume === 0) {
+                clearInterval(fadeInterval);
+              }
+              return newVolume;
+            });
+          }, 50);
+        }
+      }
+    };
+
+    window.addEventListener('wheel', handleWheel);
+    return () => window.removeEventListener('wheel', handleWheel);
+  }, [isPlaying, showBlackScreen]);
   
   return (
     <div 
@@ -125,6 +154,14 @@ const Index = () => {
           style={{ maxWidth: '80vw' }}
         />
       </div>
+      <div 
+        className="absolute inset-0 w-full h-full z-30"
+        style={{ 
+          backgroundColor: 'black',
+          opacity: showBlackScreen ? 1 : 0,
+          transition: 'opacity 1s ease-in-out',
+        }}
+      />
     </div>
   );
 };
