@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect, useCallback } from "react";
 
 const Index = () => {
@@ -11,6 +10,7 @@ const Index = () => {
   const video1Ref = useRef<HTMLVideoElement>(null);
   const video2Ref = useRef<HTMLVideoElement>(null);
   const fadeIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const currentVolumeRef = useRef<number>(1);
   
   const handleClick = useCallback((event: React.MouseEvent | React.TouchEvent) => {
     const videos = event.currentTarget.querySelectorAll('video');
@@ -18,11 +18,11 @@ const Index = () => {
       videos.forEach(video => video.play());
       if (audioRef.current) {
         audioRef.current.play();
-        audioRef.current.volume = audioVolume;
+        audioRef.current.volume = currentVolumeRef.current;
       }
       setIsPlaying(true);
     }
-  }, [isPlaying, audioVolume]);
+  }, [isPlaying]);
 
   useEffect(() => {
     const backgroundImage = new Image();
@@ -77,16 +77,17 @@ const Index = () => {
 
       if (event.deltaY > 0 && !showBlackScreen) {
         setShowBlackScreen(true);
-        let currentVolume = audioRef.current?.volume || 1;
         
         fadeIntervalRef.current = setInterval(() => {
-          currentVolume = Math.max(0, currentVolume - fadeStep);
-          if (audioRef.current) {
-            audioRef.current.volume = currentVolume;
-          }
-          setAudioVolume(currentVolume);
+          const newVolume = Math.max(0, currentVolumeRef.current - fadeStep);
+          currentVolumeRef.current = newVolume;
           
-          if (currentVolume <= 0) {
+          if (audioRef.current) {
+            audioRef.current.volume = newVolume;
+          }
+          setAudioVolume(newVolume);
+          
+          if (newVolume <= 0) {
             if (fadeIntervalRef.current) {
               clearInterval(fadeIntervalRef.current);
             }
@@ -94,16 +95,17 @@ const Index = () => {
         }, fadeInterval);
       } else if (event.deltaY < 0 && showBlackScreen) {
         setShowBlackScreen(false);
-        let currentVolume = audioRef.current?.volume || 0;
         
         fadeIntervalRef.current = setInterval(() => {
-          currentVolume = Math.min(1, currentVolume + fadeStep);
-          if (audioRef.current) {
-            audioRef.current.volume = currentVolume;
-          }
-          setAudioVolume(currentVolume);
+          const newVolume = Math.min(1, currentVolumeRef.current + fadeStep);
+          currentVolumeRef.current = newVolume;
           
-          if (currentVolume >= 1) {
+          if (audioRef.current) {
+            audioRef.current.volume = newVolume;
+          }
+          setAudioVolume(newVolume);
+          
+          if (newVolume >= 1) {
             if (fadeIntervalRef.current) {
               clearInterval(fadeIntervalRef.current);
             }
@@ -124,6 +126,7 @@ const Index = () => {
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = audioVolume;
+      currentVolumeRef.current = audioVolume;
     }
   }, [audioVolume]);
   
