@@ -1,11 +1,17 @@
 
+import { useState } from "react";
+
 const Index = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
   console.log("Tentando carregar logo de:", "/logo.svg");
   
   const handleClick = (event: React.MouseEvent | React.TouchEvent) => {
     const video = event.currentTarget.querySelector('video');
     if (video) {
-      video.play();
+      if (!isPlaying) {
+        video.play();
+        setIsPlaying(true);
+      }
     }
   };
   
