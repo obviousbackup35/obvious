@@ -42,7 +42,7 @@ const Index = () => {
         <img
           src="/logo.svg"
           alt="Logo"
-          className="w-[600px] h-auto"
+          className="w-[660px] h-auto"
           style={{ maxWidth: '80vw' }}
           onError={(e) => console.error("Erro ao carregar logo:", e)}
           onLoad={() => console.log("Logo carregado com sucesso")}
