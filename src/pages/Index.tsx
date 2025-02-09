@@ -93,11 +93,9 @@ const Index = () => {
         muted
         loop={false}
         playsInline
-        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
-          isPlaying ? 'opacity-100' : 'opacity-0'
-        }`}
+        className="absolute inset-0 w-full h-full object-cover opacity-0"
         style={{
-          opacity: activeVideo === 1 ? 1 : 0,
+          opacity: isPlaying ? (activeVideo === 1 ? 1 : 0) : 0,
           transition: 'opacity 1s ease-in-out'
         }}
         src="/loft-video.webm"
@@ -107,11 +105,9 @@ const Index = () => {
         muted
         loop={false}
         playsInline
-        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
-          isPlaying ? 'opacity-100' : 'opacity-0'
-        }`}
+        className="absolute inset-0 w-full h-full object-cover opacity-0"
         style={{
-          opacity: activeVideo === 2 ? 1 : 0,
+          opacity: isPlaying ? (activeVideo === 2 ? 1 : 0) : 0,
           transition: 'opacity 1s ease-in-out'
         }}
         src="/loft-video.webm"
