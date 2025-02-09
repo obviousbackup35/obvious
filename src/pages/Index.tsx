@@ -9,7 +9,6 @@ const Index = () => {
   const video1Ref = useRef<HTMLVideoElement>(null);
   const video2Ref = useRef<HTMLVideoElement>(null);
   
-  // Memoizando o handler de click para evitar recriações desnecessárias
   const handleClick = useCallback((event: React.MouseEvent | React.TouchEvent) => {
     const videos = event.currentTarget.querySelectorAll('video');
     if (videos.length && !isPlaying) {
@@ -19,14 +18,12 @@ const Index = () => {
     }
   }, [isPlaying]);
 
-  // Pré-carrega a imagem de fundo
   useEffect(() => {
     const backgroundImage = new Image();
     backgroundImage.src = "/fundo.webp";
     backgroundImage.onload = () => setIsBackgroundLoaded(true);
   }, []);
 
-  // Gerencia a transição suave entre os vídeos
   useEffect(() => {
     if (!isPlaying) return;
 
@@ -36,7 +33,6 @@ const Index = () => {
       
       if (!video1 || !video2) return;
 
-      // Inicia a transição 1 segundo antes do fim do vídeo
       const transitionPoint = video1.duration - 1;
       
       if (activeVideo === 1 && video1.currentTime >= transitionPoint) {
@@ -76,10 +72,18 @@ const Index = () => {
       <div 
         className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat z-0"
         style={{ 
-          backgroundImage: isPlaying ? 'none' : 'url("/fundo.webp")',
-          backgroundColor: isPlaying ? 'black' : 'transparent',
+          backgroundImage: 'url("/fundo.webp")',
           opacity: isBackgroundLoaded ? 1 : 0,
           transition: 'opacity 1s ease-in-out'
+        }}
+      />
+      <div 
+        className="absolute inset-0 w-full h-full z-0"
+        style={{ 
+          backgroundColor: 'black',
+          opacity: isPlaying ? 1 : 0,
+          transition: 'opacity 1s ease-in-out',
+          transitionDelay: '1s'
         }}
       />
       <video
