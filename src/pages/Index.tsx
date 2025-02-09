@@ -1,5 +1,5 @@
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 
 const Index = () => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -9,26 +9,21 @@ const Index = () => {
   const video1Ref = useRef<HTMLVideoElement>(null);
   const video2Ref = useRef<HTMLVideoElement>(null);
   
-  const handleClick = (event: React.MouseEvent | React.TouchEvent) => {
+  // Memoizando o handler de click para evitar recriações desnecessárias
+  const handleClick = useCallback((event: React.MouseEvent | React.TouchEvent) => {
     const videos = event.currentTarget.querySelectorAll('video');
-    if (videos.length) {
-      if (!isPlaying) {
-        videos.forEach(video => video.play());
-        if (audioRef.current) {
-          audioRef.current.play();
-        }
-        setIsPlaying(true);
-      }
+    if (videos.length && !isPlaying) {
+      videos.forEach(video => video.play());
+      audioRef.current?.play();
+      setIsPlaying(true);
     }
-  };
+  }, [isPlaying]);
 
   // Pré-carrega a imagem de fundo
   useEffect(() => {
     const backgroundImage = new Image();
     backgroundImage.src = "/fundo.webp";
-    backgroundImage.onload = () => {
-      setIsBackgroundLoaded(true);
-    };
+    backgroundImage.onload = () => setIsBackgroundLoaded(true);
   }, []);
 
   // Gerencia a transição suave entre os vídeos
@@ -79,9 +74,7 @@ const Index = () => {
         loop
       />
       <div 
-        className={`absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat z-0 transition-opacity duration-1000 ${
-          isPlaying ? 'opacity-0' : 'opacity-100'
-        }`}
+        className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat z-0"
         style={{ 
           backgroundImage: 'url("/fundo.webp")',
           opacity: isBackgroundLoaded ? 1 : 0,
@@ -113,10 +106,12 @@ const Index = () => {
         src="/loft-video.webm"
       />
       <div 
-        className={`absolute inset-0 flex items-center justify-center z-20 transition-opacity duration-1000 ${
-          isBackgroundLoaded ? 'opacity-100' : 'opacity-0'
-        }`}
-        style={{ transitionDelay: '1000ms' }}
+        className="absolute inset-0 flex items-center justify-center z-20"
+        style={{ 
+          opacity: isBackgroundLoaded ? 1 : 0,
+          transition: 'opacity 1s ease-in-out',
+          transitionDelay: '1000ms'
+        }}
       >
         <img
           src="/logo.svg"
