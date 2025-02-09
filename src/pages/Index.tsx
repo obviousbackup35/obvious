@@ -1,5 +1,7 @@
 
 const Index = () => {
+  console.log("Tentando carregar logo de:", "/logo.svg");
+  
   return (
     <div className="relative h-screen w-full overflow-hidden">
       <div 
@@ -18,6 +20,8 @@ const Index = () => {
           alt="Logo"
           className="w-[600px] h-auto"
           style={{ maxWidth: '80vw' }}
+          onError={(e) => console.error("Erro ao carregar logo:", e)}
+          onLoad={() => console.log("Logo carregado com sucesso")}
         />
       </div>
     </div>
