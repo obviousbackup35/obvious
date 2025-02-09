@@ -16,10 +16,13 @@ const Index = () => {
     const videos = event.currentTarget.querySelectorAll('video');
     if (videos.length && !isPlaying) {
       videos.forEach(video => video.play());
-      audioRef.current?.play();
+      if (audioRef.current) {
+        audioRef.current.volume = audioVolume;
+        audioRef.current.play();
+      }
       setIsPlaying(true);
     }
-  }, [isPlaying]);
+  }, [isPlaying, audioVolume]);
 
   useEffect(() => {
     const backgroundImage = new Image();
@@ -125,6 +128,13 @@ const Index = () => {
       }
     };
   }, [isPlaying, showBlackScreen]);
+
+  // Update audio volume whenever the audioVolume state changes
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = audioVolume;
+    }
+  }, [audioVolume]);
   
   return (
     <div 
