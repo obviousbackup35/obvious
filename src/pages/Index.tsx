@@ -9,10 +9,10 @@ const Index = () => {
   const video1Ref = useRef<HTMLVideoElement>(null);
   const video2Ref = useRef<HTMLVideoElement>(null);
   
-  // Memoizando o handler de click para evitar recriações desnecessárias
+  // Memoiza o handler de click para evitar recriações desnecessárias
   const handleClick = useCallback((event: React.MouseEvent | React.TouchEvent) => {
-    const videos = event.currentTarget.querySelectorAll('video');
-    if (videos.length && !isPlaying) {
+    if (!isPlaying) {
+      const videos = event.currentTarget.querySelectorAll('video');
       videos.forEach(video => video.play());
       audioRef.current?.play();
       setIsPlaying(true);
@@ -62,6 +62,9 @@ const Index = () => {
     };
   }, [isPlaying, activeVideo]);
   
+  // Classes comuns para os vídeos
+  const commonVideoClasses = "absolute inset-0 w-full h-full object-cover opacity-0";
+  
   return (
     <div 
       className="relative h-screen w-full overflow-hidden cursor-pointer bg-white"
@@ -87,7 +90,7 @@ const Index = () => {
         muted
         loop={false}
         playsInline
-        className="absolute inset-0 w-full h-full object-cover opacity-0"
+        className={commonVideoClasses}
         style={{
           opacity: isPlaying ? (activeVideo === 1 ? 1 : 0) : 0,
           transition: 'opacity 1s ease-in-out'
@@ -99,7 +102,7 @@ const Index = () => {
         muted
         loop={false}
         playsInline
-        className="absolute inset-0 w-full h-full object-cover opacity-0"
+        className={commonVideoClasses}
         style={{
           opacity: isPlaying ? (activeVideo === 2 ? 1 : 0) : 0,
           transition: 'opacity 1s ease-in-out'
