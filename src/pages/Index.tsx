@@ -12,7 +12,7 @@ const Index = () => {
   const [isBackgroundLoaded, setIsBackgroundLoaded] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const { activeVideo, video1Ref, video2Ref, handleTimeUpdate } = useVideoTransition();
-  const { showBlackScreen, audioRef, audioVolume } = useAudioFade(isPlaying);
+  const { showBlackScreen, audioRef, audioVolume, wasMutedRef } = useAudioFade(isPlaying);
   
   const handleClick = useCallback((event: React.MouseEvent | React.TouchEvent) => {
     const videos = event.currentTarget.querySelectorAll('video');
@@ -27,8 +27,9 @@ const Index = () => {
   }, [isPlaying, audioRef, audioVolume]);
 
   const toggleAudio = useCallback((event: React.MouseEvent) => {
-    event.stopPropagation(); // Previne que o click chegue ao container pai
+    event.stopPropagation();
     setIsMuted(prev => !prev);
+    wasMutedRef.current = !isMuted; // Atualiza o estado do mute
     
     if (audioRef.current) {
       const fadeStep = 0.05;
@@ -37,11 +38,11 @@ const Index = () => {
       let currentVolume = audioRef.current.volume;
 
       const fade = setInterval(() => {
-        if (isMuted) { // Aumentando o volume
+        if (isMuted) {
           currentVolume = Math.min(1, currentVolume + fadeStep);
           audioRef.current!.volume = currentVolume;
           if (currentVolume >= 1) clearInterval(fade);
-        } else { // Diminuindo o volume
+        } else {
           currentVolume = Math.max(0, currentVolume - fadeStep);
           audioRef.current!.volume = currentVolume;
           if (currentVolume <= 0) clearInterval(fade);
