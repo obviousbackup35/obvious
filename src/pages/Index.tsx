@@ -2,14 +2,24 @@
 const Index = () => {
   console.log("Tentando carregar logo de:", "/logo.svg");
   
+  const handleClick = (event: React.MouseEvent | React.TouchEvent) => {
+    const video = event.currentTarget.querySelector('video');
+    if (video) {
+      video.play();
+    }
+  };
+  
   return (
-    <div className="relative h-screen w-full overflow-hidden">
+    <div 
+      className="relative h-screen w-full overflow-hidden cursor-pointer"
+      onClick={handleClick}
+      onTouchStart={handleClick}
+    >
       <div 
         className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat opacity-0 animate-[fade-in_4000ms_ease-in-out_forwards] z-0" 
         style={{ backgroundImage: 'url("/fundo.webp")' }}
       />
       <video
-        autoPlay
         muted
         loop
         playsInline
