@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect, useCallback } from "react";
 
 const Index = () => {
@@ -17,8 +16,8 @@ const Index = () => {
     if (videos.length && !isPlaying) {
       videos.forEach(video => video.play());
       if (audioRef.current) {
-        audioRef.current.volume = audioVolume;
         audioRef.current.play();
+        audioRef.current.volume = audioVolume;
       }
       setIsPlaying(true);
     }
@@ -68,54 +67,49 @@ const Index = () => {
     if (!isPlaying) return;
 
     const handleWheel = (event: WheelEvent) => {
-      // Clear any existing fade interval
+      // Limpa qualquer intervalo existente
       if (fadeIntervalRef.current) {
         clearInterval(fadeIntervalRef.current);
         fadeIntervalRef.current = null;
       }
 
+      const fadeStep = 0.05;
+      const fadeInterval = 50;
+
       if (event.deltaY > 0 && !showBlackScreen) {
         setShowBlackScreen(true);
-        
-        // Fade out audio
-        if (audioRef.current) {
-          fadeIntervalRef.current = setInterval(() => {
-            setAudioVolume(prev => {
-              if (!audioRef.current) return prev;
-              const newVolume = Math.max(0, prev - 0.05);
+        fadeIntervalRef.current = setInterval(() => {
+          setAudioVolume(prev => {
+            const newVolume = Math.max(0, prev - fadeStep);
+            if (audioRef.current) {
               audioRef.current.volume = newVolume;
-              
-              if (newVolume === 0) {
-                if (fadeIntervalRef.current) {
-                  clearInterval(fadeIntervalRef.current);
-                  fadeIntervalRef.current = null;
-                }
+            }
+            if (newVolume === 0) {
+              if (fadeIntervalRef.current) {
+                clearInterval(fadeIntervalRef.current);
+                fadeIntervalRef.current = null;
               }
-              return newVolume;
-            });
-          }, 50);
-        }
+            }
+            return newVolume;
+          });
+        }, fadeInterval);
       } else if (event.deltaY < 0 && showBlackScreen) {
         setShowBlackScreen(false);
-        
-        // Fade in audio
-        if (audioRef.current) {
-          fadeIntervalRef.current = setInterval(() => {
-            setAudioVolume(prev => {
-              if (!audioRef.current) return prev;
-              const newVolume = Math.min(1, prev + 0.05);
+        fadeIntervalRef.current = setInterval(() => {
+          setAudioVolume(prev => {
+            const newVolume = Math.min(1, prev + fadeStep);
+            if (audioRef.current) {
               audioRef.current.volume = newVolume;
-              
-              if (newVolume === 1) {
-                if (fadeIntervalRef.current) {
-                  clearInterval(fadeIntervalRef.current);
-                  fadeIntervalRef.current = null;
-                }
+            }
+            if (newVolume === 1) {
+              if (fadeIntervalRef.current) {
+                clearInterval(fadeIntervalRef.current);
+                fadeIntervalRef.current = null;
               }
-              return newVolume;
-            });
-          }, 50);
-        }
+            }
+            return newVolume;
+          });
+        }, fadeInterval);
       }
     };
 
@@ -129,7 +123,7 @@ const Index = () => {
     };
   }, [isPlaying, showBlackScreen]);
 
-  // Update audio volume whenever the audioVolume state changes
+  // Atualiza o volume do áudio sempre que o estado audioVolume mudar
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = audioVolume;
