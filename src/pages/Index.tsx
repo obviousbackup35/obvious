@@ -127,7 +127,7 @@ const Index = () => {
         <img
           src="/manifesto.webp"
           alt="Manifesto"
-          className="absolute top-8 left-8 z-30"
+          className="absolute top-8 left-8 z-30 scale-[0.7]"
         />
         <div 
           className="absolute inset-0 w-full h-full"
