@@ -119,26 +119,15 @@ const Index = () => {
       />
       <Logo isBackgroundLoaded={isBackgroundLoaded} />
       <div 
-        className="absolute inset-0 w-full h-full z-20 flex flex-col items-center"
+        className="absolute inset-0 w-full h-full z-20"
         style={{ 
+          backgroundImage: 'url(/dunes.webp)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
           opacity: showBlackScreen ? 1 : 0,
           transition: 'opacity 2s ease-in-out',
         }}
-      >
-        <img
-          src="/manifesto.webp"
-          alt="Manifesto"
-          className="w-full max-w-[80%] h-auto mt-8"
-        />
-        <div 
-          className="absolute inset-0 w-full h-full -z-10"
-          style={{ 
-            backgroundImage: 'url(/dunes.webp)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        />
-      </div>
+      />
     </div>
   );
 };
