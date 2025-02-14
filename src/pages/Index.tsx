@@ -121,24 +121,13 @@ const Index = () => {
       <div 
         className="absolute inset-0 w-full h-full z-20"
         style={{ 
+          backgroundImage: 'url(/dunes.webp)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
           opacity: showBlackScreen ? 1 : 0,
           transition: 'opacity 2s ease-in-out',
         }}
-      >
-        <img
-          src="/manifesto.webp"
-          alt="Manifesto"
-          className="absolute top-8 left-8 w-[300px] h-auto"
-        />
-        <div 
-          className="absolute inset-0 w-full h-full -z-10"
-          style={{ 
-            backgroundImage: 'url(/dunes.webp)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        />
-      </div>
+      />
     </div>
   );
 };
