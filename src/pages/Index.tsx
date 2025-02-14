@@ -127,7 +127,7 @@ const Index = () => {
         }}
       />
       <div 
-        className="absolute inset-0 w-full h-full z-40"
+        className="absolute inset-0 w-full h-full z-50"
         style={{ 
           backgroundImage: 'url(/lovable-uploads/41b2585a-5c29-4361-bf4f-8196b96a49d6.png)',
           backgroundSize: 'cover',
