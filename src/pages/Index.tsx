@@ -123,12 +123,17 @@ const Index = () => {
         style={{ 
           opacity: showBlackScreen ? 1 : 0,
           transition: 'opacity 2s ease-in-out',
+          backgroundColor: 'black'
         }}
       >
         <img
           src="/manifesto.webp"
           alt="Manifesto"
           className="w-full max-w-[80%] h-auto mt-8"
+          style={{
+            mixBlendMode: 'normal',
+            backgroundColor: 'transparent'
+          }}
         />
         <div 
           className="absolute inset-0 w-full h-full -z-10"
