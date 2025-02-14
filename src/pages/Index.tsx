@@ -119,7 +119,7 @@ const Index = () => {
       />
       <Logo isBackgroundLoaded={isBackgroundLoaded} />
       <div 
-        className="absolute inset-0 w-full h-full z-20 flex flex-col items-center"
+        className="absolute inset-0 w-full h-full z-20"
         style={{ 
           opacity: showBlackScreen ? 1 : 0,
           transition: 'opacity 2s ease-in-out',
@@ -128,7 +128,7 @@ const Index = () => {
         <img
           src="/manifesto.webp"
           alt="Manifesto"
-          className="w-full max-w-[80%] h-auto mt-8"
+          className="absolute top-8 left-8 w-[300px] h-auto"
         />
         <div 
           className="absolute inset-0 w-full h-full -z-10"
