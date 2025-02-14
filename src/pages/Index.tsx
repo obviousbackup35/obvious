@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 import { VideoPlayer } from "@/components/video-player/VideoPlayer";
@@ -128,7 +127,7 @@ const Index = () => {
         <img
           src="/manifesto.webp"
           alt="Manifesto"
-          className="absolute top-8 left-8 w-auto h-[120px] z-30"
+          className="absolute top-8 left-8 z-30"
         />
         <div 
           className="absolute inset-0 w-full h-full"
