@@ -119,7 +119,7 @@ const Index = () => {
       />
       <Logo isBackgroundLoaded={isBackgroundLoaded} />
       <div 
-        className="absolute inset-0 w-full h-full z-20 flex flex-col items-center bg-black"
+        className="absolute inset-0 w-full h-full z-20 flex flex-col items-center"
         style={{ 
           opacity: showBlackScreen ? 1 : 0,
           transition: 'opacity 2s ease-in-out',
