@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 import { VideoPlayer } from "@/components/video-player/VideoPlayer";
@@ -119,22 +118,21 @@ const Index = () => {
       />
       <Logo isBackgroundLoaded={isBackgroundLoaded} />
       <div 
-        className="absolute inset-0 w-full h-full z-30"
-        style={{ 
-          backgroundColor: 'black',
-          opacity: showBlackScreen ? 1 : 0,
-          transition: 'opacity 1s ease-in-out',
-        }}
-      />
-      <div 
-        className="absolute inset-0 w-full h-full z-40"
+        className="absolute inset-0 w-full h-full z-20"
         style={{ 
           backgroundImage: 'url(/dunes.webp)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           opacity: showBlackScreen ? 1 : 0,
           transition: 'opacity 2s ease-in-out',
-          transitionDelay: '1s'
+        }}
+      />
+      <div 
+        className="absolute inset-0 w-full h-full z-30"
+        style={{ 
+          backgroundColor: 'black',
+          opacity: showBlackScreen ? 1 : 0,
+          transition: 'opacity 1s ease-in-out',
         }}
       />
     </div>
