@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 import { VideoPlayer } from "@/components/video-player/VideoPlayer";
@@ -120,24 +121,13 @@ const Index = () => {
       <div 
         className="absolute inset-0 w-full h-full z-20"
         style={{ 
+          backgroundImage: 'url(/dunes.webp)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
           opacity: showBlackScreen ? 1 : 0,
           transition: 'opacity 2s ease-in-out',
         }}
-      >
-        <img
-          src="/manifesto.webp"
-          alt="Manifesto"
-          className="absolute top-8 left-8 z-30 scale-[0.7]"
-        />
-        <div 
-          className="absolute inset-0 w-full h-full"
-          style={{ 
-            backgroundImage: 'url(/dunes.webp)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        />
-      </div>
+      />
     </div>
   );
 };
