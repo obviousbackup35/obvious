@@ -29,7 +29,7 @@ const Index = () => {
   const toggleAudio = useCallback((event: React.MouseEvent) => {
     event.stopPropagation();
     setIsMuted(prev => !prev);
-    wasMutedRef.current = !isMuted; // Atualiza o estado do mute
+    wasMutedRef.current = !isMuted;
     
     if (audioRef.current) {
       const fadeStep = 0.05;
@@ -124,6 +124,17 @@ const Index = () => {
           backgroundColor: 'black',
           opacity: showBlackScreen ? 1 : 0,
           transition: 'opacity 1s ease-in-out',
+        }}
+      />
+      <div 
+        className="absolute inset-0 w-full h-full z-40"
+        style={{ 
+          backgroundImage: 'url(/dunes.webp)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          opacity: showBlackScreen ? 1 : 0,
+          transition: 'opacity 2s ease-in-out',
+          transitionDelay: '1s'
         }}
       />
     </div>
