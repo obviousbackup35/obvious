@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 import { VideoPlayer } from "@/components/video-player/VideoPlayer";
@@ -78,11 +79,11 @@ const Index = () => {
       onTouchStart={handleClick}
     >
       <nav 
-        className={`absolute top-8 w-full z-50 transition-opacity duration-1000 ${
+        className={`absolute top-6 w-full z-50 transition-opacity duration-1000 ${
           isPlaying && !showBlackScreen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
       >
-        <div className="flex justify-center font-montserrat text-white text-sm">
+        <div className="flex justify-center font-montserrat text-white text-[1.15rem]">
           <a href="#" className="cursor-pointer">H O M E</a>
           <span className="mx-10" />
           <a href="#" className="cursor-pointer">P R O J E C T S</a>
