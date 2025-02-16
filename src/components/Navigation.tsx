@@ -39,7 +39,7 @@ export const Navigation = ({
       }}
     >
       <nav className="absolute top-4 w-full">
-        <div className="flex justify-center items-center font-montserrat text-[#a4a4a3] text-[1.15rem] relative">
+        <div className="flex justify-center items-center font-montserrat text-[#a4a4a3] text-[1.38rem] relative">
           <button
             onClick={handleHomeClick}
             className="absolute left-4 p-2 hover:opacity-70 transition-opacity"
