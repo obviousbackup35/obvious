@@ -19,6 +19,9 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				'montserrat': ['Montserrat', 'sans-serif'],
+			},
 			keyframes: {
 				'fade-in': {
 					'0%': { opacity: '0' },
