@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Volume2, VolumeX } from "lucide-react";
+import { Volume2, VolumeX, Hexagon } from "lucide-react";
 
 interface NavigationProps {
   audioRef: React.RefObject<HTMLAudioElement>;
@@ -18,7 +18,16 @@ export const Navigation = ({ audioRef, isMuted, toggleAudio, isVisible = true }:
     e.preventDefault();
     setIsNavigating(true);
     setTimeout(() => {
-      navigate(path, { replace: true });
+      navigate(path);
+      setIsNavigating(false);
+    }, 1000);
+  };
+
+  const handleHomeClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsNavigating(true);
+    setTimeout(() => {
+      navigate('/');
       setIsNavigating(false);
     }, 1000);
   };
@@ -33,7 +42,14 @@ export const Navigation = ({ audioRef, isMuted, toggleAudio, isVisible = true }:
         }}
       >
         <nav className="absolute top-4 w-full">
-          <div className="flex justify-center font-montserrat text-[#CABA9F] text-[1.15rem]">
+          <div className="flex justify-center items-center font-montserrat text-[#CABA9F] text-[1.15rem] relative">
+            <button
+              onClick={handleHomeClick}
+              className="absolute left-4 p-2 hover:opacity-70 transition-opacity"
+              aria-label="Go to home"
+            >
+              <Hexagon className="w-6 h-6 text-[#CABA9F]" />
+            </button>
             <a href="/company" onClick={handleNavigation('/company')} className="cursor-pointer">C O M P A N Y</a>
             <span className="mx-16" />
             <a href="/projects" onClick={handleNavigation('/projects')} className="cursor-pointer">P R O J E C T S</a>
