@@ -153,6 +153,17 @@ const Index = () => {
 
       {/* Menu Content Sections */}
       <div className="absolute inset-0 w-full h-full z-30">
+        {/* Dunes Section */}
+        <div 
+          className="absolute inset-0 w-full h-full bg-cover bg-center"
+          style={{ 
+            backgroundImage: 'url("/dunes.webp")',
+            opacity: currentView === 'dunes' ? 1 : 0,
+            transition: 'opacity 2s ease-in-out',
+            pointerEvents: currentView === 'dunes' ? 'auto' : 'none'
+          }}
+        />
+
         {/* Company Section */}
         <div 
           className="absolute inset-0 w-full h-full"
