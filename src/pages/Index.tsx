@@ -116,7 +116,6 @@ const Index = () => {
         currentView={currentView}
       />
 
-      {/* Black overlay to prevent white arches from showing during transitions */}
       <div 
         className="absolute inset-0 w-full h-full z-10"
         style={{ 
@@ -126,7 +125,6 @@ const Index = () => {
         }}
       />
 
-      {/* Video Content */}
       <VideoOverlay 
         isBackgroundLoaded={isBackgroundLoaded} 
         style={{ 
@@ -165,9 +163,7 @@ const Index = () => {
         }}
       />
 
-      {/* Menu Content Sections */}
       <div className="absolute inset-0 w-full h-full z-30">
-        {/* Dunes Section */}
         <div 
           className="absolute inset-0 w-full h-full bg-cover bg-center"
           style={{ 
@@ -178,7 +174,6 @@ const Index = () => {
           }}
         />
 
-        {/* Company Section */}
         <div 
           className="absolute inset-0 w-full h-full"
           style={{ 
@@ -193,7 +188,6 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Projects Section */}
         <div 
           className="absolute inset-0 w-full h-full"
           style={{ 
@@ -208,7 +202,6 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Gallery Section */}
         <div 
           className="absolute inset-0 w-full h-full"
           style={{ 
@@ -223,7 +216,6 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Contact Section */}
         <div 
           className="absolute inset-0 w-full h-full"
           style={{ 
