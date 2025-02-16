@@ -24,6 +24,12 @@ const Index = () => {
     currentTime,
     setCurrentTime
   } = useAudio();
+
+  useEffect(() => {
+    if (showBlackScreen && currentView === 'video') {
+      setCurrentView('dunes');
+    }
+  }, [showBlackScreen, currentView]);
   
   const startPlayback = useCallback(() => {
     const videos = document.querySelectorAll('video');
