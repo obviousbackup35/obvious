@@ -5,6 +5,10 @@ interface AudioContextType {
   audioRef: React.RefObject<HTMLAudioElement>;
   isMuted: boolean;
   toggleAudio: (event: React.MouseEvent) => void;
+  hasInitialInteraction: boolean;
+  setHasInitialInteraction: (value: boolean) => void;
+  currentTime: number;
+  setCurrentTime: (time: number) => void;
 }
 
 const AudioContext = createContext<AudioContextType | undefined>(undefined);
@@ -12,6 +16,8 @@ const AudioContext = createContext<AudioContextType | undefined>(undefined);
 export const AudioProvider = ({ children }: { children: ReactNode }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isMuted, setIsMuted] = useState(false);
+  const [hasInitialInteraction, setHasInitialInteraction] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
 
   const toggleAudio = useCallback((event: React.MouseEvent) => {
     event.stopPropagation();
@@ -38,7 +44,15 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
   }, [isMuted]);
 
   return (
-    <AudioContext.Provider value={{ audioRef, isMuted, toggleAudio }}>
+    <AudioContext.Provider value={{ 
+      audioRef, 
+      isMuted, 
+      toggleAudio, 
+      hasInitialInteraction, 
+      setHasInitialInteraction,
+      currentTime,
+      setCurrentTime
+    }}>
       <audio
         ref={audioRef}
         src="/background-music.mp3"

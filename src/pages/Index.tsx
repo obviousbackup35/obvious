@@ -13,19 +13,43 @@ const Index = () => {
   const [isBackgroundLoaded, setIsBackgroundLoaded] = useState(false);
   const { activeVideo, video1Ref, video2Ref, handleTimeUpdate } = useVideoTransition();
   const { showBlackScreen } = useAudioFade(isPlaying);
-  const { audioRef, isMuted, toggleAudio } = useAudio();
+  const { 
+    audioRef, 
+    isMuted, 
+    toggleAudio, 
+    hasInitialInteraction, 
+    setHasInitialInteraction,
+    currentTime,
+    setCurrentTime
+  } = useAudio();
   
-  const handleClick = useCallback((event: React.MouseEvent | React.TouchEvent) => {
-    const videos = event.currentTarget.querySelectorAll('video');
+  const startPlayback = useCallback(() => {
+    const videos = document.querySelectorAll('video');
     if (videos.length && !isPlaying) {
-      videos.forEach(video => video.play());
+      videos.forEach(video => {
+        video.currentTime = currentTime;
+        video.play();
+      });
       if (audioRef.current) {
         audioRef.current.play();
         audioRef.current.volume = 1;
       }
       setIsPlaying(true);
     }
-  }, [isPlaying, audioRef]);
+  }, [isPlaying, audioRef, currentTime]);
+
+  const handleClick = useCallback((event: React.MouseEvent | React.TouchEvent) => {
+    if (!hasInitialInteraction) {
+      setHasInitialInteraction(true);
+    }
+    startPlayback();
+  }, [hasInitialInteraction, setHasInitialInteraction, startPlayback]);
+
+  useEffect(() => {
+    if (hasInitialInteraction && !isPlaying) {
+      startPlayback();
+    }
+  }, [hasInitialInteraction, isPlaying, startPlayback]);
 
   useEffect(() => {
     const backgroundImage = new Image();
@@ -39,14 +63,21 @@ const Index = () => {
     const video1 = video1Ref.current;
     const video2 = video2Ref.current;
 
-    video1?.addEventListener('timeupdate', handleTimeUpdate);
-    video2?.addEventListener('timeupdate', handleTimeUpdate);
+    const handleVideoTimeUpdate = () => {
+      handleTimeUpdate();
+      if (video1) {
+        setCurrentTime(video1.currentTime);
+      }
+    };
+
+    video1?.addEventListener('timeupdate', handleVideoTimeUpdate);
+    video2?.addEventListener('timeupdate', handleVideoTimeUpdate);
 
     return () => {
-      video1?.removeEventListener('timeupdate', handleTimeUpdate);
-      video2?.removeEventListener('timeupdate', handleTimeUpdate);
+      video1?.removeEventListener('timeupdate', handleVideoTimeUpdate);
+      video2?.removeEventListener('timeupdate', handleVideoTimeUpdate);
     };
-  }, [isPlaying, handleTimeUpdate, video1Ref, video2Ref]);
+  }, [isPlaying, handleTimeUpdate, video1Ref, video2Ref, setCurrentTime]);
   
   return (
     <div 
