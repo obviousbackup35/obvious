@@ -9,13 +9,6 @@ export const useAudioState = () => {
     const audio = audioRef.current;
     if (audio) {
       audio.volume = isMuted ? 0 : 1;
-      if (!audio.paused) {
-        return;
-      }
-      const playPromise = audio.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {});
-      }
     }
   }, [isMuted]);
 
