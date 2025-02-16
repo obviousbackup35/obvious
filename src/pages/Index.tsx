@@ -54,7 +54,7 @@ const Index = () => {
       onTouchStart={handleClick}
     >
       <div className={`transition-opacity duration-1000 ${
-        isPlaying && !showBlackScreen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        isPlaying ? 'opacity-100 delay-[1500ms]' : 'opacity-0'
       }`}>
         <Navigation audioRef={audioRef} isMuted={isMuted} toggleAudio={toggleAudio} />
       </div>
