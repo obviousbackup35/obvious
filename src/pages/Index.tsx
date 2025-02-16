@@ -1,15 +1,12 @@
 
 import { useState, useEffect, useCallback } from "react";
-import { VideoPlayer } from "@/components/video-player/VideoPlayer";
-import { VideoOverlay } from "@/components/video-player/VideoOverlay";
-import { Logo } from "@/components/video-player/Logo";
 import { useVideoTransition } from "@/hooks/useVideoTransition";
 import { usePageAudio } from "@/hooks/usePageAudio";
 import { useViewTransition } from "@/hooks/useViewTransition";
 import { Navigation } from "@/components/Navigation";
 import { useAudio } from "@/contexts/AudioContext";
-
-type ContentView = 'video' | 'dunes' | 'company' | 'projects' | 'gallery' | 'contact';
+import { VideoManager } from "@/components/video-player/VideoManager";
+import { ContentSections } from "@/components/sections/ContentSections";
 
 const Index = () => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -118,111 +115,16 @@ const Index = () => {
         }}
       />
 
-      <VideoOverlay 
-        isBackgroundLoaded={isBackgroundLoaded} 
-        style={{ 
-          opacity: !isPlaying && currentView === 'video' ? (isBackgroundLoaded ? 1 : 0) : 0,
-          transition: 'opacity 2s ease-in-out',
-        }}
-      />
-      <VideoPlayer
-        ref={video1Ref}
+      <VideoManager
         isPlaying={isPlaying}
-        isActive={activeVideo === 1}
-        src="/loft-video.webm"
-        style={{
-          opacity: currentView === 'video' && isPlaying ? (activeVideo === 1 ? 1 : 0) : 0,
-          transition: 'opacity 1s ease-in-out',
-          zIndex: 20
-        }}
-      />
-      <VideoPlayer
-        ref={video2Ref}
-        isPlaying={isPlaying}
-        isActive={activeVideo === 2}
-        src="/loft-video.webm"
-        style={{
-          opacity: currentView === 'video' && isPlaying ? (activeVideo === 2 ? 1 : 0) : 0,
-          transition: 'opacity 1s ease-in-out',
-          zIndex: 20
-        }}
-      />
-      <Logo 
         isBackgroundLoaded={isBackgroundLoaded}
-        style={{
-          opacity: currentView === 'video' ? (isBackgroundLoaded ? 1 : 0) : 0,
-          transition: 'opacity 1s ease-in-out',
-          zIndex: 30
-        }}
+        currentView={currentView}
+        activeVideo={activeVideo}
+        video1Ref={video1Ref}
+        video2Ref={video2Ref}
       />
 
-      <div className="absolute inset-0 w-full h-full z-30">
-        <div 
-          className="absolute inset-0 w-full h-full bg-cover bg-center"
-          style={{ 
-            backgroundImage: 'url("/dunes.webp")',
-            opacity: currentView === 'dunes' ? 1 : 0,
-            transition: 'opacity 1s ease-in-out',
-            pointerEvents: currentView === 'dunes' ? 'auto' : 'none'
-          }}
-        />
-
-        <div 
-          className="absolute inset-0 w-full h-full"
-          style={{ 
-            backgroundImage: 'linear-gradient(to right, #243949 0%, #517fa4 100%)',
-            opacity: currentView === 'company' ? 1 : 0,
-            transition: 'opacity 2s ease-in-out',
-            pointerEvents: currentView === 'company' ? 'auto' : 'none'
-          }}
-        >
-          <div className="flex items-center justify-center h-full text-white text-4xl font-montserrat">
-            Company Content
-          </div>
-        </div>
-
-        <div 
-          className="absolute inset-0 w-full h-full"
-          style={{ 
-            backgroundImage: 'linear-gradient(to right, #c1c161 0%, #c1c161 0%, #d4d4b1 100%)',
-            opacity: currentView === 'projects' ? 1 : 0,
-            transition: 'opacity 2s ease-in-out',
-            pointerEvents: currentView === 'projects' ? 'auto' : 'none'
-          }}
-        >
-          <div className="flex items-center justify-center h-full text-white text-4xl font-montserrat">
-            Projects Content
-          </div>
-        </div>
-
-        <div 
-          className="absolute inset-0 w-full h-full"
-          style={{ 
-            backgroundImage: 'linear-gradient(to right, #ffc3a0 0%, #ffafbd 100%)',
-            opacity: currentView === 'gallery' ? 1 : 0,
-            transition: 'opacity 2s ease-in-out',
-            pointerEvents: currentView === 'gallery' ? 'auto' : 'none'
-          }}
-        >
-          <div className="flex items-center justify-center h-full text-white text-4xl font-montserrat">
-            Gallery Content
-          </div>
-        </div>
-
-        <div 
-          className="absolute inset-0 w-full h-full"
-          style={{ 
-            backgroundImage: 'linear-gradient(to top, #e6b980 0%, #eacda3 100%)',
-            opacity: currentView === 'contact' ? 1 : 0,
-            transition: 'opacity 2s ease-in-out',
-            pointerEvents: currentView === 'contact' ? 'auto' : 'none'
-          }}
-        >
-          <div className="flex items-center justify-center h-full text-white text-4xl font-montserrat">
-            Contact Content
-          </div>
-        </div>
-      </div>
+      <ContentSections currentView={currentView} />
     </div>
   );
 };
