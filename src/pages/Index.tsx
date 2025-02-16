@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 import { VideoPlayer } from "@/components/video-player/VideoPlayer";
@@ -82,7 +83,7 @@ const Index = () => {
           isPlaying && !showBlackScreen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
       >
-        <div className="flex justify-center font-montserrat text-white text-[1.15rem]">
+        <div className="flex justify-center font-montserrat text-[#CABA9F] text-[1.15rem]">
           <a href="#" className="cursor-pointer">C O M P A N Y</a>
           <span className="mx-16" />
           <a href="#" className="cursor-pointer">P R O J E C T S</a>
