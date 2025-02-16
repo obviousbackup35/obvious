@@ -39,13 +39,13 @@ export const Navigation = ({
       }}
     >
       <nav className="absolute top-4 w-full">
-        <div className="flex justify-center items-center font-montserrat text-[#CABA9F] text-[1.15rem] relative">
+        <div className="flex justify-center items-center font-montserrat text-[#a4a4a3] text-[1.15rem] relative">
           <button
             onClick={handleHomeClick}
             className="absolute left-4 p-2 hover:opacity-70 transition-opacity"
             aria-label="Go to home"
           >
-            <Hexagon className="w-6 h-6 text-[#CABA9F]" />
+            <Hexagon className="w-6 h-6 text-[#a4a4a3]" />
           </button>
           <button onClick={handleViewChange('company')} className="cursor-pointer hover:opacity-70 transition-opacity">C O M P A N Y</button>
           <span className="mx-16" />
