@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback } from "react";
 import { VideoPlayer } from "@/components/video-player/VideoPlayer";
 import { VideoOverlay } from "@/components/video-player/VideoOverlay";
@@ -14,7 +15,7 @@ const Index = () => {
   const [isBackgroundLoaded, setIsBackgroundLoaded] = useState(false);
   const [currentView, setCurrentView] = useState<ContentView>('video');
   const { activeVideo, video1Ref, video2Ref, handleTimeUpdate } = useVideoTransition();
-  const { audioRef, audioVolume } = useAudioFade(isPlaying);
+  const { audioRef } = useAudioFade(isPlaying);
   const { 
     isMuted, 
     toggleAudio, 
@@ -43,29 +44,32 @@ const Index = () => {
 
   const startPlayback = useCallback(async () => {
     try {
-      const videos = document.querySelectorAll('video');
-      if (videos.length && !isPlaying) {
-        const playPromises = Array.from(videos).map(video => {
-          video.currentTime = currentTime;
-          return video.play();
-        });
-
+      if (!isPlaying) {
+        // Primeiro, tenta iniciar o áudio
         if (audioRef.current) {
           audioRef.current.currentTime = 0;
-          const audioPromise = audioRef.current.play();
-          playPromises.push(audioPromise);
+          audioRef.current.volume = 1;
+          await audioRef.current.play();
         }
 
-        await Promise.all(playPromises);
-        if (audioRef.current) {
-          audioRef.current.volume = 1;
-        }
+        // Depois inicia os vídeos
+        const videos = [video1Ref.current, video2Ref.current].filter(Boolean);
+        await Promise.all(
+          videos.map(video => {
+            if (video) {
+              video.currentTime = currentTime;
+              return video.play();
+            }
+            return Promise.resolve();
+          })
+        );
+
         setIsPlaying(true);
       }
     } catch (error) {
       console.error('Error starting playback:', error);
     }
-  }, [isPlaying, audioRef, currentTime]);
+  }, [isPlaying, audioRef, currentTime, video1Ref, video2Ref]);
 
   const handleClick = useCallback((event: React.MouseEvent | React.TouchEvent) => {
     if (!hasInitialInteraction) {
@@ -111,7 +115,7 @@ const Index = () => {
       video2?.removeEventListener('timeupdate', handleVideoTimeUpdate);
     };
   }, [isPlaying, handleTimeUpdate, video1Ref, video2Ref, setCurrentTime]);
-  
+
   return (
     <div 
       className="relative h-screen w-full overflow-hidden cursor-pointer bg-white"

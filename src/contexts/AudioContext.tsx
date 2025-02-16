@@ -24,22 +24,11 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
     setIsMuted(prev => !prev);
     
     if (audioRef.current) {
-      const fadeStep = 0.05;
-      const fadeInterval = 50;
-      const targetVolume = isMuted ? 1 : 0;
-      let currentVolume = audioRef.current.volume;
-
-      const fade = setInterval(() => {
-        if (isMuted) {
-          currentVolume = Math.min(1, currentVolume + fadeStep);
-          audioRef.current!.volume = currentVolume;
-          if (currentVolume >= 1) clearInterval(fade);
-        } else {
-          currentVolume = Math.max(0, currentVolume - fadeStep);
-          audioRef.current!.volume = currentVolume;
-          if (currentVolume <= 0) clearInterval(fade);
-        }
-      }, fadeInterval);
+      if (isMuted) {
+        audioRef.current.volume = 1;
+      } else {
+        audioRef.current.volume = 0;
+      }
     }
   }, [isMuted]);
 

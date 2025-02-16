@@ -1,13 +1,10 @@
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import { useAudio } from "@/contexts/AudioContext";
 
 export const useAudioFade = (isPlaying: boolean) => {
-  const [showBlackScreen, setShowBlackScreen] = useState(false);
-  const [audioVolume, setAudioVolume] = useState(1);
   const fadeIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const currentVolumeRef = useRef<number>(1);
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const wasMutedRef = useRef<boolean>(false);
+  const { audioRef } = useAudio();
 
   useEffect(() => {
     if (!isPlaying) return;
@@ -21,19 +18,14 @@ export const useAudioFade = (isPlaying: boolean) => {
 
       const fadeStep = 0.05;
       const fadeInterval = 50;
+      const currentVolume = audioRef.current?.volume || 1;
 
-      // Removendo a lógica do showBlackScreen e mantendo apenas o controle do áudio
-      if (event.deltaY > 0) {
+      if (event.deltaY > 0) { // Scrolling down
         const startFadeOut = () => {
-          if (wasMutedRef.current) return;
+          if (!audioRef.current) return;
           
-          const newVolume = Math.max(0, currentVolumeRef.current - fadeStep);
-          currentVolumeRef.current = newVolume;
-          
-          if (audioRef.current) {
-            audioRef.current.volume = newVolume;
-          }
-          setAudioVolume(newVolume);
+          const newVolume = Math.max(0, (audioRef.current.volume - fadeStep));
+          audioRef.current.volume = newVolume;
           
           if (newVolume <= 0) {
             if (fadeIntervalRef.current) {
@@ -44,17 +36,12 @@ export const useAudioFade = (isPlaying: boolean) => {
 
         fadeIntervalRef.current = setInterval(startFadeOut, fadeInterval);
         startFadeOut();
-      } else if (event.deltaY < 0) {
+      } else if (event.deltaY < 0) { // Scrolling up
         const startFadeIn = () => {
-          if (wasMutedRef.current) return;
+          if (!audioRef.current) return;
           
-          const newVolume = Math.min(1, currentVolumeRef.current + fadeStep);
-          currentVolumeRef.current = newVolume;
-          
-          if (audioRef.current) {
-            audioRef.current.volume = newVolume;
-          }
-          setAudioVolume(newVolume);
+          const newVolume = Math.min(1, (audioRef.current.volume + fadeStep));
+          audioRef.current.volume = newVolume;
           
           if (newVolume >= 1) {
             if (fadeIntervalRef.current) {
@@ -75,19 +62,7 @@ export const useAudioFade = (isPlaying: boolean) => {
         clearInterval(fadeIntervalRef.current);
       }
     };
-  }, [isPlaying]);
+  }, [isPlaying, audioRef]);
 
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = audioVolume;
-      currentVolumeRef.current = audioVolume;
-    }
-  }, [audioVolume]);
-
-  return {
-    showBlackScreen,
-    audioRef,
-    audioVolume,
-    wasMutedRef
-  };
+  return { audioRef };
 };
