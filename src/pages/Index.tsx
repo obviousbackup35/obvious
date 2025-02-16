@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from "react";
 import { VideoPlayer } from "@/components/video-player/VideoPlayer";
 import { VideoOverlay } from "@/components/video-player/VideoOverlay";
@@ -15,7 +14,7 @@ const Index = () => {
   const [isBackgroundLoaded, setIsBackgroundLoaded] = useState(false);
   const [currentView, setCurrentView] = useState<ContentView>('video');
   const { activeVideo, video1Ref, video2Ref, handleTimeUpdate } = useVideoTransition();
-  const { audioRef } = useAudioFade(isPlaying);
+  const { audioRef } = useAudioFade(isPlaying, currentView);
   const { 
     isMuted, 
     toggleAudio, 
