@@ -1,9 +1,11 @@
+
 import { useState, useEffect, useCallback } from "react";
 import { VideoPlayer } from "@/components/video-player/VideoPlayer";
 import { VideoOverlay } from "@/components/video-player/VideoOverlay";
 import { Logo } from "@/components/video-player/Logo";
 import { useVideoTransition } from "@/hooks/useVideoTransition";
-import { useAudioFade } from "@/hooks/useAudioFade";
+import { usePageAudio } from "@/hooks/usePageAudio";
+import { useViewTransition } from "@/hooks/useViewTransition";
 import { Navigation } from "@/components/Navigation";
 import { useAudio } from "@/contexts/AudioContext";
 
@@ -12,9 +14,9 @@ type ContentView = 'video' | 'dunes' | 'company' | 'projects' | 'gallery' | 'con
 const Index = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isBackgroundLoaded, setIsBackgroundLoaded] = useState(false);
-  const [currentView, setCurrentView] = useState<ContentView>('video');
+  const { currentView, setCurrentView } = useViewTransition(isPlaying);
   const { activeVideo, video1Ref, video2Ref, handleTimeUpdate } = useVideoTransition();
-  const { audioRef } = useAudioFade(isPlaying, currentView);
+  const { audioRef } = usePageAudio(isPlaying, currentView);
   const { 
     isMuted, 
     toggleAudio, 
@@ -24,34 +26,15 @@ const Index = () => {
     setCurrentTime
   } = useAudio();
 
-  useEffect(() => {
-    if (!isPlaying) return;
-
-    const handleWheel = (event: WheelEvent) => {
-      event.preventDefault();
-      
-      if (event.deltaY > 0 && currentView === 'video') {
-        setCurrentView('dunes');
-      } else if (event.deltaY < 0 && currentView === 'dunes') {
-        setCurrentView('video');
-      }
-    };
-
-    window.addEventListener('wheel', handleWheel, { passive: false });
-    return () => window.removeEventListener('wheel', handleWheel);
-  }, [isPlaying, currentView]);
-
   const startPlayback = useCallback(async () => {
     try {
       if (!isPlaying) {
-        // Primeiro, tenta iniciar o áudio
         if (audioRef.current) {
           audioRef.current.currentTime = 0;
           audioRef.current.volume = 1;
           await audioRef.current.play();
         }
 
-        // Depois inicia os vídeos
         const videos = [video1Ref.current, video2Ref.current].filter(Boolean);
         await Promise.all(
           videos.map(video => {
@@ -76,10 +59,6 @@ const Index = () => {
     }
     startPlayback();
   }, [hasInitialInteraction, setHasInitialInteraction, startPlayback]);
-
-  const handleViewChange = (view: ContentView) => {
-    setCurrentView(view);
-  };
 
   useEffect(() => {
     if (hasInitialInteraction && !isPlaying) {
@@ -126,7 +105,7 @@ const Index = () => {
         isMuted={isMuted} 
         toggleAudio={toggleAudio} 
         isVisible={isPlaying}
-        onViewChange={handleViewChange}
+        onViewChange={setCurrentView}
         currentView={currentView}
       />
 
