@@ -16,9 +16,11 @@ export const Navigation = ({ audioRef, isMuted, toggleAudio, isVisible = true }:
   const location = useLocation();
 
   useEffect(() => {
-    const handlePopState = (event: PopStateEvent) => {
-      event.preventDefault();
-      navigate('/');
+    const handlePopState = () => {
+      const menuRoutes = ['/company', '/projects', '/gallery', '/contact'];
+      if (menuRoutes.includes(location.pathname)) {
+        navigate('/');
+      }
     };
 
     window.addEventListener('popstate', handlePopState);
@@ -26,13 +28,13 @@ export const Navigation = ({ audioRef, isMuted, toggleAudio, isVisible = true }:
     return () => {
       window.removeEventListener('popstate', handlePopState);
     };
-  }, [navigate]);
+  }, [navigate, location]);
 
   const handleNavigation = (path: string) => (e: React.MouseEvent) => {
     e.preventDefault();
     setIsNavigating(true);
     setTimeout(() => {
-      navigate(path, { replace: true });
+      navigate(path);
       setIsNavigating(false);
     }, 1000);
   };
