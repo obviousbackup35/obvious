@@ -41,18 +41,29 @@ const Index = () => {
     return () => window.removeEventListener('wheel', handleWheel);
   }, [isPlaying, currentView]);
 
-  const startPlayback = useCallback(() => {
-    const videos = document.querySelectorAll('video');
-    if (videos.length && !isPlaying) {
-      videos.forEach(video => {
-        video.currentTime = currentTime;
-        video.play();
-      });
-      if (audioRef.current) {
-        audioRef.current.play();
-        audioRef.current.volume = 1;
+  const startPlayback = useCallback(async () => {
+    try {
+      const videos = document.querySelectorAll('video');
+      if (videos.length && !isPlaying) {
+        const playPromises = Array.from(videos).map(video => {
+          video.currentTime = currentTime;
+          return video.play();
+        });
+
+        if (audioRef.current) {
+          audioRef.current.currentTime = 0;
+          const audioPromise = audioRef.current.play();
+          playPromises.push(audioPromise);
+        }
+
+        await Promise.all(playPromises);
+        if (audioRef.current) {
+          audioRef.current.volume = 1;
+        }
+        setIsPlaying(true);
       }
-      setIsPlaying(true);
+    } catch (error) {
+      console.error('Error starting playback:', error);
     }
   }, [isPlaying, audioRef, currentTime]);
 

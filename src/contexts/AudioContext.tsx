@@ -57,6 +57,7 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
         ref={audioRef}
         src="/background-music.mp3"
         loop
+        preload="auto"
       />
       {children}
     </AudioContext.Provider>
