@@ -1,20 +1,19 @@
 
 import { useState, useEffect, useCallback } from "react";
-import { Volume2, VolumeX } from "lucide-react";
 import { VideoPlayer } from "@/components/video-player/VideoPlayer";
 import { VideoOverlay } from "@/components/video-player/VideoOverlay";
 import { Logo } from "@/components/video-player/Logo";
 import { useVideoTransition } from "@/hooks/useVideoTransition";
 import { useAudioFade } from "@/hooks/useAudioFade";
 import { Navigation } from "@/components/Navigation";
-import { useAudioState } from "@/hooks/useAudioState";
+import { useAudio } from "@/contexts/AudioContext";
 
 const Index = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isBackgroundLoaded, setIsBackgroundLoaded] = useState(false);
   const { activeVideo, video1Ref, video2Ref, handleTimeUpdate } = useVideoTransition();
   const { showBlackScreen } = useAudioFade(isPlaying);
-  const { audioRef, isMuted, toggleAudio } = useAudioState();
+  const { audioRef, isMuted, toggleAudio } = useAudio();
   
   const handleClick = useCallback((event: React.MouseEvent | React.TouchEvent) => {
     const videos = event.currentTarget.querySelectorAll('video');
@@ -60,11 +59,6 @@ const Index = () => {
         isMuted={isMuted} 
         toggleAudio={toggleAudio} 
         isVisible={isPlaying && !showBlackScreen}
-      />
-      <audio
-        ref={audioRef}
-        src="/background-music.mp3"
-        loop
       />
       <VideoOverlay isBackgroundLoaded={isBackgroundLoaded} />
       <div 
