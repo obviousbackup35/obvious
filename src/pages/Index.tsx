@@ -58,7 +58,7 @@ const Index = () => {
         audioRef={audioRef} 
         isMuted={isMuted} 
         toggleAudio={toggleAudio} 
-        isVisible={isPlaying && !showBlackScreen}
+        isVisible={isPlaying}
       />
       <VideoOverlay isBackgroundLoaded={isBackgroundLoaded} />
       <div 
