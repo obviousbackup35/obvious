@@ -104,7 +104,7 @@ const Index = () => {
       <VideoOverlay 
         isBackgroundLoaded={isBackgroundLoaded} 
         style={{ 
-          opacity: currentView === 'video' ? 1 : 0,
+          opacity: currentView === 'video' ? (isBackgroundLoaded ? 1 : 0) : 0,
           transition: 'opacity 2s ease-in-out',
         }}
       />
@@ -140,19 +140,7 @@ const Index = () => {
       <Logo 
         isBackgroundLoaded={isBackgroundLoaded}
         style={{
-          opacity: currentView === 'video' ? 1 : 0,
-          transition: 'opacity 2s ease-in-out',
-        }}
-      />
-
-      {/* Dunes Content */}
-      <div 
-        className="absolute inset-0 w-full h-full z-20"
-        style={{ 
-          backgroundImage: 'url(/dunes.webp)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          opacity: showBlackScreen ? 1 : 0,
+          opacity: currentView === 'video' ? (isBackgroundLoaded ? 1 : 0) : 0,
           transition: 'opacity 2s ease-in-out',
         }}
       />

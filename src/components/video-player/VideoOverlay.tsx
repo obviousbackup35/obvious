@@ -13,8 +13,12 @@ export const VideoOverlay = ({ isBackgroundLoaded, style }: VideoOverlayProps) =
       style={{ 
         backgroundImage: 'url("/fundo.webp")',
         opacity: isBackgroundLoaded ? 1 : 0,
-        transition: 'opacity 1s ease-in-out',
-        ...style
+        transition: 'opacity 2s ease-in-out',
+        ...style,
+        // Combina as transições mantendo a suavidade
+        transitionProperty: 'opacity',
+        transitionDuration: '2s',
+        transitionTimingFunction: 'ease-in-out'
       }}
     />
   );
