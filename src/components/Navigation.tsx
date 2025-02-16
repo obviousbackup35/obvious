@@ -36,11 +36,11 @@ export const Navigation = ({ audioRef, isMuted, toggleAudio, isVisible = true }:
           <div className="flex justify-center font-montserrat text-[#CABA9F] text-[1.15rem]">
             <a href="/company" onClick={handleNavigation('/company')} className="cursor-pointer">C O M P A N Y</a>
             <span className="mx-16" />
-            <a href="/projects" className="cursor-pointer">P R O J E C T S</a>
+            <a href="/projects" onClick={handleNavigation('/projects')} className="cursor-pointer">P R O J E C T S</a>
             <span className="mx-32" />
-            <a href="/gallery" className="cursor-pointer">G A L L E R Y</a>
+            <a href="/gallery" onClick={handleNavigation('/gallery')} className="cursor-pointer">G A L L E R Y</a>
             <span className="mx-16" />
-            <a href="/contact" className="cursor-pointer">C O N T A C T</a>
+            <a href="/contact" onClick={handleNavigation('/contact')} className="cursor-pointer">C O N T A C T</a>
           </div>
         </nav>
 
