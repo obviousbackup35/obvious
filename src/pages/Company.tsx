@@ -11,6 +11,7 @@ const Company = () => {
         audioRef={audioRef} 
         isMuted={isMuted} 
         toggleAudio={toggleAudio}
+        isVisible={true}
       />
     </div>
   );
