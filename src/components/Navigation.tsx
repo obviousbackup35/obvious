@@ -1,6 +1,6 @@
 
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Volume2, VolumeX } from "lucide-react";
 
 interface NavigationProps {
@@ -13,12 +13,26 @@ interface NavigationProps {
 export const Navigation = ({ audioRef, isMuted, toggleAudio, isVisible = true }: NavigationProps) => {
   const [isNavigating, setIsNavigating] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const handlePopState = (event: PopStateEvent) => {
+      event.preventDefault();
+      navigate('/');
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [navigate]);
 
   const handleNavigation = (path: string) => (e: React.MouseEvent) => {
     e.preventDefault();
     setIsNavigating(true);
     setTimeout(() => {
-      navigate(path);
+      navigate(path, { replace: true });
       setIsNavigating(false);
     }, 1000);
   };
