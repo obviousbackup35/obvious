@@ -140,7 +140,7 @@ const Index = () => {
       <Logo 
         isBackgroundLoaded={isBackgroundLoaded}
         style={{
-          opacity: currentView === 'video' ? (isBackgroundLoaded ? 1 : 0) : 0,
+          opacity: currentView === 'video' && !showBlackScreen ? (isBackgroundLoaded ? 1 : 0) : 0,
           transition: 'opacity 2s ease-in-out',
         }}
       />
