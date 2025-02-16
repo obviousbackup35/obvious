@@ -55,9 +55,12 @@ const Index = () => {
       onClick={handleClick}
       onTouchStart={handleClick}
     >
-      {isPlaying && !showBlackScreen && (
-        <Navigation audioRef={audioRef} isMuted={isMuted} toggleAudio={toggleAudio} />
-      )}
+      <Navigation 
+        audioRef={audioRef} 
+        isMuted={isMuted} 
+        toggleAudio={toggleAudio} 
+        isVisible={isPlaying && !showBlackScreen}
+      />
       <audio
         ref={audioRef}
         src="/background-music.mp3"
