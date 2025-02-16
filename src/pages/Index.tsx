@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from "react";
 import { VideoPlayer } from "@/components/video-player/VideoPlayer";
 import { VideoOverlay } from "@/components/video-player/VideoOverlay";
@@ -139,21 +138,14 @@ const Index = () => {
       />
 
       {/* Menu Content Sections */}
-      <div 
-        className="absolute inset-0 w-full h-full z-30"
-        style={{ 
-          opacity: currentView !== 'video' && currentView !== 'dunes' ? 1 : 0,
-          pointerEvents: currentView !== 'video' && currentView !== 'dunes' ? 'auto' : 'none',
-          transition: 'opacity 1s ease-in-out',
-        }}
-      >
+      <div className="absolute inset-0 w-full h-full z-30">
         {/* Company Section */}
         <div 
           className="absolute inset-0 w-full h-full"
           style={{ 
             backgroundImage: 'linear-gradient(to right, #243949 0%, #517fa4 100%)',
             opacity: currentView === 'company' ? 1 : 0,
-            transition: 'opacity 1s ease-in-out',
+            transition: 'opacity 2s ease-in-out',
           }}
         >
           <div className="flex items-center justify-center h-full text-white text-4xl font-montserrat">
@@ -167,7 +159,7 @@ const Index = () => {
           style={{ 
             backgroundImage: 'linear-gradient(to right, #c1c161 0%, #c1c161 0%, #d4d4b1 100%)',
             opacity: currentView === 'projects' ? 1 : 0,
-            transition: 'opacity 1s ease-in-out',
+            transition: 'opacity 2s ease-in-out',
           }}
         >
           <div className="flex items-center justify-center h-full text-white text-4xl font-montserrat">
@@ -181,7 +173,7 @@ const Index = () => {
           style={{ 
             backgroundImage: 'linear-gradient(to right, #ffc3a0 0%, #ffafbd 100%)',
             opacity: currentView === 'gallery' ? 1 : 0,
-            transition: 'opacity 1s ease-in-out',
+            transition: 'opacity 2s ease-in-out',
           }}
         >
           <div className="flex items-center justify-center h-full text-white text-4xl font-montserrat">
@@ -195,7 +187,7 @@ const Index = () => {
           style={{ 
             backgroundImage: 'linear-gradient(to top, #e6b980 0%, #eacda3 100%)',
             opacity: currentView === 'contact' ? 1 : 0,
-            transition: 'opacity 1s ease-in-out',
+            transition: 'opacity 2s ease-in-out',
           }}
         >
           <div className="flex items-center justify-center h-full text-white text-4xl font-montserrat">
