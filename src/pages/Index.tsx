@@ -79,7 +79,7 @@ const Index = () => {
       onTouchStart={handleClick}
     >
       <nav 
-        className={`absolute top-6 w-full z-50 transition-opacity duration-1000 ${
+        className={`absolute top-4 w-full z-50 transition-opacity duration-1000 ${
           isPlaying && !showBlackScreen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
       >
