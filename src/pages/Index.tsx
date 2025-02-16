@@ -116,11 +116,21 @@ const Index = () => {
         currentView={currentView}
       />
 
+      {/* Black overlay to prevent white arches from showing during transitions */}
+      <div 
+        className="absolute inset-0 w-full h-full z-10"
+        style={{ 
+          backgroundColor: 'black',
+          opacity: isPlaying ? 1 : 0,
+          transition: 'opacity 0.5s ease-in-out',
+        }}
+      />
+
       {/* Video Content */}
       <VideoOverlay 
         isBackgroundLoaded={isBackgroundLoaded} 
         style={{ 
-          opacity: currentView === 'video' ? (isBackgroundLoaded ? 1 : 0) : 0,
+          opacity: !isPlaying && currentView === 'video' ? (isBackgroundLoaded ? 1 : 0) : 0,
           transition: 'opacity 2s ease-in-out',
         }}
       />
@@ -131,7 +141,8 @@ const Index = () => {
         src="/loft-video.webm"
         style={{
           opacity: currentView === 'video' && isPlaying ? (activeVideo === 1 ? 1 : 0) : 0,
-          transition: 'opacity 1s ease-in-out'
+          transition: 'opacity 1s ease-in-out',
+          zIndex: 20
         }}
       />
       <VideoPlayer
@@ -141,14 +152,16 @@ const Index = () => {
         src="/loft-video.webm"
         style={{
           opacity: currentView === 'video' && isPlaying ? (activeVideo === 2 ? 1 : 0) : 0,
-          transition: 'opacity 1s ease-in-out'
+          transition: 'opacity 1s ease-in-out',
+          zIndex: 20
         }}
       />
       <Logo 
         isBackgroundLoaded={isBackgroundLoaded}
         style={{
           opacity: currentView === 'video' ? (isBackgroundLoaded ? 1 : 0) : 0,
-          transition: 'opacity 1s ease-in-out'
+          transition: 'opacity 1s ease-in-out',
+          zIndex: 30
         }}
       />
 
