@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 import { VideoPlayer } from "@/components/video-player/VideoPlayer";
@@ -78,21 +77,23 @@ const Index = () => {
       onClick={handleClick}
       onTouchStart={handleClick}
     >
-      {isPlaying && !showBlackScreen && (
-        <nav className="absolute top-8 w-full z-50">
-          <div className="flex justify-center font-montserrat text-white text-sm">
-            <a href="#" className="cursor-pointer">H O M E</a>
-            <span className="mx-10" />
-            <a href="#" className="cursor-pointer">P R O J E C T S</a>
-            <span className="mx-10" />
-            <a href="#" className="cursor-pointer">C O M P A N Y</a>
-            <span className="mx-10" />
-            <a href="#" className="cursor-pointer">G A L L E R Y</a>
-            <span className="mx-10" />
-            <a href="#" className="cursor-pointer">C O N T A C T</a>
-          </div>
-        </nav>
-      )}
+      <nav 
+        className={`absolute top-8 w-full z-50 transition-opacity duration-1000 ${
+          isPlaying && !showBlackScreen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+      >
+        <div className="flex justify-center font-montserrat text-white text-sm">
+          <a href="#" className="cursor-pointer">H O M E</a>
+          <span className="mx-10" />
+          <a href="#" className="cursor-pointer">P R O J E C T S</a>
+          <span className="mx-10" />
+          <a href="#" className="cursor-pointer">C O M P A N Y</a>
+          <span className="mx-10" />
+          <a href="#" className="cursor-pointer">G A L L E R Y</a>
+          <span className="mx-10" />
+          <a href="#" className="cursor-pointer">C O N T A C T</a>
+        </div>
+      </nav>
 
       {isPlaying && (
         <button
