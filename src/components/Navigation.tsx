@@ -34,7 +34,7 @@ export const Navigation = ({ audioRef, isMuted, toggleAudio, isVisible = true }:
     e.preventDefault();
     setIsNavigating(true);
     setTimeout(() => {
-      navigate(path);
+      navigate(path, { replace: true });
       setIsNavigating(false);
     }, 1000);
   };
