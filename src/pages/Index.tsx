@@ -14,9 +14,8 @@ const Index = () => {
   const [isBackgroundLoaded, setIsBackgroundLoaded] = useState(false);
   const [currentView, setCurrentView] = useState<ContentView>('video');
   const { activeVideo, video1Ref, video2Ref, handleTimeUpdate } = useVideoTransition();
-  const { showBlackScreen } = useAudioFade(isPlaying);
+  const { audioRef, audioVolume } = useAudioFade(isPlaying);
   const { 
-    audioRef, 
     isMuted, 
     toggleAudio, 
     hasInitialInteraction, 
@@ -26,11 +25,22 @@ const Index = () => {
   } = useAudio();
 
   useEffect(() => {
-    if (showBlackScreen && currentView === 'video') {
-      setCurrentView('dunes');
-    }
-  }, [showBlackScreen, currentView]);
-  
+    if (!isPlaying) return;
+
+    const handleWheel = (event: WheelEvent) => {
+      event.preventDefault();
+      
+      if (event.deltaY > 0 && currentView === 'video') {
+        setCurrentView('dunes');
+      } else if (event.deltaY < 0 && currentView === 'dunes') {
+        setCurrentView('video');
+      }
+    };
+
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    return () => window.removeEventListener('wheel', handleWheel);
+  }, [isPlaying, currentView]);
+
   const startPlayback = useCallback(() => {
     const videos = document.querySelectorAll('video');
     if (videos.length && !isPlaying) {
@@ -114,15 +124,6 @@ const Index = () => {
           transition: 'opacity 2s ease-in-out',
         }}
       />
-      <div 
-        className="absolute inset-0 w-full h-full z-0"
-        style={{ 
-          backgroundColor: 'black',
-          opacity: isPlaying && currentView === 'video' ? 1 : 0,
-          transition: 'opacity 1s ease-in-out',
-          transitionDelay: '1s'
-        }}
-      />
       <VideoPlayer
         ref={video1Ref}
         isPlaying={isPlaying}
@@ -146,8 +147,8 @@ const Index = () => {
       <Logo 
         isBackgroundLoaded={isBackgroundLoaded}
         style={{
-          opacity: (currentView === 'video' && !showBlackScreen) ? (isBackgroundLoaded ? 1 : 0) : 0,
-          transition: currentView === 'video' ? 'opacity 2s ease-in-out' : 'opacity 0.5s ease-out',
+          opacity: currentView === 'video' ? (isBackgroundLoaded ? 1 : 0) : 0,
+          transition: 'opacity 1s ease-in-out'
         }}
       />
 
@@ -159,7 +160,7 @@ const Index = () => {
           style={{ 
             backgroundImage: 'url("/dunes.webp")',
             opacity: currentView === 'dunes' ? 1 : 0,
-            transition: 'opacity 2s ease-in-out',
+            transition: 'opacity 1s ease-in-out',
             pointerEvents: currentView === 'dunes' ? 'auto' : 'none'
           }}
         />

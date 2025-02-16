@@ -22,11 +22,10 @@ export const useAudioFade = (isPlaying: boolean) => {
       const fadeStep = 0.05;
       const fadeInterval = 50;
 
-      if (event.deltaY > 0 && !showBlackScreen) {
-        setShowBlackScreen(true);
-        
+      // Removendo a lógica do showBlackScreen e mantendo apenas o controle do áudio
+      if (event.deltaY > 0) {
         const startFadeOut = () => {
-          if (wasMutedRef.current) return; // Se estava mudo, não faz fade
+          if (wasMutedRef.current) return;
           
           const newVolume = Math.max(0, currentVolumeRef.current - fadeStep);
           currentVolumeRef.current = newVolume;
@@ -45,11 +44,9 @@ export const useAudioFade = (isPlaying: boolean) => {
 
         fadeIntervalRef.current = setInterval(startFadeOut, fadeInterval);
         startFadeOut();
-      } else if (event.deltaY < 0 && showBlackScreen) {
-        setShowBlackScreen(false);
-        
+      } else if (event.deltaY < 0) {
         const startFadeIn = () => {
-          if (wasMutedRef.current) return; // Se estava mudo, não faz fade
+          if (wasMutedRef.current) return;
           
           const newVolume = Math.min(1, currentVolumeRef.current + fadeStep);
           currentVolumeRef.current = newVolume;
@@ -78,7 +75,7 @@ export const useAudioFade = (isPlaying: boolean) => {
         clearInterval(fadeIntervalRef.current);
       }
     };
-  }, [isPlaying, showBlackScreen]);
+  }, [isPlaying]);
 
   useEffect(() => {
     if (audioRef.current) {
