@@ -78,19 +78,21 @@ const Index = () => {
       onClick={handleClick}
       onTouchStart={handleClick}
     >
-      <nav className="absolute top-8 left-1/2 transform -translate-x-1/2 z-50">
-        <div className="flex font-montserrat text-white text-sm">
-          <a href="#" className="cursor-pointer">H O M E</a>
-          <span className="mx-10" />
-          <a href="#" className="cursor-pointer">P R O J E C T S</a>
-          <span className="mx-10" />
-          <a href="#" className="cursor-pointer">C O M P A N Y</a>
-          <span className="mx-10" />
-          <a href="#" className="cursor-pointer">G A L L E R Y</a>
-          <span className="mx-10" />
-          <a href="#" className="cursor-pointer">C O N T A C T</a>
-        </div>
-      </nav>
+      {isPlaying && !showBlackScreen && (
+        <nav className="absolute top-8 w-full z-50">
+          <div className="flex justify-center font-montserrat text-white text-sm">
+            <a href="#" className="cursor-pointer">H O M E</a>
+            <span className="mx-10" />
+            <a href="#" className="cursor-pointer">P R O J E C T S</a>
+            <span className="mx-10" />
+            <a href="#" className="cursor-pointer">C O M P A N Y</a>
+            <span className="mx-10" />
+            <a href="#" className="cursor-pointer">G A L L E R Y</a>
+            <span className="mx-10" />
+            <a href="#" className="cursor-pointer">C O N T A C T</a>
+          </div>
+        </nav>
+      )}
 
       {isPlaying && (
         <button
