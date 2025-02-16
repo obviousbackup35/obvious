@@ -1,6 +1,6 @@
-
 import { useState, useEffect, useCallback } from "react";
 import { Volume2, VolumeX } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { VideoPlayer } from "@/components/video-player/VideoPlayer";
 import { VideoOverlay } from "@/components/video-player/VideoOverlay";
 import { Logo } from "@/components/video-player/Logo";
@@ -11,9 +11,19 @@ const Index = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isBackgroundLoaded, setIsBackgroundLoaded] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
+  const navigate = useNavigate();
   const { activeVideo, video1Ref, video2Ref, handleTimeUpdate } = useVideoTransition();
   const { showBlackScreen, audioRef, audioVolume, wasMutedRef } = useAudioFade(isPlaying);
-  
+
+  const handleNavigation = (path: string) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsNavigating(true);
+    setTimeout(() => {
+      navigate(path);
+    }, 1000);
+  };
+
   const handleClick = useCallback((event: React.MouseEvent | React.TouchEvent) => {
     const videos = event.currentTarget.querySelectorAll('video');
     if (videos.length && !isPlaying) {
@@ -84,13 +94,13 @@ const Index = () => {
         }`}
       >
         <div className="flex justify-center font-montserrat text-[#CABA9F] text-[1.15rem]">
-          <a href="#" className="cursor-pointer">C O M P A N Y</a>
+          <a href="/company" className="cursor-pointer transition-opacity duration-1000" onClick={handleNavigation('/company')}>C O M P A N Y</a>
           <span className="mx-16" />
-          <a href="#" className="cursor-pointer">P R O J E C T S</a>
+          <a href="/projects" className="cursor-pointer transition-opacity duration-1000" onClick={handleNavigation('/projects')}>P R O J E C T S</a>
           <span className="mx-32" />
-          <a href="#" className="cursor-pointer">G A L L E R Y</a>
+          <a href="/gallery" className="cursor-pointer transition-opacity duration-1000" onClick={handleNavigation('/gallery')}>G A L L E R Y</a>
           <span className="mx-16" />
-          <a href="#" className="cursor-pointer">C O N T A C T</a>
+          <a href="/contact" className="cursor-pointer transition-opacity duration-1000" onClick={handleNavigation('/contact')}>C O N T A C T</a>
         </div>
       </nav>
 
@@ -135,14 +145,9 @@ const Index = () => {
       />
       <Logo isBackgroundLoaded={isBackgroundLoaded} />
       <div 
-        className="absolute inset-0 w-full h-full z-20"
-        style={{ 
-          backgroundImage: 'url(/dunes.webp)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          opacity: showBlackScreen ? 1 : 0,
-          transition: 'opacity 2s ease-in-out',
-        }}
+        className={`absolute inset-0 w-full h-full bg-white z-[60] transition-opacity duration-1000 ${
+          isNavigating ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
       />
     </div>
   );
