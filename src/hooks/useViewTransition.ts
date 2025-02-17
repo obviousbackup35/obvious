@@ -1,7 +1,6 @@
 
 import { useState, useEffect } from 'react';
-
-type ContentView = 'video' | 'dunes' | 'company' | 'projects' | 'gallery' | 'contact';
+import type { ContentView } from '@/types/navigation';
 
 export const useViewTransition = (isPlaying: boolean) => {
   const [currentView, setCurrentView] = useState<ContentView>('video');
