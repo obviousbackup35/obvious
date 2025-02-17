@@ -9,6 +9,10 @@ interface ContentSectionsProps {
 }
 
 export const ContentSections = ({ currentView, onViewChange }: ContentSectionsProps) => {
+  const handleBack = () => {
+    onViewChange('dunes');
+  };
+
   return (
     <div className="absolute inset-0 w-full h-full z-30">
       <div 
@@ -30,24 +34,28 @@ export const ContentSections = ({ currentView, onViewChange }: ContentSectionsPr
         isVisible={currentView === 'company'}
         gradient="linear-gradient(to right, #243949 0%, #517fa4 100%)"
         title="Company"
+        onBack={handleBack}
       />
       
       <SectionContent
         isVisible={currentView === 'projects'}
         gradient="linear-gradient(to right, #c1c161 0%, #c1c161 0%, #d4d4b1 100%)"
         title="Projects"
+        onBack={handleBack}
       />
       
       <SectionContent
         isVisible={currentView === 'gallery'}
         gradient="linear-gradient(to right, #ffc3a0 0%, #ffafbd 100%)"
         title="Gallery"
+        onBack={handleBack}
       />
       
       <SectionContent
         isVisible={currentView === 'contact'}
         gradient="linear-gradient(to top, #e6b980 0%, #eacda3 100%)"
         title="Contact"
+        onBack={handleBack}
       />
 
       {/* Policy Sections */}
@@ -64,6 +72,7 @@ export const ContentSections = ({ currentView, onViewChange }: ContentSectionsPr
           isVisible={currentView === policy}
           gradient="linear-gradient(to right, #2c3e50 0%, #3498db 100%)"
           title={policy.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+          onBack={handleBack}
         />
       ))}
     </div>
