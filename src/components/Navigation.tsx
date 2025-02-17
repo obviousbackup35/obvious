@@ -42,7 +42,7 @@ export const Navigation = ({
         <div className="flex justify-center items-center font-montserrat text-[1.38rem] relative" style={{ color: '#c8c5ad' }}>
           <button
             onClick={handleHomeClick}
-            className="absolute left-4 p-2 hover:opacity-70 transition-opacity"
+            className="absolute left-4 p-2 hover:opacity-70 transition-opacity rounded-full bg-black/50 hover:bg-black/70"
             aria-label="Go to home"
           >
             <Hexagon className="w-6 h-6" style={{ color: '#c8c5ad' }} />
