@@ -1,11 +1,14 @@
 
 import { SectionContent } from "./SectionContent";
+import type { ContentView } from "@/types/navigation";
+import { PolicyMenu } from "../PolicyMenu";
 
 interface ContentSectionsProps {
-  currentView: string;
+  currentView: ContentView;
+  onViewChange: (view: ContentView) => void;
 }
 
-export const ContentSections = ({ currentView }: ContentSectionsProps) => {
+export const ContentSections = ({ currentView, onViewChange }: ContentSectionsProps) => {
   return (
     <div className="absolute inset-0 w-full h-full z-30">
       <div 
@@ -16,7 +19,12 @@ export const ContentSections = ({ currentView }: ContentSectionsProps) => {
           transition: 'opacity 1s ease-in-out',
           pointerEvents: currentView === 'dunes' ? 'auto' : 'none'
         }}
-      />
+      >
+        <PolicyMenu 
+          onViewChange={onViewChange} 
+          isVisible={currentView === 'dunes'} 
+        />
+      </div>
       
       <SectionContent
         isVisible={currentView === 'company'}
@@ -41,6 +49,23 @@ export const ContentSections = ({ currentView }: ContentSectionsProps) => {
         gradient="linear-gradient(to top, #e6b980 0%, #eacda3 100%)"
         title="Contact"
       />
+
+      {/* Policy Sections */}
+      {[
+        'privacy', 'terms', 'cookie', 'legal', 'intellectual-property',
+        'accessibility', 'refund', 'shipping', 'terms-sale', 'ugc',
+        'data-retention', 'cybersecurity', 'ai-policy', 'california-privacy',
+        'do-not-sell', 'ethics', 'anti-bribery', 'whistleblower',
+        'supplier-code', 'employee-code', 'social-media', 'environmental',
+        'sitemap'
+      ].map((policy) => (
+        <SectionContent
+          key={policy}
+          isVisible={currentView === policy}
+          gradient="linear-gradient(to right, #2c3e50 0%, #3498db 100%)"
+          title={policy.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+        />
+      ))}
     </div>
   );
 };

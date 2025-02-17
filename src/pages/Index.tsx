@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from "react";
 import { useVideoTransition } from "@/hooks/useVideoTransition";
 import { usePageAudio } from "@/hooks/usePageAudio";
@@ -124,7 +123,10 @@ const Index = () => {
         video2Ref={video2Ref}
       />
 
-      <ContentSections currentView={currentView} />
+      <ContentSections 
+        currentView={currentView} 
+        onViewChange={setCurrentView}
+      />
     </div>
   );
 };
