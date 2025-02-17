@@ -54,7 +54,7 @@ export const PolicyMenu = ({ onViewChange, isVisible }: PolicyMenuProps) => {
               className="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white"
               onClick={() => onViewChange('auth')}
             >
-              Meu Perfil
+              My Profile
             </Button>
           ) : (
             <Button 
@@ -62,7 +62,7 @@ export const PolicyMenu = ({ onViewChange, isVisible }: PolicyMenuProps) => {
               className="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white"
               onClick={() => onViewChange('auth')}
             >
-              Login / Cadastro
+              Login / Register
             </Button>
           )}
         </div>
