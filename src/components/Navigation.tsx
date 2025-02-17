@@ -49,9 +49,17 @@ export const Navigation = ({
           </button>
           <button onClick={handleViewChange('company')} className="cursor-pointer hover:opacity-70 transition-opacity">C O M P A N Y</button>
           <span className="mx-12" />
-          <button onClick={handleViewChange('projects')} className="cursor-pointer hover:opacity-70 transition-opacity">P R O J E C T S</button>
+          <button 
+            onClick={handleViewChange('projects')} 
+            className="cursor-pointer hover:opacity-70 transition-opacity"
+            style={{ transform: 'translateX(-1cm)' }}
+          >P R O J E C T S</button>
           <span className="mx-36" />
-          <button onClick={handleViewChange('gallery')} className="cursor-pointer hover:opacity-70 transition-opacity">G A L L E R Y</button>
+          <button 
+            onClick={handleViewChange('gallery')} 
+            className="cursor-pointer hover:opacity-70 transition-opacity"
+            style={{ transform: 'translateX(1cm)' }}
+          >G A L L E R Y</button>
           <span className="mx-12" />
           <button onClick={handleViewChange('contact')} className="cursor-pointer hover:opacity-70 transition-opacity">C O N T A C T</button>
         </div>
