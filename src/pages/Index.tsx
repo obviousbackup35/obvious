@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback } from "react";
 import { useVideoTransition } from "@/hooks/useVideoTransition";
 import { usePageAudio } from "@/hooks/usePageAudio";
@@ -6,6 +7,7 @@ import { Navigation } from "@/components/Navigation";
 import { useAudio } from "@/contexts/AudioContext";
 import { VideoManager } from "@/components/video-player/VideoManager";
 import { ContentSections } from "@/components/sections/ContentSections";
+import type { ContentView } from "@/types/navigation";
 
 const Index = () => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -21,6 +23,10 @@ const Index = () => {
     currentTime,
     setCurrentTime
   } = useAudio();
+
+  const handleViewChange = useCallback((view: ContentView) => {
+    setCurrentView(view);
+  }, [setCurrentView]);
 
   const startPlayback = useCallback(async () => {
     try {
@@ -101,7 +107,7 @@ const Index = () => {
         isMuted={isMuted} 
         toggleAudio={toggleAudio} 
         isVisible={isPlaying}
-        onViewChange={setCurrentView}
+        onViewChange={handleViewChange}
         currentView={currentView}
       />
 
@@ -125,7 +131,7 @@ const Index = () => {
 
       <ContentSections 
         currentView={currentView} 
-        onViewChange={setCurrentView}
+        onViewChange={handleViewChange}
       />
     </div>
   );
