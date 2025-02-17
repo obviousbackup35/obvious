@@ -2,7 +2,6 @@
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/use-toast";
-import { useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 
 interface ProfileSectionProps {
@@ -11,8 +10,6 @@ interface ProfileSectionProps {
 }
 
 export const ProfileSection = ({ isVisible, onBack }: ProfileSectionProps) => {
-  const navigate = useNavigate();
-
   const handleLogout = async () => {
     try {
       await supabase.auth.signOut();
