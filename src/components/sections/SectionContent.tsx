@@ -11,7 +11,7 @@ interface SectionContentProps {
 export const SectionContent = ({ isVisible, gradient, title, style }: SectionContentProps) => {
   return (
     <div 
-      className="absolute inset-0 w-full h-full flex items-center justify-center"
+      className="absolute inset-0 w-full h-full"
       style={{ 
         backgroundImage: gradient,
         opacity: isVisible ? 1 : 0,
@@ -21,7 +21,7 @@ export const SectionContent = ({ isVisible, gradient, title, style }: SectionCon
       }}
     >
       <div className="w-full h-full flex items-center justify-center">
-        <h2 className="text-white text-4xl font-montserrat tracking-[0.3em] text-center">{title}</h2>
+        <h2 className="text-white text-4xl font-montserrat tracking-[0.3em]">{title}</h2>
       </div>
     </div>
   );
