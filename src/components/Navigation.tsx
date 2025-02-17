@@ -62,9 +62,9 @@ export const Navigation = ({
         className="absolute top-4 right-4 z-50 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors"
       >
         {isMuted ? (
-          <VolumeX className="w-6 h-6 text-white" />
+          <VolumeX className="w-6 h-6" style={{ color: '#c8c5ad' }} />
         ) : (
-          <Volume2 className="w-6 h-6 text-white" />
+          <Volume2 className="w-6 h-6" style={{ color: '#c8c5ad' }} />
         )}
       </button>
     </div>
