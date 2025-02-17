@@ -46,7 +46,7 @@ export const PolicyMenu = ({ onViewChange, isVisible }: PolicyMenuProps) => {
         isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}
     >
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-7xl">
+      <div className="absolute top-[62.5%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-7xl">
         <div className="flex justify-center items-center mb-24">
           {user ? (
             <Button 
@@ -81,11 +81,7 @@ export const PolicyMenu = ({ onViewChange, isVisible }: PolicyMenuProps) => {
                     onClick={() => handlePolicyClick(item)}
                     onMouseEnter={() => setHoveredItem(item)}
                     onMouseLeave={() => setHoveredItem(null)}
-                    className={`cursor-pointer transition-opacity duration-300 text-lg font-semibold ${
-                      hoveredItem && hoveredItem !== item
-                        ? 'opacity-30'
-                        : 'opacity-100'
-                    }`}
+                    className={`cursor-pointer transition-colors duration-300 text-lg font-semibold text-white/90 hover:text-white/70`}
                   >
                     {item.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                   </li>
