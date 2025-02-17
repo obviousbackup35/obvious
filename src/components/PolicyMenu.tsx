@@ -67,7 +67,7 @@ export const PolicyMenu = ({ onViewChange, isVisible }: PolicyMenuProps) => {
                   </li>
                 ))}
                 {group.title === "Other" && (
-                  <li className="mt-8">
+                  <li className="mt-12">
                     {user ? (
                       <Button 
                         variant="outline" 
