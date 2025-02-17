@@ -24,46 +24,46 @@ export const PolicyMenu = ({ onViewChange, isVisible = true }: PolicyMenuProps) 
       <nav className="w-full px-8">
         <div className="grid grid-cols-4 gap-x-16 gap-y-4 justify-items-start font-montserrat text-[#a4a4a3] text-sm font-semibold">
           <button onClick={handleViewChange('privacy')} className="cursor-pointer hover:opacity-70 transition-opacity">
-            P R I V A C Y  P O L I C Y
+            P R I V A C Y&nbsp;&nbsp;P O L I C Y
           </button>
           <button onClick={handleViewChange('terms')} className="cursor-pointer hover:opacity-70 transition-opacity">
-            T E R M S  O F  U S E
+            T E R M S&nbsp;&nbsp;O F&nbsp;&nbsp;U S E
           </button>
           <button onClick={handleViewChange('cookie')} className="cursor-pointer hover:opacity-70 transition-opacity">
-            C O O K I E  P O L I C Y
+            C O O K I E&nbsp;&nbsp;P O L I C Y
           </button>
           <button onClick={handleViewChange('legal')} className="cursor-pointer hover:opacity-70 transition-opacity">
-            L E G A L  D I S C L A I M E R
+            L E G A L&nbsp;&nbsp;D I S C L A I M E R
           </button>
           <button onClick={handleViewChange('intellectual-property')} className="cursor-pointer hover:opacity-70 transition-opacity">
-            I P  P O L I C Y
+            I P&nbsp;&nbsp;P O L I C Y
           </button>
           <button onClick={handleViewChange('accessibility')} className="cursor-pointer hover:opacity-70 transition-opacity">
             A C C E S S I B I L I T Y
           </button>
           <button onClick={handleViewChange('refund')} className="cursor-pointer hover:opacity-70 transition-opacity">
-            R E F U N D  P O L I C Y
+            R E F U N D&nbsp;&nbsp;P O L I C Y
           </button>
           <button onClick={handleViewChange('shipping')} className="cursor-pointer hover:opacity-70 transition-opacity">
-            S H I P P I N G  P O L I C Y
+            S H I P P I N G&nbsp;&nbsp;P O L I C Y
           </button>
           <button onClick={handleViewChange('terms-sale')} className="cursor-pointer hover:opacity-70 transition-opacity">
-            T E R M S  O F  S A L E
+            T E R M S&nbsp;&nbsp;O F&nbsp;&nbsp;S A L E
           </button>
           <button onClick={handleViewChange('ugc')} className="cursor-pointer hover:opacity-70 transition-opacity">
-            U G C  P O L I C Y
+            U G C&nbsp;&nbsp;P O L I C Y
           </button>
           <button onClick={handleViewChange('data-retention')} className="cursor-pointer hover:opacity-70 transition-opacity">
-            D A T A  R E T E N T I O N
+            D A T A&nbsp;&nbsp;R E T E N T I O N
           </button>
           <button onClick={handleViewChange('cybersecurity')} className="cursor-pointer hover:opacity-70 transition-opacity">
             C Y B E R S E C U R I T Y
           </button>
           <button onClick={handleViewChange('ai-policy')} className="cursor-pointer hover:opacity-70 transition-opacity">
-            A I  P O L I C Y
+            A I&nbsp;&nbsp;P O L I C Y
           </button>
           <button onClick={handleViewChange('california-privacy')} className="cursor-pointer hover:opacity-70 transition-opacity">
-            C A  P R I V A C Y
+            C A&nbsp;&nbsp;P R I V A C Y
           </button>
           <button onClick={handleViewChange('do-not-sell')} className="cursor-pointer hover:opacity-70 transition-opacity">
             D N S M P I
@@ -78,13 +78,13 @@ export const PolicyMenu = ({ onViewChange, isVisible = true }: PolicyMenuProps) 
             W H I S T L E B L O W E R
           </button>
           <button onClick={handleViewChange('supplier-code')} className="cursor-pointer hover:opacity-70 transition-opacity">
-            S U P P L I E R  C O D E
+            S U P P L I E R&nbsp;&nbsp;C O D E
           </button>
           <button onClick={handleViewChange('employee-code')} className="cursor-pointer hover:opacity-70 transition-opacity">
-            E M P L O Y E E  C O D E
+            E M P L O Y E E&nbsp;&nbsp;C O D E
           </button>
           <button onClick={handleViewChange('social-media')} className="cursor-pointer hover:opacity-70 transition-opacity">
-            S O C I A L  M E D I A
+            S O C I A L&nbsp;&nbsp;M E D I A
           </button>
           <button onClick={handleViewChange('environmental')} className="cursor-pointer hover:opacity-70 transition-opacity">
             E N V I R O N M E N T A L
