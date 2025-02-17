@@ -47,26 +47,6 @@ export const PolicyMenu = ({ onViewChange, isVisible }: PolicyMenuProps) => {
       }`}
     >
       <div className="absolute top-[62.5%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-6xl mx-auto">
-        <div className="flex justify-center items-center mb-24">
-          {user ? (
-            <Button 
-              variant="outline" 
-              className="border-0 mix-blend-color-burn font-semibold bg-[#c8c5ad] hover:bg-[#c8c5ad]/90 clip-hexagon px-8"
-              onClick={() => onViewChange('profile')}
-            >
-              My Profile
-            </Button>
-          ) : (
-            <Button 
-              variant="outline" 
-              className="border-0 mix-blend-color-burn font-semibold bg-[#c8c5ad] hover:bg-[#c8c5ad]/90 clip-hexagon px-8"
-              onClick={() => onViewChange('auth')}
-            >
-              Login / Register
-            </Button>
-          )}
-        </div>
-
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-12">
           {policyGroups.map((group) => (
             <div
@@ -86,6 +66,27 @@ export const PolicyMenu = ({ onViewChange, isVisible }: PolicyMenuProps) => {
                     {item.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                   </li>
                 ))}
+                {group.title === "Other" && (
+                  <li className="mt-8">
+                    {user ? (
+                      <Button 
+                        variant="outline" 
+                        className="border-0 mix-blend-color-burn font-semibold bg-[#c8c5ad] hover:bg-[#c8c5ad]/90 clip-hexagon px-8"
+                        onClick={() => onViewChange('profile')}
+                      >
+                        My Profile
+                      </Button>
+                    ) : (
+                      <Button 
+                        variant="outline" 
+                        className="border-0 mix-blend-color-burn font-semibold bg-[#c8c5ad] hover:bg-[#c8c5ad]/90 clip-hexagon px-8"
+                        onClick={() => onViewChange('auth')}
+                      >
+                        Login / Register
+                      </Button>
+                    )}
+                  </li>
+                )}
               </ul>
             </div>
           ))}
