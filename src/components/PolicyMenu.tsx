@@ -46,7 +46,7 @@ export const PolicyMenu = ({ onViewChange, isVisible }: PolicyMenuProps) => {
         isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}
     >
-      <div className="absolute top-[62.5%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-7xl">
+      <div className="absolute top-[62.5%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-6xl mx-auto">
         <div className="flex justify-center items-center mb-24">
           {user ? (
             <Button 
@@ -67,11 +67,11 @@ export const PolicyMenu = ({ onViewChange, isVisible }: PolicyMenuProps) => {
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-12 px-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-12">
           {policyGroups.map((group) => (
             <div
               key={group.title}
-              className="text-white"
+              className="text-center"
             >
               <h3 className="text-2xl font-semibold mb-6" style={{ color: '#c8c5ad' }}>{group.title}</h3>
               <ul className="space-y-4">
@@ -81,7 +81,7 @@ export const PolicyMenu = ({ onViewChange, isVisible }: PolicyMenuProps) => {
                     onClick={() => handlePolicyClick(item)}
                     onMouseEnter={() => setHoveredItem(item)}
                     onMouseLeave={() => setHoveredItem(null)}
-                    className={`cursor-pointer transition-colors duration-300 text-lg font-semibold text-white/90 hover:text-white/70`}
+                    className="cursor-pointer transition-colors duration-300 text-lg font-semibold text-white/90 hover:text-white/70 text-center"
                   >
                     {item.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                   </li>
