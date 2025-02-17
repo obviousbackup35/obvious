@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import type { ContentView, PolicyView } from '@/types/navigation';
@@ -42,7 +41,7 @@ export const PolicyMenu = ({
             color: '#c8c5ad'
           }}>{group.title}</h3>
               <ul className="space-y-1.5">
-                {group.items.map(item => <li key={item} onClick={() => handlePolicyClick(item)} onMouseEnter={() => setHoveredItem(item)} onMouseLeave={() => setHoveredItem(null)} className="cursor-pointer transition-colors duration-300 text-xs font-semibold text-white/90 hover:text-white/70 text-center bg-transparent">
+                {group.items.map(item => <li key={item} onClick={() => handlePolicyClick(item)} onMouseEnter={() => setHoveredItem(item)} onMouseLeave={() => setHoveredItem(null)} className="cursor-pointer transition-colors duration-300 text-xs font-semibold text-white/90 hover:text-white/70 text-center bg-transparent px-0 py-0 my-[19px] mx-[32px]">
                     {item.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                   </li>)}
                 {group.title === "Other" && <li className="relative">
