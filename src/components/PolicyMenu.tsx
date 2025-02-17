@@ -41,7 +41,7 @@ export const PolicyMenu = ({
             color: '#c8c5ad'
           }}>{group.title}</h3>
               <ul className="space-y-4">
-                {group.items.map(item => <li key={item} onClick={() => handlePolicyClick(item)} onMouseEnter={() => setHoveredItem(item)} onMouseLeave={() => setHoveredItem(null)} className="cursor-pointer transition-colors duration-300 text-lg font-semibold text-white/90 hover:text-white/70 text-center bg-black/0">
+                {group.items.map(item => <li key={item} onClick={() => handlePolicyClick(item)} onMouseEnter={() => setHoveredItem(item)} onMouseLeave={() => setHoveredItem(null)} className="cursor-pointer transition-colors duration-300 text-lg font-semibold text-white/90 hover:text-white/70 text-center bg-transparent">
                     {item.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                   </li>)}
                 {group.title === "Other" && <li className="relative">
