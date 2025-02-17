@@ -20,8 +20,8 @@ export const SectionContent = ({ isVisible, gradient, title, style }: SectionCon
         ...style
       }}
     >
-      <div className="w-full max-w-4xl mx-auto px-4 text-center">
-        <h2 className="text-white text-4xl font-montserrat">{title} Content</h2>
+      <div className="w-full text-center">
+        <h2 className="text-white text-4xl font-montserrat tracking-[0.3em]">{title}</h2>
       </div>
     </div>
   );
