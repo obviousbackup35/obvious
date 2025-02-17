@@ -47,7 +47,7 @@ export const PolicyMenu = ({ onViewChange, isVisible }: PolicyMenuProps) => {
       }`}
     >
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-7xl">
-        <div className="flex justify-center items-center mb-8">
+        <div className="flex justify-center items-center mb-16">
           {user ? (
             <Button 
               variant="outline" 
@@ -67,7 +67,7 @@ export const PolicyMenu = ({ onViewChange, isVisible }: PolicyMenuProps) => {
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8 px-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-12 px-4">
           {policyGroups.map((group) => (
             <div
               key={group.title}
@@ -75,13 +75,13 @@ export const PolicyMenu = ({ onViewChange, isVisible }: PolicyMenuProps) => {
               onMouseEnter={() => setHoveredGroup(group.title)}
               onMouseLeave={() => setHoveredGroup(null)}
             >
-              <h3 className="text-lg font-semibold mb-2">{group.title}</h3>
-              <ul className="space-y-1">
+              <h3 className="text-lg font-semibold mb-4 opacity-70">{group.title}</h3>
+              <ul className="space-y-3">
                 {group.items.map((item) => (
                   <li
                     key={item}
                     onClick={() => handlePolicyClick(item)}
-                    className={`cursor-pointer transition-opacity duration-300 ${
+                    className={`cursor-pointer transition-opacity duration-300 text-lg ${
                       hoveredGroup && hoveredGroup !== group.title
                         ? 'opacity-30'
                         : 'opacity-100'
