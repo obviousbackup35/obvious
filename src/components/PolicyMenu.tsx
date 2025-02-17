@@ -36,20 +36,20 @@ export const PolicyMenu = ({
   };
   return <div className={`absolute inset-0 w-full h-full transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
       <div className="absolute top-[70%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8">
           {policyGroups.map(group => <div key={group.title} className="text-center">
-              <h3 className="text-xl font-semibold mb-4" style={{
+              <h3 className="text-sm font-semibold mb-2" style={{
             color: '#c8c5ad'
           }}>{group.title}</h3>
-              <ul className="space-y-3">
-                {group.items.map(item => <li key={item} onClick={() => handlePolicyClick(item)} onMouseEnter={() => setHoveredItem(item)} onMouseLeave={() => setHoveredItem(null)} className="cursor-pointer transition-colors duration-300 text-base font-semibold text-white/90 hover:text-white/70 text-center bg-transparent">
+              <ul className="space-y-1.5">
+                {group.items.map(item => <li key={item} onClick={() => handlePolicyClick(item)} onMouseEnter={() => setHoveredItem(item)} onMouseLeave={() => setHoveredItem(null)} className="cursor-pointer transition-colors duration-300 text-xs font-semibold text-white/90 hover:text-white/70 text-center bg-transparent">
                     {item.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                   </li>)}
                 {group.title === "Other" && <li className="relative">
-                    <div className="pt-4">
-                      {user ? <Button variant="outline" className="border-0 mix-blend-color-burn font-semibold bg-[#c8c5ad] hover:bg-[#c8c5ad]/90 px-8 text-base" onClick={() => onViewChange('profile')}>
+                    <div className="pt-2">
+                      {user ? <Button variant="outline" className="border-0 mix-blend-color-burn font-semibold bg-[#c8c5ad] hover:bg-[#c8c5ad]/90 px-6 text-xs" onClick={() => onViewChange('profile')}>
                           My Profile
-                        </Button> : <Button variant="outline" className="border-0 mix-blend-color-burn font-semibold bg-[#c8c5ad] hover:bg-[#c8c5ad]/90 px-8 text-base" onClick={() => onViewChange('auth')}>
+                        </Button> : <Button variant="outline" className="border-0 mix-blend-color-burn font-semibold bg-[#c8c5ad] hover:bg-[#c8c5ad]/90 px-6 text-xs" onClick={() => onViewChange('auth')}>
                           Login / Register
                         </Button>}
                     </div>
