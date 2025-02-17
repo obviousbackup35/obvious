@@ -51,7 +51,7 @@ export const PolicyMenu = ({ onViewChange, isVisible }: PolicyMenuProps) => {
           {user ? (
             <Button 
               variant="outline" 
-              className="border-0 text-transparent bg-[#c8c5ad] hover:bg-[#c8c5ad]/90 clip-hexagon px-8"
+              className="border-0 mix-blend-color-burn font-semibold bg-[#c8c5ad] hover:bg-[#c8c5ad]/90 clip-hexagon px-8"
               onClick={() => onViewChange('profile')}
             >
               My Profile
@@ -59,7 +59,7 @@ export const PolicyMenu = ({ onViewChange, isVisible }: PolicyMenuProps) => {
           ) : (
             <Button 
               variant="outline" 
-              className="border-0 text-transparent bg-[#c8c5ad] hover:bg-[#c8c5ad]/90 clip-hexagon px-8"
+              className="border-0 mix-blend-color-burn font-semibold bg-[#c8c5ad] hover:bg-[#c8c5ad]/90 clip-hexagon px-8"
               onClick={() => onViewChange('auth')}
             >
               Login / Register
