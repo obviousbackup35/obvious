@@ -42,14 +42,18 @@ export const ProfileSection = ({ isVisible, onBack }: ProfileSectionProps) => {
       >
         <ChevronLeft size={40} />
       </button>
-      <div className="flex flex-col items-center justify-center h-full">
-        <Button 
-          variant="outline"
-          onClick={handleLogout}
-          className="bg-white/20 hover:bg-white/30 text-white"
-        >
-          Logout
-        </Button>
+      <div className="absolute top-[70%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-12">
+          <div className="lg:col-start-5 text-center">
+            <Button 
+              variant="outline" 
+              onClick={handleLogout}
+              className="border-0 mix-blend-color-burn font-semibold bg-[#c8c5ad] hover:bg-[#c8c5ad]/90 px-8 text-lg"
+            >
+              Logout
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );
