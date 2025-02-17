@@ -1,8 +1,7 @@
 
 import { Volume2, VolumeX, Hexagon } from "lucide-react";
 import { useCallback } from "react";
-
-type ContentView = 'video' | 'dunes' | 'company' | 'projects' | 'gallery' | 'contact';
+import type { ContentView } from "@/types/navigation";
 
 interface NavigationProps {
   audioRef: React.RefObject<HTMLAudioElement>;
