@@ -52,7 +52,7 @@ export const PolicyMenu = ({ onViewChange, isVisible }: PolicyMenuProps) => {
             <Button 
               variant="outline" 
               className="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white"
-              onClick={() => onViewChange('auth')}
+              onClick={() => onViewChange('profile')}
             >
               My Profile
             </Button>

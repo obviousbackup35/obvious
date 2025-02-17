@@ -3,6 +3,7 @@ import { SectionContent } from "./SectionContent";
 import type { ContentView } from "@/types/navigation";
 import { PolicyMenu } from "../PolicyMenu";
 import { AuthContent } from "../auth/AuthContent";
+import { ProfileSection } from "./ProfileSection";
 
 interface ContentSectionsProps {
   currentView: ContentView;
@@ -31,6 +32,11 @@ export const ContentSections = ({ currentView, onViewChange }: ContentSectionsPr
         />
       </div>
       
+      <ProfileSection
+        isVisible={currentView === 'profile'}
+        onBack={handleBack}
+      />
+      
       <SectionContent
         isVisible={currentView === 'company'}
         gradient="linear-gradient(to right, #243949 0%, #517fa4 100%)"
@@ -54,7 +60,7 @@ export const ContentSections = ({ currentView, onViewChange }: ContentSectionsPr
       
       <SectionContent
         isVisible={currentView === 'contact'}
-        gradient="linear-gradient(to top, #e6b980 0%, #eacda3 100%)"
+        gradient="linear-gradient(to right, #e6b980 0%, #eacda3 100%)"
         title="Contact"
         onBack={handleBack}
       />
