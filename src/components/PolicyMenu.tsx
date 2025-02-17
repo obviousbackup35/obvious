@@ -46,7 +46,7 @@ export const PolicyMenu = ({ onViewChange, isVisible }: PolicyMenuProps) => {
         isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}
     >
-      <div className="absolute top-[64%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-6xl mx-auto">
+      <div className="absolute top-[70%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-12">
           {policyGroups.map((group) => (
             <div
@@ -67,7 +67,7 @@ export const PolicyMenu = ({ onViewChange, isVisible }: PolicyMenuProps) => {
                   </li>
                 ))}
                 {group.title === "Other" && (
-                  <li className="relative mt-[22vh]">
+                  <li className="relative mt-8">
                     {user ? (
                       <Button 
                         variant="outline" 
