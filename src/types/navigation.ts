@@ -14,4 +14,5 @@ export type ContentView =
   | 'projects' 
   | 'gallery' 
   | 'contact' 
+  | 'auth'
   | PolicyView;
