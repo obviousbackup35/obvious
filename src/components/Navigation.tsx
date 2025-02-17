@@ -1,5 +1,6 @@
 
 import { Volume2, VolumeX, Hexagon } from "lucide-react";
+import { useCallback } from "react";
 
 type ContentView = 'video' | 'dunes' | 'company' | 'projects' | 'gallery' | 'contact';
 
@@ -20,15 +21,15 @@ export const Navigation = ({
   onViewChange,
   currentView
 }: NavigationProps) => {
-  const handleViewChange = (view: ContentView) => (e: React.MouseEvent) => {
+  const handleViewChange = useCallback((view: ContentView) => (e: React.MouseEvent) => {
     e.preventDefault();
     onViewChange(view);
-  };
+  }, [onViewChange]);
 
-  const handleHomeClick = (e: React.MouseEvent) => {
+  const handleHomeClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     onViewChange('video');
-  };
+  }, [onViewChange]);
 
   return (
     <div 

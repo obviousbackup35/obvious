@@ -5,6 +5,7 @@ export const useVideoTransition = () => {
   const [activeVideo, setActiveVideo] = useState(1);
   const video1Ref = useRef<HTMLVideoElement>(null);
   const video2Ref = useRef<HTMLVideoElement>(null);
+  const transitionPoint = useRef<number>(0);
 
   const handleTimeUpdate = useCallback(() => {
     const video1 = video1Ref.current;
@@ -12,15 +13,18 @@ export const useVideoTransition = () => {
     
     if (!video1 || !video2) return;
 
-    const transitionPoint = video1.duration - 1;
+    // Armazena o ponto de transição apenas uma vez
+    if (transitionPoint.current === 0) {
+      transitionPoint.current = video1.duration - 1;
+    }
     
-    if (activeVideo === 1 && video1.currentTime >= transitionPoint) {
+    if (activeVideo === 1 && video1.currentTime >= transitionPoint.current) {
       video2.currentTime = 0;
-      video2.play();
+      void video2.play();
       setActiveVideo(2);
-    } else if (activeVideo === 2 && video2.currentTime >= transitionPoint) {
+    } else if (activeVideo === 2 && video2.currentTime >= transitionPoint.current) {
       video1.currentTime = 0;
-      video1.play();
+      void video1.play();
       setActiveVideo(1);
     }
   }, [activeVideo]);
