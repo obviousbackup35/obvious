@@ -73,7 +73,7 @@ export const PolicyMenu = ({ onViewChange, isVisible }: PolicyMenuProps) => {
               key={group.title}
               className="text-white"
             >
-              <h3 className="text-2xl font-semibold mb-6 opacity-70">{group.title}</h3>
+              <h3 className="text-2xl font-semibold mb-6" style={{ color: '#c8c5ad' }}>{group.title}</h3>
               <ul className="space-y-4">
                 {group.items.map((item) => (
                   <li
