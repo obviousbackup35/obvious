@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useVideoTransition } from "@/hooks/useVideoTransition";
 import { usePageAudio } from "@/hooks/usePageAudio";
 import { useViewTransition } from "@/hooks/useViewTransition";
-import Navigation from "@/components/Navigation";
+import { Navigation } from "@/components/Navigation";
 import { useAudio } from "@/contexts/AudioContext";
 import { VideoManager } from "@/components/video-player/VideoManager";
 import { ContentSections } from "@/components/sections/ContentSections";
