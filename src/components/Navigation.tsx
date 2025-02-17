@@ -1,6 +1,8 @@
+
 import { useState } from "react";
-import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,8 +12,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/ModeToggle";
-import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu"
-import Link from "next/link";
+import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -22,11 +23,11 @@ const Navigation = ({ className }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const supabaseClient = useSupabaseClient();
   const user = useUser();
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const handleSignOut = async () => {
     await supabaseClient.auth.signOut();
-    router.push("/auth");
+    navigate("/auth");
   };
 
   const signInButtonText = user ? "Sign Out" : "Sign In";
@@ -34,7 +35,7 @@ const Navigation = ({ className }: Props) => {
   return (
     <header className={cn("bg-background sticky top-0 z-50 w-full border-b", className)}>
       <div className="container flex h-16 items-center justify-between py-4">
-        <Link href="/" className="mr-4 flex items-center space-x-2">
+        <Link to="/" className="mr-4 flex items-center space-x-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -52,24 +53,18 @@ const Navigation = ({ className }: Props) => {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <Link href="/" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  Home
-                </NavigationMenuLink>
+              <Link to="/" className={navigationMenuTriggerStyle()}>
+                Home
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Link href="/blog" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  Blog
-                </NavigationMenuLink>
+              <Link to="/blog" className={navigationMenuTriggerStyle()}>
+                Blog
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Link href="/docs" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  Docs
-                </NavigationMenuLink>
+              <Link to="/docs" className={navigationMenuTriggerStyle()}>
+                Docs
               </Link>
             </NavigationMenuItem>
           </NavigationMenuList>
@@ -89,7 +84,7 @@ const Navigation = ({ className }: Props) => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end" forceMount>
-                <DropdownMenuItem onClick={() => router.push("/account")}>
+                <DropdownMenuItem onClick={() => navigate("/account")}>
                   Account
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleSignOut}>
@@ -98,7 +93,7 @@ const Navigation = ({ className }: Props) => {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button onClick={() => router.push("/auth")}>{signInButtonText}</Button>
+            <Button onClick={() => navigate("/auth")}>{signInButtonText}</Button>
           )}
         </div>
       </div>
