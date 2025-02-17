@@ -33,7 +33,7 @@ const policyGroups = [
 ] as const;
 
 export const PolicyMenu = ({ onViewChange, isVisible }: PolicyMenuProps) => {
-  const [hoveredGroup, setHoveredGroup] = useState<string | null>(null);
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const { user } = useAuth();
 
   const handlePolicyClick = (policy: PolicyView) => {
@@ -47,7 +47,7 @@ export const PolicyMenu = ({ onViewChange, isVisible }: PolicyMenuProps) => {
       }`}
     >
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-7xl">
-        <div className="flex justify-center items-center mb-16">
+        <div className="flex justify-center items-center mb-24">
           {user ? (
             <Button 
               variant="outline" 
@@ -72,17 +72,17 @@ export const PolicyMenu = ({ onViewChange, isVisible }: PolicyMenuProps) => {
             <div
               key={group.title}
               className="text-white"
-              onMouseEnter={() => setHoveredGroup(group.title)}
-              onMouseLeave={() => setHoveredGroup(null)}
             >
-              <h3 className="text-lg font-semibold mb-4 opacity-70">{group.title}</h3>
-              <ul className="space-y-3">
+              <h3 className="text-lg font-semibold mb-6 opacity-70">{group.title}</h3>
+              <ul className="space-y-4">
                 {group.items.map((item) => (
                   <li
                     key={item}
                     onClick={() => handlePolicyClick(item)}
-                    className={`cursor-pointer transition-opacity duration-300 text-lg ${
-                      hoveredGroup && hoveredGroup !== group.title
+                    onMouseEnter={() => setHoveredItem(item)}
+                    onMouseLeave={() => setHoveredItem(null)}
+                    className={`cursor-pointer transition-opacity duration-300 text-lg font-semibold ${
+                      hoveredItem && hoveredItem !== item
                         ? 'opacity-30'
                         : 'opacity-100'
                     }`}
