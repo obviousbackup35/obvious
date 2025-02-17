@@ -10,7 +10,7 @@ interface ContentSectionsProps {
 
 export const ContentSections = ({ currentView, onViewChange }: ContentSectionsProps) => {
   return (
-    <div className="absolute inset-0 w-full h-full z-30 flex items-center justify-center">
+    <div className="absolute inset-0 w-full h-full z-30">
       <div 
         className="absolute inset-0 w-full h-full bg-cover bg-center"
         style={{ 
@@ -26,7 +26,7 @@ export const ContentSections = ({ currentView, onViewChange }: ContentSectionsPr
         />
       </div>
       
-      <div className="container mx-auto px-4">
+      <div className="relative w-full h-full flex items-center justify-center">
         <SectionContent
           isVisible={currentView === 'company'}
           gradient="linear-gradient(to right, #243949 0%, #517fa4 100%)"
