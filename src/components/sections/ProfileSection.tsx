@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
+import { ChevronLeft } from "lucide-react";
 
 interface ProfileSectionProps {
   isVisible: boolean;
@@ -37,6 +38,13 @@ export const ProfileSection = ({ isVisible, onBack }: ProfileSectionProps) => {
         pointerEvents: isVisible ? 'auto' : 'none'
       }}
     >
+      <button 
+        onClick={onBack}
+        className="absolute left-8 top-16 text-white hover:opacity-70 transition-opacity p-3"
+        aria-label="Voltar para dunas"
+      >
+        <ChevronLeft size={40} />
+      </button>
       <div className="flex flex-col items-center justify-center h-full">
         <Button 
           variant="outline"
