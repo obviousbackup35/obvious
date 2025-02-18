@@ -45,7 +45,7 @@ export const Navigation = ({
             className="absolute left-4 p-2 hover:opacity-70 transition-opacity rounded-full bg-black/50 hover:bg-black/70"
             aria-label="Go to home"
           >
-            <Hexagon className="w-6 h-6" style={{ color: '#c8c5ad' }} />
+            <Hexagon className="w-7 h-7" style={{ color: '#c8c5ad' }} />
           </button>
           
           <div className="flex items-center justify-center space-x-16">
@@ -93,9 +93,9 @@ export const Navigation = ({
         className="absolute top-4 right-4 z-50 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors"
       >
         {isMuted ? (
-          <VolumeX className="w-6 h-6" style={{ color: '#c8c5ad' }} />
+          <VolumeX className="w-7 h-7" style={{ color: '#c8c5ad' }} />
         ) : (
-          <Volume2 className="w-6 h-6" style={{ color: '#c8c5ad' }} />
+          <Volume2 className="w-7 h-7" style={{ color: '#c8c5ad' }} />
         )}
       </button>
     </div>
