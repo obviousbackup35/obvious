@@ -14,7 +14,6 @@ interface ContentSectionsProps {
 export const ContentSections = ({ currentView, onViewChange }: ContentSectionsProps) => {
   const [lastMainView, setLastMainView] = useState<'video' | 'dunes'>('video');
 
-  // Atualiza lastMainView quando mudar para video ou dunes
   useEffect(() => {
     if (currentView === 'video' || currentView === 'dunes') {
       setLastMainView(currentView);
@@ -38,6 +37,16 @@ export const ContentSections = ({ currentView, onViewChange }: ContentSectionsPr
           pointerEvents: currentView === 'dunes' ? 'auto' : 'none'
         }}
       >
+        {currentView === 'dunes' && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <img
+              src="/logo.svg"
+              alt="Logo"
+              className="w-[300px] h-auto"
+              style={{ maxWidth: '40vw' }}
+            />
+          </div>
+        )}
         <PolicyMenu 
           onViewChange={onViewChange} 
           isVisible={currentView === 'dunes'} 
