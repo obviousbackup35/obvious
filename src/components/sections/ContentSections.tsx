@@ -1,3 +1,4 @@
+
 import { SectionContent } from "./SectionContent";
 import type { ContentView } from "@/types/navigation";
 import { PolicyMenu } from "../PolicyMenu";
@@ -36,6 +37,13 @@ export const ContentSections = ({ currentView, onViewChange }: ContentSectionsPr
           pointerEvents: currentView === 'dunes' ? 'auto' : 'none'
         }}
       >
+        <div className="absolute top-8 left-1/2 transform -translate-x-1/2">
+          <img 
+            src="/logo menor.webp" 
+            alt="Logo" 
+            className="w-auto h-16"
+          />
+        </div>
         <PolicyMenu 
           onViewChange={onViewChange} 
           isVisible={currentView === 'dunes'} 
