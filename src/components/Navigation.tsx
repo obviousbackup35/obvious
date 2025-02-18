@@ -62,7 +62,7 @@ export const Navigation = ({
                 className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity px-4 py-2 rounded-full"
               >
                 <Hexagon className="w-4 h-4" style={{ color: '#c8c5ad' }} />
-                P R O J E C T S
+                P R O J E C T
               </button>
             </div>
 
