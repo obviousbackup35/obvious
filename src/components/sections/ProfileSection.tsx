@@ -42,7 +42,7 @@ export const ProfileSection = ({ isVisible, onBack }: ProfileSectionProps) => {
       >
         <ChevronLeft size={40} />
       </button>
-      <div className="absolute top-[55%] right-[10%] transform -translate-y-1/2">
+      <div className="absolute bottom-8 right-8">
         <Button 
           variant="outline" 
           onClick={handleLogout}
