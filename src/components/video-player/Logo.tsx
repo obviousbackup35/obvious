@@ -15,6 +15,7 @@ export const Logo = ({ isBackgroundLoaded, style }: LogoProps) => {
         transition: 'opacity 2s ease-in-out',
         transitionDelay: '1000ms',
         ...style,
+        // Mantém o delay original para a transição inicial
         transitionProperty: 'opacity',
         transitionDuration: '2s',
         transitionTimingFunction: 'ease-in-out'
@@ -23,12 +24,8 @@ export const Logo = ({ isBackgroundLoaded, style }: LogoProps) => {
       <img
         src="/logo.svg"
         alt="Logo"
-        className="w-[400px] h-auto mt-8"
-        style={{ 
-          maxWidth: '50vw',
-          marginTop: '80px', // Adiciona espaço acima para não conflitar com o menu
-          marginBottom: '80px' // Adiciona espaço abaixo para não conflitar com outros elementos
-        }}
+        className="w-[660px] h-auto"
+        style={{ maxWidth: '80vw' }}
       />
     </div>
   );
