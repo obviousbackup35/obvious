@@ -43,7 +43,7 @@ export const PolicyMenu = ({
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 px-4">
           {policyGroups.map(group => (
             <div key={group.title} className="text-center">
-              <h3 className="text-sm font-semibold mb-3 tracking-wider uppercase" style={{
+              <h3 className="text-sm font-bold mb-3 tracking-wider uppercase" style={{
                 color: '#d4d1b9'
               }}>
                 {group.title}
