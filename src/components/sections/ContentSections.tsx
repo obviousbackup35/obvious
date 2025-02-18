@@ -42,8 +42,8 @@ export const ContentSections = ({ currentView, onViewChange }: ContentSectionsPr
             <img
               src="/logo.svg"
               alt="Logo"
-              className="w-[300px] h-auto"
-              style={{ maxWidth: '40vw' }}
+              className="w-[900px] h-auto"
+              style={{ maxWidth: '120vw' }}
             />
           </div>
         )}
