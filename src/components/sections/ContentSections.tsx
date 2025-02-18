@@ -12,7 +12,11 @@ interface ContentSectionsProps {
 
 export const ContentSections = ({ currentView, onViewChange }: ContentSectionsProps) => {
   const handleBack = () => {
-    onViewChange('dunes');
+    // Se a view atual for 'video' ou 'dunes', não faz sentido voltar
+    // Se não, verifica se existe scrollY - se existir, volta para 'dunes', se não, volta para 'video'
+    if (currentView !== 'video' && currentView !== 'dunes') {
+      onViewChange(window.scrollY > 0 ? 'dunes' : 'video');
+    }
   };
 
   return (
