@@ -46,7 +46,7 @@ export const ProfileSection = ({ isVisible, onBack }: ProfileSectionProps) => {
         <Button 
           variant="outline" 
           onClick={handleLogout}
-          className="border-0 mix-blend-color-burn font-semibold bg-[#c8c5ad] hover:bg-[#c8c5ad]/90 px-8 text-lg"
+          className="bg-white text-black hover:bg-white/90 px-8 text-lg font-semibold"
         >
           Logout
         </Button>
