@@ -1,4 +1,3 @@
-
 import { SectionContent } from "./SectionContent";
 import type { ContentView } from "@/types/navigation";
 import { PolicyMenu } from "../PolicyMenu";
@@ -37,16 +36,6 @@ export const ContentSections = ({ currentView, onViewChange }: ContentSectionsPr
           pointerEvents: currentView === 'dunes' ? 'auto' : 'none'
         }}
       >
-        {currentView === 'dunes' && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <img
-              src="/logo.svg"
-              alt="Logo"
-              className="w-[675px] h-auto"
-              style={{ maxWidth: '90vw' }}
-            />
-          </div>
-        )}
         <PolicyMenu 
           onViewChange={onViewChange} 
           isVisible={currentView === 'dunes'} 
