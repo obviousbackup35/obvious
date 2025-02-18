@@ -4,6 +4,7 @@ import type { ContentView } from "@/types/navigation";
 import { PolicyMenu } from "../PolicyMenu";
 import { AuthContent } from "../auth/AuthContent";
 import { ProfileSection } from "./ProfileSection";
+import { useState, useEffect } from "react";
 
 interface ContentSectionsProps {
   currentView: ContentView;
@@ -11,11 +12,18 @@ interface ContentSectionsProps {
 }
 
 export const ContentSections = ({ currentView, onViewChange }: ContentSectionsProps) => {
+  const [lastMainView, setLastMainView] = useState<'video' | 'dunes'>('video');
+
+  // Atualiza lastMainView quando mudar para video ou dunes
+  useEffect(() => {
+    if (currentView === 'video' || currentView === 'dunes') {
+      setLastMainView(currentView);
+    }
+  }, [currentView]);
+
   const handleBack = () => {
-    // Se a view atual for 'video' ou 'dunes', não faz sentido voltar
-    // Se não, verifica se existe scrollY - se existir, volta para 'dunes', se não, volta para 'video'
     if (currentView !== 'video' && currentView !== 'dunes') {
-      onViewChange(window.scrollY > 0 ? 'dunes' : 'video');
+      onViewChange(lastMainView);
     }
   };
 
