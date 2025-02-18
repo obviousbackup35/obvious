@@ -52,16 +52,14 @@ export const Navigation = ({
             <div className="flex items-center space-x-8">
               <button 
                 onClick={handleViewChange('company')} 
-                className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity px-4 py-2 rounded-full"
+                className="cursor-pointer hover:opacity-70 transition-opacity px-4 py-2 rounded-full"
               >
-                <Hexagon className="w-4 h-4" style={{ color: '#c8c5ad' }} />
                 C O M P A N Y
               </button>
               <button 
                 onClick={handleViewChange('projects')} 
-                className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity px-4 py-2 rounded-full"
+                className="cursor-pointer hover:opacity-70 transition-opacity px-4 py-2 rounded-full"
               >
-                <Hexagon className="w-4 h-4" style={{ color: '#c8c5ad' }} />
                 P R O J E C T
               </button>
             </div>
@@ -71,16 +69,14 @@ export const Navigation = ({
             <div className="flex items-center space-x-8">
               <button 
                 onClick={handleViewChange('gallery')} 
-                className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity px-4 py-2 rounded-full"
+                className="cursor-pointer hover:opacity-70 transition-opacity px-4 py-2 rounded-full"
               >
-                <Hexagon className="w-4 h-4" style={{ color: '#c8c5ad' }} />
                 G A L L E R Y
               </button>
               <button 
                 onClick={handleViewChange('contact')} 
-                className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity px-4 py-2 rounded-full"
+                className="cursor-pointer hover:opacity-70 transition-opacity px-4 py-2 rounded-full"
               >
-                <Hexagon className="w-4 h-4" style={{ color: '#c8c5ad' }} />
                 C O N T A C T
               </button>
             </div>
