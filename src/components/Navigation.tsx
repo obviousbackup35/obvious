@@ -30,6 +30,11 @@ export const Navigation = ({
     onViewChange('video');
   }, [onViewChange]);
 
+  const handleAudioToggle = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    toggleAudio(e);
+  }, [toggleAudio]);
+
   return <div className="absolute top-0 w-full z-50 transition-opacity duration-1000" style={{
     opacity: isVisible ? 1 : 0,
     pointerEvents: isVisible ? 'auto' : 'none'
@@ -44,7 +49,7 @@ export const Navigation = ({
             }} />
           </button>
 
-          <button onClick={toggleAudio} className="absolute right-4 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors">
+          <button onClick={handleAudioToggle} className="absolute right-4 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors">
             {isMuted ? <VolumeX className="w-7 h-7" style={{
               color: '#c8c5ad'
             }} /> : <Volume2 className="w-7 h-7" style={{
