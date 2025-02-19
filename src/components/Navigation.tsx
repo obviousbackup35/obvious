@@ -64,7 +64,7 @@ export const Navigation = ({
         </div>
       </nav>
 
-      <button onClick={toggleAudio} className="absolute top-[0.25rem] right-4 z-50 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors">
+      <button onClick={toggleAudio} className="absolute top-8 right-4 z-50 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors">
         {isMuted ? <VolumeX className="w-7 h-7" style={{
           color: '#c8c5ad'
         }} /> : <Volume2 className="w-7 h-7" style={{
