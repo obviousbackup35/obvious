@@ -35,14 +35,6 @@ export const Navigation = ({
     pointerEvents: isVisible ? 'auto' : 'none'
   }}>
       <nav className="absolute top-8 w-full">
-        <button onClick={toggleAudio} className="absolute right-4 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors">
-          {isMuted ? <VolumeX className="w-7 h-7" style={{
-            color: '#c8c5ad'
-          }} /> : <Volume2 className="w-7 h-7" style={{
-            color: '#c8c5ad'
-          }} />}
-        </button>
-
         <div className="flex justify-center items-center font-montserrat text-[1.38rem] relative" style={{
           color: '#c8c5ad'
         }}>
@@ -50,6 +42,14 @@ export const Navigation = ({
             <Hexagon className="w-7 h-7" style={{
               color: '#c8c5ad'
             }} />
+          </button>
+
+          <button onClick={toggleAudio} className="absolute right-4 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors">
+            {isMuted ? <VolumeX className="w-7 h-7" style={{
+              color: '#c8c5ad'
+            }} /> : <Volume2 className="w-7 h-7" style={{
+              color: '#c8c5ad'
+            }} />}
           </button>
           
           <div className="relative w-full max-w-4xl flex justify-center items-center">
