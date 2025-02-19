@@ -55,7 +55,7 @@ export const Navigation = ({
               </button>
             </div>
 
-            <div className="w-24" /> {/* Reduzido o espaço central de w-32 para w-24 */}
+            <div className="w-28" /> {/* Aumentado o espaço central de w-24 para w-28 */}
 
             <div className="flex items-center space-x-8">
               <button onClick={handleViewChange('gallery')} className="cursor-pointer hover:opacity-70 transition-opacity px-4 py-2 rounded-full">
