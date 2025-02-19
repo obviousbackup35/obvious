@@ -25,7 +25,7 @@ export const SectionContent = ({ isVisible, gradient, title, style, onBack }: Se
       {onBack && (
         <button 
           onClick={onBack}
-          className="absolute left-8 top-16 text-white hover:opacity-70 transition-opacity p-3"
+          className="absolute left-12 top-16 text-white hover:opacity-70 transition-opacity p-3"
           aria-label="Voltar para dunas"
         >
           <ChevronLeft size={40} />
