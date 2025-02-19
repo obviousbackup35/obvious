@@ -45,8 +45,8 @@ export const Navigation = ({
             }} />
           </button>
           
-          <div className="flex items-center justify-center space-x-16">
-            <div className="flex items-center space-x-8 -ml-8"> {/* Adicionado -ml-8 (aproximadamente 0.5cm) */}
+          <div className="flex items-center justify-center">
+            <div className="flex items-center space-x-8 -mr-8"> {/* Ajustado para mover apenas o grupo da esquerda */}
               <button onClick={handleViewChange('company')} className="cursor-pointer hover:opacity-70 transition-opacity px-4 py-2 rounded-full">
                 C O M P A N Y
               </button>
@@ -55,7 +55,7 @@ export const Navigation = ({
               </button>
             </div>
 
-            <div className="w-32" />
+            <div className="w-40" /> {/* Aumentado para compensar o deslocamento */}
 
             <div className="flex items-center space-x-8">
               <button onClick={handleViewChange('gallery')} className="cursor-pointer hover:opacity-70 transition-opacity px-4 py-2 rounded-full">
