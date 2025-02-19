@@ -34,7 +34,7 @@ export const Navigation = ({
     opacity: isVisible ? 1 : 0,
     pointerEvents: isVisible ? 'auto' : 'none'
   }}>
-      <nav className="absolute top-8 w-full"> {/* Ajustado de top-4 para top-8 */}
+      <nav className="absolute top-8 w-full">
         <div className="flex justify-center items-center font-montserrat text-[1.38rem] relative" style={{
           color: '#c8c5ad'
         }}>
@@ -64,7 +64,7 @@ export const Navigation = ({
         </div>
       </nav>
 
-      <button onClick={toggleAudio} className="absolute top-8 right-4 z-50 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors"> {/* Ajustado de top-4 para top-8 */}
+      <button onClick={toggleAudio} className="absolute top-4 right-4 z-50 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors">
         {isMuted ? <VolumeX className="w-7 h-7" style={{
           color: '#c8c5ad'
         }} /> : <Volume2 className="w-7 h-7" style={{
