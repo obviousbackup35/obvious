@@ -58,6 +58,7 @@ export const PolicyMenu = ({
                     className={`
                       cursor-pointer
                       text-xs
+                      font-montserrat
                       font-medium
                       transition-opacity
                       duration-300
@@ -77,7 +78,7 @@ export const PolicyMenu = ({
                       {user ? (
                         <Button 
                           variant="outline" 
-                          className="border-0 bg-white/10 hover:bg-white/20 text-white font-medium text-xs px-6 py-2 rounded-full transition-all duration-300" 
+                          className="border-0 bg-white/10 hover:bg-white/20 text-white font-montserrat font-medium text-xs px-6 py-2 rounded-full transition-all duration-300" 
                           onClick={() => onViewChange('profile')}
                         >
                           My Profile
@@ -85,7 +86,7 @@ export const PolicyMenu = ({
                       ) : (
                         <Button 
                           variant="outline" 
-                          className="border-0 bg-white/10 hover:bg-white/20 text-white font-medium text-xs px-6 py-2 rounded-full transition-all duration-300" 
+                          className="border-0 bg-white/10 hover:bg-white/20 text-white font-montserrat font-medium text-xs px-6 py-2 rounded-full transition-all duration-300" 
                           onClick={() => onViewChange('auth')}
                         >
                           Login / Register
