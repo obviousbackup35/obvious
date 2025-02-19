@@ -22,15 +22,18 @@ export const Navigation = ({
 }: NavigationProps) => {
   const handleViewChange = useCallback((view: ContentView) => (e: React.MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     onViewChange(view);
   }, [onViewChange]);
 
   const handleHomeClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     onViewChange('video');
   }, [onViewChange]);
 
   const handleAudioToggle = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation();
     toggleAudio(e);
   }, [toggleAudio]);
