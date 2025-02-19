@@ -1,3 +1,4 @@
+
 import { SectionContent } from "./SectionContent";
 import type { ContentView } from "@/types/navigation";
 import { PolicyMenu } from "../PolicyMenu";
@@ -28,9 +29,10 @@ export const ContentSections = ({ currentView, onViewChange }: ContentSectionsPr
   return (
     <div className="absolute inset-0 w-full h-full z-30">
       <div 
-        className="absolute inset-0 w-full h-full bg-cover bg-center"
+        className="absolute inset-0 w-full h-full bg-cover"
         style={{ 
           backgroundImage: 'url("/dunes.webp")',
+          backgroundPosition: 'center 20%', // Ajustado para mover a imagem um pouco para baixo
           opacity: currentView === 'dunes' ? 1 : 0,
           transition: 'opacity 1s ease-in-out',
           pointerEvents: currentView === 'dunes' ? 'auto' : 'none'
