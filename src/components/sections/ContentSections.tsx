@@ -1,3 +1,4 @@
+
 import { SectionContent } from "./SectionContent";
 import type { ContentView } from "@/types/navigation";
 import { PolicyMenu } from "../PolicyMenu";
