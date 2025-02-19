@@ -46,13 +46,13 @@ export const Navigation = ({
         <div className="flex justify-center items-center font-montserrat text-[1.38rem] relative" style={{
           color: '#c8c5ad'
         }}>
-          <button onClick={handleHomeClick} className="absolute left-4 top-[1.5cm] p-2 hover:opacity-70 transition-opacity rounded-full bg-black/50 hover:bg-black/70" aria-label="Go to home">
+          <button onClick={handleHomeClick} className="absolute left-4 top-[1.2cm] p-2 hover:opacity-70 transition-opacity rounded-full bg-black/50 hover:bg-black/70" aria-label="Go to home">
             <Hexagon className="w-7 h-7" style={{
               color: '#c8c5ad'
             }} />
           </button>
 
-          <button onClick={handleAudioToggle} className="absolute right-4 top-[1.5cm] p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors">
+          <button onClick={handleAudioToggle} className="absolute right-4 top-[1.2cm] p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors">
             {isMuted ? <VolumeX className="w-7 h-7" style={{
               color: '#c8c5ad'
             }} /> : <Volume2 className="w-7 h-7" style={{
