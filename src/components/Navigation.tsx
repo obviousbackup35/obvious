@@ -98,7 +98,7 @@ export const Navigation = memo(({
                 onClick={handleViewChange('projects')}
                 className="cursor-pointer hover:opacity-70 transition-opacity py-2 rounded-full pointer-events-auto mx-0 px-0"
               >
-                P R O J E C T
+                P R O D U C T
               </NavigationButton>
             </div>
             
