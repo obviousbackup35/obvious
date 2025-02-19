@@ -1,4 +1,3 @@
-
 import { SectionContent } from "./SectionContent";
 import type { ContentView } from "@/types/navigation";
 import { PolicyMenu } from "../PolicyMenu";
@@ -34,8 +33,7 @@ export const ContentSections = ({ currentView, onViewChange }: ContentSectionsPr
           backgroundImage: 'url("/dunes.webp")',
           opacity: currentView === 'dunes' ? 1 : 0,
           transition: 'opacity 1s ease-in-out',
-          pointerEvents: currentView === 'dunes' ? 'auto' : 'none',
-          top: '2cm'
+          pointerEvents: currentView === 'dunes' ? 'auto' : 'none'
         }}
       >
         <PolicyMenu 
