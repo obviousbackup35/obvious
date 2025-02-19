@@ -68,7 +68,7 @@ export const Navigation = memo(({
         >
           <NavigationButton
             onClick={handleHomeClick}
-            className="absolute left-4 top-[1.2cm] p-2 hover:opacity-70 transition-opacity rounded-full bg-black/50 hover:bg-black/70"
+            className="absolute left-4 top-[1.2cm] p-2 transition-colors rounded-full bg-black/50 hover:bg-black/70"
           >
             <Hexagon className="w-7 h-7" style={{ color: '#c8c5ad' }} />
           </NavigationButton>
