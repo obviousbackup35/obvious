@@ -61,19 +61,19 @@ export const Navigation = ({
           </button>
           
           <div className="relative w-full max-w-4xl flex justify-center items-center">
-            <button onClick={handleViewChange('company')} className="absolute left-1/4 -translate-x-[calc(100%+2rem)] cursor-pointer hover:opacity-70 transition-opacity py-2 rounded-full mx-px px-[129px]">
+            <button onClick={handleViewChange('company')} className="absolute left-1/4 -translate-x-[calc(100%+2rem)] cursor-pointer hover:opacity-70 transition-opacity py-2 rounded-full mx-px px-[129px] w-fit">
               C O M P A N Y
             </button>
             
-            <button onClick={handleViewChange('projects')} className="absolute left-1/4 -translate-x-1/2 cursor-pointer hover:opacity-70 transition-opacity py-2 rounded-full mx-[5px] px-[26px]">
+            <button onClick={handleViewChange('projects')} className="absolute left-1/4 -translate-x-1/2 cursor-pointer hover:opacity-70 transition-opacity py-2 rounded-full mx-[5px] px-[26px] w-fit">
               P R O J E C T
             </button>
             
-            <button onClick={handleViewChange('gallery')} className="absolute right-1/4 translate-x-1/2 cursor-pointer hover:opacity-70 transition-opacity py-2 rounded-full px-[24px] mx-[5px]">
+            <button onClick={handleViewChange('gallery')} className="absolute right-1/4 translate-x-1/2 cursor-pointer hover:opacity-70 transition-opacity py-2 rounded-full px-[24px] mx-[5px] w-fit">
               G A L L E R Y
             </button>
             
-            <button onClick={handleViewChange('contact')} className="absolute right-1/4 translate-x-[calc(100%+2rem)] cursor-pointer hover:opacity-70 transition-opacity py-2 rounded-full mx-0 px-[130px]">
+            <button onClick={handleViewChange('contact')} className="absolute right-1/4 translate-x-[calc(100%+2rem)] cursor-pointer hover:opacity-70 transition-opacity py-2 rounded-full mx-0 px-[130px] w-fit">
               C O N T A C T
             </button>
           </div>
