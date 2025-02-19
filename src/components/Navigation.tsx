@@ -34,7 +34,7 @@ export const Navigation = ({
     opacity: isVisible ? 1 : 0,
     pointerEvents: isVisible ? 'auto' : 'none'
   }}>
-      <nav className="absolute top-4 w-full">
+      <nav className="absolute top-8 w-full">
         <div className="flex justify-center items-center font-montserrat text-[1.38rem] relative" style={{
           color: '#c8c5ad'
         }}>
