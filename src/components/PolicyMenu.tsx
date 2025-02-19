@@ -59,11 +59,11 @@ export const PolicyMenu = ({
                       cursor-pointer
                       text-xs
                       font-medium
-                      transition-all
+                      transition-opacity
                       duration-300
                       py-0.5
                       ${hoveredItem === item 
-                        ? 'text-white transform scale-105' 
+                        ? 'text-white' 
                         : 'text-white/80'
                       }
                     `}
