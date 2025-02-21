@@ -32,7 +32,7 @@ export const ContentSections = ({ currentView, onViewChange }: ContentSectionsPr
         className="absolute inset-0 w-full h-full bg-cover"
         style={{ 
           backgroundImage: 'url("/dunes.webp")',
-          backgroundPosition: 'center 20%',
+          backgroundPosition: 'center 25%',
           opacity: currentView === 'dunes' ? 1 : 0,
           transition: 'opacity 1s ease-in-out',
           pointerEvents: currentView === 'dunes' ? 'auto' : 'none'
