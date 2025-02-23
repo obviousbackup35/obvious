@@ -11,12 +11,12 @@ export const Logo = ({ isBackgroundLoaded, style }: LogoProps) => {
     <div 
       className="absolute inset-0 flex items-center justify-center z-30"
       style={{ 
-        opacity: isBackgroundLoaded ? 1 : 0,
+        opacity: 0, // Começa sempre invisível
         ...style,
         // Durante a primeira carga (quando style?.transition é undefined), usa transição lenta
         // Nas transições entre páginas, usa exatamente o mesmo timing do vídeo
         transition: style?.transition || 'opacity 2s ease-in-out',
-        transitionDelay: style?.transition ? '0ms' : '2000ms', // Na primeira carga, espera a transição do fundo (2s) terminar
+        transitionDelay: style?.transition ? '0ms' : '2500ms', // Aumentado para 2.5s para garantir que a imagem de fundo esteja carregada
         visibility: isBackgroundLoaded ? 'visible' : 'hidden', // Garante que o logo só apareça após o fundo carregar
       }}
     >
