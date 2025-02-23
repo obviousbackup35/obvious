@@ -13,10 +13,10 @@ export const Logo = ({ isBackgroundLoaded, style }: LogoProps) => {
       style={{ 
         opacity: isBackgroundLoaded ? 1 : 0,
         ...style,
-        // Usa transição lenta apenas na primeira carga (quando style está undefined)
-        // Nas transições entre páginas, usa o timing passado via style prop
+        // Durante a primeira carga (quando style?.transition é undefined), usa transição lenta
+        // Nas transições entre páginas, usa exatamente o mesmo timing do vídeo
         transition: style?.transition || 'opacity 2s ease-in-out',
-        transitionDelay: style?.transitionDelay || '1000ms',
+        transitionDelay: style?.transition ? '0ms' : '1000ms', // Remove o delay nas transições entre páginas
       }}
     >
       <img
