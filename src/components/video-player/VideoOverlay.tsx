@@ -1,12 +1,12 @@
 
-import { CSSProperties } from "react";
+import { CSSProperties, memo } from "react";
 
 interface VideoOverlayProps {
   isBackgroundLoaded: boolean;
   style?: CSSProperties;
 }
 
-export const VideoOverlay = ({ isBackgroundLoaded, style }: VideoOverlayProps) => {
+export const VideoOverlay = memo(({ isBackgroundLoaded, style }: VideoOverlayProps) => {
   return (
     <div 
       className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat z-0"
@@ -14,12 +14,11 @@ export const VideoOverlay = ({ isBackgroundLoaded, style }: VideoOverlayProps) =
         backgroundImage: 'url("/fundo.webp")',
         opacity: isBackgroundLoaded ? 1 : 0,
         transition: 'opacity 2s ease-in-out',
+        willChange: 'opacity',
         ...style,
-        // Combina as transições mantendo a suavidade
-        transitionProperty: 'opacity',
-        transitionDuration: '2s',
-        transitionTimingFunction: 'ease-in-out'
       }}
     />
   );
-};
+});
+
+VideoOverlay.displayName = 'VideoOverlay';
