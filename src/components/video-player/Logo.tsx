@@ -17,6 +17,7 @@ export const Logo = ({ isBackgroundLoaded, style }: LogoProps) => {
         // Nas transições entre páginas, usa exatamente o mesmo timing do vídeo
         transition: style?.transition || 'opacity 2s ease-in-out',
         transitionDelay: style?.transition ? '0ms' : '1000ms', // Remove o delay nas transições entre páginas
+        visibility: isBackgroundLoaded ? 'visible' : 'hidden', // Garante que o logo só apareça após o fundo carregar
       }}
     >
       <img
