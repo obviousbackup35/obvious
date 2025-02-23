@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useVideoTransition } from "@/hooks/useVideoTransition";
 import { usePageAudio } from "@/hooks/usePageAudio";
 import { useViewTransition } from "@/hooks/useViewTransition";
@@ -29,27 +29,27 @@ const Index = () => {
   }, [setCurrentView]);
 
   const startPlayback = useCallback(async () => {
+    if (isPlaying) return;
+
     try {
-      if (!isPlaying) {
-        if (audioRef.current) {
-          audioRef.current.currentTime = 0;
-          audioRef.current.volume = 1;
-          await audioRef.current.play();
-        }
-
-        const videos = [video1Ref.current, video2Ref.current].filter(Boolean);
-        await Promise.all(
-          videos.map(video => {
-            if (video) {
-              video.currentTime = currentTime;
-              return video.play();
-            }
-            return Promise.resolve();
-          })
-        );
-
-        setIsPlaying(true);
+      if (audioRef.current) {
+        audioRef.current.currentTime = 0;
+        audioRef.current.volume = 1;
+        await audioRef.current.play();
       }
+
+      const videos = [video1Ref.current, video2Ref.current].filter(Boolean);
+      await Promise.all(
+        videos.map(video => {
+          if (video) {
+            video.currentTime = currentTime;
+            return video.play();
+          }
+          return Promise.resolve();
+        })
+      );
+
+      setIsPlaying(true);
     } catch (error) {
       console.error('Error starting playback:', error);
     }
@@ -96,20 +96,42 @@ const Index = () => {
     };
   }, [isPlaying, handleTimeUpdate, video1Ref, video2Ref, setCurrentTime]);
 
+  const memoizedVideoManager = useMemo(() => (
+    <VideoManager
+      isPlaying={isPlaying}
+      isBackgroundLoaded={isBackgroundLoaded}
+      currentView={currentView}
+      activeVideo={activeVideo}
+      video1Ref={video1Ref}
+      video2Ref={video2Ref}
+    />
+  ), [isPlaying, isBackgroundLoaded, currentView, activeVideo, video1Ref, video2Ref]);
+
+  const memoizedNavigation = useMemo(() => (
+    <Navigation 
+      audioRef={audioRef} 
+      isMuted={isMuted} 
+      toggleAudio={toggleAudio} 
+      isVisible={isPlaying}
+      onViewChange={handleViewChange}
+      currentView={currentView}
+    />
+  ), [audioRef, isMuted, toggleAudio, isPlaying, handleViewChange, currentView]);
+
+  const memoizedContentSections = useMemo(() => (
+    <ContentSections 
+      currentView={currentView} 
+      onViewChange={handleViewChange}
+    />
+  ), [currentView, handleViewChange]);
+
   return (
     <div 
       className="relative h-screen w-full overflow-hidden cursor-pointer bg-white"
       onClick={handleClick}
       onTouchStart={handleClick}
     >
-      <Navigation 
-        audioRef={audioRef} 
-        isMuted={isMuted} 
-        toggleAudio={toggleAudio} 
-        isVisible={isPlaying}
-        onViewChange={handleViewChange}
-        currentView={currentView}
-      />
+      {memoizedNavigation}
 
       <div 
         className="absolute inset-0 w-full h-full z-10"
@@ -120,19 +142,8 @@ const Index = () => {
         }}
       />
 
-      <VideoManager
-        isPlaying={isPlaying}
-        isBackgroundLoaded={isBackgroundLoaded}
-        currentView={currentView}
-        activeVideo={activeVideo}
-        video1Ref={video1Ref}
-        video2Ref={video2Ref}
-      />
-
-      <ContentSections 
-        currentView={currentView} 
-        onViewChange={handleViewChange}
-      />
+      {memoizedVideoManager}
+      {memoizedContentSections}
     </div>
   );
 };

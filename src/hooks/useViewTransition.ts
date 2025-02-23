@@ -6,11 +6,15 @@ export const useViewTransition = (isPlaying: boolean) => {
   const [currentView, setCurrentView] = useState<ContentView>('video');
   const wheelTimeout = useRef<number>();
   const isTransitioning = useRef(false);
+  const lastWheelTime = useRef<number>(0);
+  const WHEEL_THRESHOLD = 50; // ms between wheel events
 
   const handleWheel = useCallback((event: WheelEvent) => {
     event.preventDefault();
     
-    if (isTransitioning.current) return;
+    const now = Date.now();
+    if (now - lastWheelTime.current < WHEEL_THRESHOLD || isTransitioning.current) return;
+    lastWheelTime.current = now;
     
     if (wheelTimeout.current) {
       window.clearTimeout(wheelTimeout.current);
@@ -44,9 +48,14 @@ export const useViewTransition = (isPlaying: boolean) => {
   useEffect(() => {
     if (!isPlaying) return;
 
-    window.addEventListener('wheel', handleWheel, { passive: false });
+    const wheelHandler = (e: WheelEvent) => {
+      e.preventDefault();
+      handleWheel(e);
+    };
+
+    window.addEventListener('wheel', wheelHandler, { passive: false });
     return () => {
-      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('wheel', wheelHandler);
       if (wheelTimeout.current) {
         window.clearTimeout(wheelTimeout.current);
       }
