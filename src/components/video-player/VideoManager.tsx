@@ -55,7 +55,7 @@ export const VideoManager = ({
       <Logo 
         isBackgroundLoaded={isBackgroundLoaded}
         style={{
-          opacity: currentView === 'video' ? (isBackgroundLoaded ? 1 : 0) : 0,
+          opacity: currentView === 'video' && isBackgroundLoaded ? 1 : 0,
           transition: 'opacity 1s ease-in-out',
           zIndex: 30
         }}
