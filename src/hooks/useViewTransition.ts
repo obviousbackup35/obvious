@@ -12,26 +12,33 @@ export const useViewTransition = (isPlaying: boolean) => {
     
     if (isTransitioning.current) return;
     
-    // Debounce da rolagem para evitar múltiplas transições
     if (wheelTimeout.current) {
       window.clearTimeout(wheelTimeout.current);
     }
     
     wheelTimeout.current = window.setTimeout(() => {
-      if (event.deltaY > 0 && currentView === 'video') {
+      if (event.deltaY > 0) {
         isTransitioning.current = true;
-        setCurrentView('dunes');
+        if (currentView === 'video') {
+          setCurrentView('black');
+        } else if (currentView === 'black') {
+          setCurrentView('dunes');
+        }
         setTimeout(() => {
           isTransitioning.current = false;
-        }, 1000); // Duração da transição
-      } else if (event.deltaY < 0 && currentView === 'dunes') {
+        }, 1000);
+      } else if (event.deltaY < 0) {
         isTransitioning.current = true;
-        setCurrentView('video');
+        if (currentView === 'dunes') {
+          setCurrentView('black');
+        } else if (currentView === 'black') {
+          setCurrentView('video');
+        }
         setTimeout(() => {
           isTransitioning.current = false;
-        }, 1000); // Duração da transição
+        }, 1000);
       }
-    }, 50); // Debounce delay
+    }, 50);
   }, [currentView]);
 
   useEffect(() => {

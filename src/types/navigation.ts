@@ -9,6 +9,7 @@ export type PolicyView =
 
 export type ContentView = 
   | 'video' 
+  | 'black'
   | 'dunes' 
   | 'company' 
   | 'projects' 

@@ -12,22 +12,32 @@ interface ContentSectionsProps {
 }
 
 export const ContentSections = ({ currentView, onViewChange }: ContentSectionsProps) => {
-  const [lastMainView, setLastMainView] = useState<'video' | 'dunes'>('video');
+  const [lastMainView, setLastMainView] = useState<'video' | 'black' | 'dunes'>('video');
 
   useEffect(() => {
-    if (currentView === 'video' || currentView === 'dunes') {
+    if (currentView === 'video' || currentView === 'black' || currentView === 'dunes') {
       setLastMainView(currentView);
     }
   }, [currentView]);
 
   const handleBack = () => {
-    if (currentView !== 'video' && currentView !== 'dunes') {
+    if (currentView !== 'video' && currentView !== 'black' && currentView !== 'dunes') {
       onViewChange(lastMainView);
     }
   };
 
   return (
     <div className="absolute inset-0 w-full h-full z-30">
+      <div 
+        className="absolute inset-0 w-full h-full"
+        style={{ 
+          backgroundColor: 'black',
+          opacity: currentView === 'black' ? 1 : 0,
+          transition: 'opacity 1s ease-in-out',
+          pointerEvents: currentView === 'black' ? 'auto' : 'none'
+        }}
+      />
+      
       <div 
         className="absolute inset-0 w-full h-full bg-cover"
         style={{ 
