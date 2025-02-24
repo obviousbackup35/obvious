@@ -2,7 +2,7 @@
 import { VideoPlayer } from "./VideoPlayer";
 import { VideoOverlay } from "./VideoOverlay";
 import { Logo } from "./Logo";
-import { RefObject, memo } from "react";
+import { RefObject } from "react";
 
 interface VideoManagerProps {
   isPlaying: boolean;
@@ -13,8 +13,7 @@ interface VideoManagerProps {
   video2Ref: RefObject<HTMLVideoElement>;
 }
 
-// Memoização do componente para evitar re-renders desnecessários
-export const VideoManager = memo(({
+export const VideoManager = ({
   isPlaying,
   isBackgroundLoaded,
   currentView,
@@ -29,7 +28,6 @@ export const VideoManager = memo(({
         style={{ 
           opacity: !isPlaying && currentView === 'video' ? (isBackgroundLoaded ? 1 : 0) : 0,
           transition: 'opacity 2s ease-in-out',
-          willChange: 'opacity',
         }}
       />
       <VideoPlayer
@@ -40,8 +38,7 @@ export const VideoManager = memo(({
         style={{
           opacity: currentView === 'video' && isPlaying ? (activeVideo === 1 ? 1 : 0) : 0,
           transition: 'opacity 1s ease-in-out',
-          zIndex: 20,
-          willChange: 'opacity',
+          zIndex: 20
         }}
       />
       <VideoPlayer
@@ -52,8 +49,7 @@ export const VideoManager = memo(({
         style={{
           opacity: currentView === 'video' && isPlaying ? (activeVideo === 2 ? 1 : 0) : 0,
           transition: 'opacity 1s ease-in-out',
-          zIndex: 20,
-          willChange: 'opacity',
+          zIndex: 20
         }}
       />
       <Logo 
@@ -61,12 +57,9 @@ export const VideoManager = memo(({
         style={{
           opacity: currentView === 'video' ? (isBackgroundLoaded ? 1 : 0) : 0,
           transition: 'opacity 2s ease-in-out',
-          transitionDelay: '2s',
-          willChange: 'opacity',
+          transitionDelay: '2s'
         }}
       />
     </>
   );
-});
-
-VideoManager.displayName = 'VideoManager';
+};
