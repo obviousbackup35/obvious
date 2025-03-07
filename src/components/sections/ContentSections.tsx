@@ -69,7 +69,7 @@ export const ContentSections = ({ currentView, onViewChange }: ContentSectionsPr
       <SectionContent
         isVisible={currentView === 'projects'}
         backgroundImage="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1920&q=80"
-        title="Projects"
+        title="Product"
         onBack={handleBack}
       />
       
