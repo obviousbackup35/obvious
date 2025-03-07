@@ -2,7 +2,7 @@
 import { VideoPlayer } from "./VideoPlayer";
 import { VideoOverlay } from "./VideoOverlay";
 import { Logo } from "./Logo";
-import { RefObject } from "react";
+import { RefObject, memo } from "react";
 
 interface VideoManagerProps {
   isPlaying: boolean;
@@ -13,7 +13,7 @@ interface VideoManagerProps {
   video2Ref: RefObject<HTMLVideoElement>;
 }
 
-export const VideoManager = ({
+export const VideoManager = memo(({
   isPlaying,
   isBackgroundLoaded,
   currentView,
@@ -62,4 +62,6 @@ export const VideoManager = ({
       />
     </>
   );
-};
+});
+
+VideoManager.displayName = 'VideoManager';

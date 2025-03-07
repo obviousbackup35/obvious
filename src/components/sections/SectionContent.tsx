@@ -1,5 +1,5 @@
 
-import { CSSProperties } from "react";
+import { CSSProperties, memo } from "react";
 import { ChevronLeft } from "lucide-react";
 
 interface SectionContentProps {
@@ -11,7 +11,7 @@ interface SectionContentProps {
   onBack?: () => void;
 }
 
-export const SectionContent = ({ 
+export const SectionContent = memo(({ 
   isVisible, 
   gradient, 
   backgroundImage, 
@@ -35,14 +35,17 @@ export const SectionContent = ({
         opacity: isVisible ? 1 : 0,
         transition: 'opacity 2s ease-in-out',
         pointerEvents: isVisible ? 'auto' : 'none',
+        willChange: isVisible ? 'opacity' : 'auto',
         ...style
       }}
+      role={isVisible ? "region" : "presentation"}
+      aria-hidden={!isVisible}
     >
       {onBack && (
         <button 
           onClick={onBack}
           className="absolute left-12 top-16 text-white hover:opacity-70 transition-opacity p-3"
-          aria-label="Voltar para dunas"
+          aria-label="Back to dunes"
         >
           <ChevronLeft size={40} />
         </button>
@@ -52,4 +55,6 @@ export const SectionContent = ({
       </div>
     </div>
   );
-};
+});
+
+SectionContent.displayName = 'SectionContent';

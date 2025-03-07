@@ -1,5 +1,5 @@
 
-import { forwardRef, CSSProperties, useEffect } from "react";
+import { forwardRef, CSSProperties, useEffect, memo } from "react";
 
 interface VideoPlayerProps {
   isPlaying: boolean;
@@ -8,10 +8,10 @@ interface VideoPlayerProps {
   style?: CSSProperties;
 }
 
-export const VideoPlayer = forwardRef<HTMLVideoElement, VideoPlayerProps>(
+export const VideoPlayer = memo(forwardRef<HTMLVideoElement, VideoPlayerProps>(
   ({ isPlaying, isActive, src, style }, ref) => {
     useEffect(() => {
-      // Pré-carrega o vídeo assim que o componente montar
+      // Preload video when component mounts
       if (ref && 'current' in ref && ref.current) {
         ref.current.load();
       }
@@ -28,12 +28,13 @@ export const VideoPlayer = forwardRef<HTMLVideoElement, VideoPlayerProps>(
         style={{
           opacity: isPlaying ? (isActive ? 1 : 0) : 0,
           transition: 'opacity 1s ease-in-out',
+          willChange: 'opacity', // Optimize for GPU acceleration
           ...style
         }}
         src={src}
       />
     );
   }
-);
+));
 
 VideoPlayer.displayName = 'VideoPlayer';
