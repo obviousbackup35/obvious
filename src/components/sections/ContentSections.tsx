@@ -61,28 +61,28 @@ export const ContentSections = ({ currentView, onViewChange }: ContentSectionsPr
       
       <SectionContent
         isVisible={currentView === 'company'}
-        gradient="linear-gradient(to right, #243949 0%, #517fa4 100%)"
+        backgroundImage="https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=1920&q=80"
         title="Company"
         onBack={handleBack}
       />
       
       <SectionContent
         isVisible={currentView === 'projects'}
-        gradient="linear-gradient(to right, #c1c161 0%, #c1c161 0%, #d4d4b1 100%)"
+        backgroundImage="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1920&q=80"
         title="Projects"
         onBack={handleBack}
       />
       
       <SectionContent
         isVisible={currentView === 'gallery'}
-        gradient="linear-gradient(to right, #ffc3a0 0%, #ffafbd 100%)"
+        backgroundImage="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1920&q=80"
         title="Gallery"
         onBack={handleBack}
       />
       
       <SectionContent
         isVisible={currentView === 'contact'}
-        gradient="linear-gradient(to right, #e6b980 0%, #eacda3 100%)"
+        backgroundImage="https://images.unsplash.com/photo-1458668383970-8ddd3927deed?auto=format&fit=crop&w=1920&q=80"
         title="Contact"
         onBack={handleBack}
       />
