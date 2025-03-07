@@ -61,28 +61,28 @@ export const ContentSections = ({ currentView, onViewChange }: ContentSectionsPr
       
       <SectionContent
         isVisible={currentView === 'company'}
-        backgroundImage="https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=1920&q=80"
+        backgroundImage="/visualelectric-1741372805454.webp"
         title="Company"
         onBack={handleBack}
       />
       
       <SectionContent
         isVisible={currentView === 'projects'}
-        backgroundImage="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1920&q=80"
+        backgroundImage="/visualelectric-1741372813250.webp"
         title="Product"
         onBack={handleBack}
       />
       
       <SectionContent
         isVisible={currentView === 'gallery'}
-        backgroundImage="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1920&q=80"
+        backgroundImage="/visualelectric-1741372954881.webp"
         title="Gallery"
         onBack={handleBack}
       />
       
       <SectionContent
         isVisible={currentView === 'contact'}
-        backgroundImage="https://images.unsplash.com/photo-1458668383970-8ddd3927deed?auto=format&fit=crop&w=1920&q=80"
+        backgroundImage="/visualelectric-1741373174467.webp"
         title="Contact"
         onBack={handleBack}
       />
