@@ -1,3 +1,4 @@
+
 import { Volume2, VolumeX, Hexagon, Menu } from "lucide-react";
 import { useCallback, memo, useState } from "react";
 import type { ContentView } from "@/types/navigation";
@@ -83,14 +84,14 @@ export const Navigation = memo(({
       role="navigation"
       aria-label="Main Navigation"
     >
-      <nav className="absolute top-8 w-full">
+      <nav className="absolute top-4 w-full">
         <div 
           className="flex justify-center items-center font-montserrat text-[1.38rem] relative transition-colors duration-700" 
           style={{ color: getTextColor() }}
         >
           <NavigationButton
             onClick={handleHomeClick}
-            className="absolute left-4 top-[1.2cm] p-2 transition-all duration-700 rounded-full bg-black/50 hover:bg-black/70"
+            className="absolute left-4 top-[0.6cm] p-2 transition-all duration-700 rounded-full bg-black/50 hover:bg-black/70"
           >
             <Hexagon 
               className="w-7 h-7" 
@@ -103,7 +104,7 @@ export const Navigation = memo(({
           {isMobile && (
             <NavigationButton
               onClick={toggleMobileMenu}
-              className="absolute left-1/2 -translate-x-1/2 top-[1.2cm] p-2 transition-all duration-700 rounded-full bg-black/50 hover:bg-black/70"
+              className="absolute left-1/2 -translate-x-1/2 top-[0.6cm] p-2 transition-all duration-700 rounded-full bg-black/50 hover:bg-black/70"
             >
               <Menu 
                 className="w-7 h-7" 
@@ -116,7 +117,7 @@ export const Navigation = memo(({
 
           <NavigationButton
             onClick={handleAudioToggle}
-            className="absolute right-4 top-[1.2cm] p-2 rounded-full bg-black/50 hover:bg-black/70 transition-all duration-700"
+            className="absolute right-4 top-[0.6cm] p-2 rounded-full bg-black/50 hover:bg-black/70 transition-all duration-700"
           >
             {isMuted ? 
               <VolumeX className="w-7 h-7" style={{ color: getTextColor(), transition: 'color 0.7s ease-in-out' }} aria-hidden="true" /> : 
