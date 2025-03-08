@@ -46,16 +46,22 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
     closeMobileMenu();
   };
   
+  // Don't render anything if the menu is closed
+  if (!isOpen) {
+    return null;
+  }
+  
   return (
     <div 
-      className={`fixed inset-0 z-40 mobile-menu-backdrop ${isOpen ? 'open' : ''}`}
+      className={`fixed inset-0 z-40 menu-backdrop ${isOpen ? 'open' : ''}`}
       style={{ 
-        pointerEvents: isOpen ? 'auto' : 'none',
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        backdropFilter: 'blur(3px)',
         willChange: 'opacity'
       }}
       aria-hidden={!isOpen}
     >
-      <div className={`flex items-center justify-center h-full mobile-menu-content ${isOpen ? 'open' : ''}`}>
+      <div className={`flex items-center justify-center h-full menu-content ${isOpen ? 'open' : ''}`}>
         <div className="menu-items">
           <ul className="space-y-6 p-8 text-center">
             <li>
