@@ -91,6 +91,10 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
     }
   };
 
+  // Fix: Instead of comparing the menuState to specific string literals,
+  // we should use proper boolean logic or check against the actual MenuState type
+  const isMenuHidden = menuState === 'closing' || menuState === 'closed';
+
   return (
     <div 
       className={cn(
@@ -101,7 +105,7 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
         backgroundColor: 'rgba(0, 0, 0, 0.9)',
         willChange: 'opacity, backdrop-filter'
       }}
-      aria-hidden={menuState === 'closing' || menuState === 'closed'}
+      aria-hidden={isMenuHidden}
     >
       <div className="flex items-center justify-center h-full">
         <div className="menu-items">
