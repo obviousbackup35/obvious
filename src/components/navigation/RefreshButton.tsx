@@ -41,12 +41,10 @@ const RefreshButton = memo(({ isPlaying, currentView }: RefreshButtonProps) => {
     return '#c8c5ad';
   };
 
+  // Fixed the duplicate property issue here
   const buttonClasses = cn(
     "transition-all duration-700 z-50",
-    {
-      "absolute left-1/2 -translate-x-1/2 bottom-8": !isMobile,
-      "absolute left-1/2 -translate-x-1/2 bottom-8": isMobile
-    }
+    "absolute left-1/2 -translate-x-1/2 bottom-8"
   );
 
   return (
