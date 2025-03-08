@@ -1,58 +1,92 @@
 
-import { memo } from "react";
+import { memo, useEffect } from "react";
 import NavigationButton from "./NavigationButton";
 import type { ContentView } from "@/types/navigation";
 
 interface MobileMenuProps {
   isOpen: boolean;
   handleViewChange: (view: ContentView) => (e: React.MouseEvent) => void;
+  closeMobileMenu: () => void;
 }
 
-const MobileMenu = memo(({ isOpen, handleViewChange }: MobileMenuProps) => {
+const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMenuProps) => {
+  // Add effect to handle clicks outside the menu
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      // Don't close if clicking menu items or the menu button (which has its own handler)
+      const target = e.target as HTMLElement;
+      const isMenuOrButton = target.closest('.mobile-menu-content') || 
+                            target.closest('button[aria-label="Menu"]');
+      
+      if (isOpen && !isMenuOrButton) {
+        closeMobileMenu();
+      }
+    };
+
+    // Add global click listener when menu is open
+    if (isOpen) {
+      document.addEventListener('click', handleOutsideClick);
+    }
+
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+    };
+  }, [isOpen, closeMobileMenu]);
+
   return (
-    <div 
-      className={`absolute top-24 left-0 w-full transition-all duration-300 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
-      style={{ 
-        willChange: isOpen ? 'opacity, transform' : 'auto'
-      }}
-    >
-      <div className="bg-black/70 backdrop-blur-sm rounded-lg mx-4 p-4 text-center">
-        <ul className="space-y-4">
-          <li>
-            <NavigationButton
-              onClick={handleViewChange('company')}
-              className="cursor-pointer hover:opacity-70 transition-all duration-700 py-2 w-full text-sm"
-            >
-              C O M P A N Y
-            </NavigationButton>
-          </li>
-          <li>
-            <NavigationButton
-              onClick={handleViewChange('projects')}
-              className="cursor-pointer hover:opacity-70 transition-all duration-700 py-2 w-full text-sm"
-            >
-              P R O D U C T
-            </NavigationButton>
-          </li>
-          <li>
-            <NavigationButton
-              onClick={handleViewChange('gallery')}
-              className="cursor-pointer hover:opacity-70 transition-all duration-700 py-2 w-full text-sm"
-            >
-              G A L L E R Y
-            </NavigationButton>
-          </li>
-          <li>
-            <NavigationButton
-              onClick={handleViewChange('contact')}
-              className="cursor-pointer hover:opacity-70 transition-all duration-700 py-2 w-full text-sm"
-            >
-              C O N T A C T
-            </NavigationButton>
-          </li>
-        </ul>
+    <>
+      {/* Invisible overlay that covers the whole screen when menu is open */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 z-40"
+          aria-hidden="true"
+        />
+      )}
+      
+      <div 
+        className={`absolute top-24 left-0 w-full transition-all duration-300 z-50 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        style={{ 
+          willChange: isOpen ? 'opacity, transform' : 'auto'
+        }}
+      >
+        <div className="bg-black/70 backdrop-blur-sm rounded-lg mx-4 p-4 text-center mobile-menu-content">
+          <ul className="space-y-4">
+            <li>
+              <NavigationButton
+                onClick={handleViewChange('company')}
+                className="cursor-pointer hover:opacity-70 transition-all duration-700 py-2 w-full text-sm"
+              >
+                C O M P A N Y
+              </NavigationButton>
+            </li>
+            <li>
+              <NavigationButton
+                onClick={handleViewChange('projects')}
+                className="cursor-pointer hover:opacity-70 transition-all duration-700 py-2 w-full text-sm"
+              >
+                P R O D U C T
+              </NavigationButton>
+            </li>
+            <li>
+              <NavigationButton
+                onClick={handleViewChange('gallery')}
+                className="cursor-pointer hover:opacity-70 transition-all duration-700 py-2 w-full text-sm"
+              >
+                G A L L E R Y
+              </NavigationButton>
+            </li>
+            <li>
+              <NavigationButton
+                onClick={handleViewChange('contact')}
+                className="cursor-pointer hover:opacity-70 transition-all duration-700 py-2 w-full text-sm"
+              >
+                C O N T A C T
+              </NavigationButton>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
+    </>
   );
 });
 

@@ -54,10 +54,8 @@ export const Navigation = memo(({
     setMobileMenuOpen(prev => !prev);
   }, []);
 
+  // Always return the brighter color regardless of view
   const getTextColor = () => {
-    if (currentView === 'dunes') {
-      return '#555555';
-    }
     return '#c8c5ad';
   };
 
@@ -90,6 +88,7 @@ export const Navigation = memo(({
             <MobileMenu 
               isOpen={mobileMenuOpen}
               handleViewChange={handleViewChange}
+              closeMobileMenu={() => setMobileMenuOpen(false)}
             />
           ) : (
             <DesktopMenu 
