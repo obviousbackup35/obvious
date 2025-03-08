@@ -23,7 +23,6 @@ export const VideoOverlay = memo(({ isBackgroundLoaded, style }: VideoOverlayPro
       }}
       aria-hidden="true"
       role="presentation"
-      loading="eager"
     />
   );
 });

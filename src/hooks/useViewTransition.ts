@@ -1,7 +1,6 @@
-
 import { useState, useEffect, useCallback, useRef } from 'react';
 import type { ContentView } from '@/types/navigation';
-import { useMobile } from '@/hooks/use-mobile';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export const useViewTransition = (isPlaying: boolean) => {
   const [currentView, setCurrentView] = useState<ContentView>('video');
@@ -11,7 +10,7 @@ export const useViewTransition = (isPlaying: boolean) => {
   const touchStartY = useRef<number>(0);
   const WHEEL_THRESHOLD = 50; // ms between wheel events
   const TOUCH_THRESHOLD = 50; // minimum touch move distance to trigger transition
-  const isMobile = useMobile();
+  const isMobile = useIsMobile();
 
   const handleViewTransition = useCallback((direction: 'up' | 'down') => {
     if (isTransitioning.current) return;

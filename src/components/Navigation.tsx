@@ -1,8 +1,7 @@
-
 import { Volume2, VolumeX, Hexagon, Menu } from "lucide-react";
 import { useCallback, memo, useState } from "react";
 import type { ContentView } from "@/types/navigation";
-import { useMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface NavigationProps {
   audioRef: React.RefObject<HTMLAudioElement>;
@@ -36,7 +35,7 @@ export const Navigation = memo(({
   onViewChange,
   currentView
 }: NavigationProps) => {
-  const isMobile = useMobile();
+  const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleViewChange = useCallback((view: ContentView) => (e: React.MouseEvent) => {
