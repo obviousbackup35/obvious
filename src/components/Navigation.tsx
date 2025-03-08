@@ -27,20 +27,12 @@ export const Navigation = memo(({
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Only close mobile menu when view changes and a menu item was clicked
-  useEffect(() => {
-    if (mobileMenuOpen) {
-      // We don't auto-close the menu anymore; it will be closed by explicit user action
-      // (either clicking a menu item or clicking outside the menu)
-    }
-  }, [currentView, mobileMenuOpen]);
-
   const handleViewChange = useCallback((view: ContentView) => (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     onViewChange(view);
     
-    // Close the menu after view change only when a menu item was clicked
+    // Close the menu after view change
     setMobileMenuOpen(false);
   }, [onViewChange]);
 
@@ -76,7 +68,7 @@ export const Navigation = memo(({
       style={{
         opacity: isVisible ? 1 : 0,
         pointerEvents: isVisible ? 'auto' : 'none',
-        willChange: isVisible ? 'opacity' : 'auto'
+        willChange: 'opacity'
       }}
       role="navigation"
       aria-label="Main Navigation"
@@ -97,13 +89,15 @@ export const Navigation = memo(({
             isMobileMenuOpen={mobileMenuOpen}
           />
           
-          {isMobile ? (
+          {isMobile && (
             <MobileMenu 
               isOpen={mobileMenuOpen}
               handleViewChange={handleViewChange}
               closeMobileMenu={() => setMobileMenuOpen(false)}
             />
-          ) : (
+          )}
+          
+          {!isMobile && (
             <DesktopMenu 
               handleViewChange={handleViewChange}
             />

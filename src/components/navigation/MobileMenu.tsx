@@ -1,5 +1,5 @@
 
-import { memo, useEffect, useState, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 import NavigationButton from "./NavigationButton";
 import type { ContentView } from "@/types/navigation";
 
@@ -10,17 +10,8 @@ interface MobileMenuProps {
 }
 
 const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMenuProps) => {
-  const [localIsOpen, setLocalIsOpen] = useState(isOpen);
-  const prevOpenState = useRef(isOpen);
+  const menuRef = useRef<HTMLDivElement>(null);
   
-  // Optimize state updates
-  useEffect(() => {
-    if (prevOpenState.current !== isOpen) {
-      setLocalIsOpen(isOpen);
-      prevOpenState.current = isOpen;
-    }
-  }, [isOpen]);
-
   // Add effect to handle clicks outside the menu - optimized version
   useEffect(() => {
     // Only add listener when menu is open
@@ -46,35 +37,33 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
     };
   }, [isOpen, closeMobileMenu]);
 
-  // Wrapper function to handle view change and close menu
-  const handleMenuItemClick = (view: ContentView) => (e: React.MouseEvent) => {
-    // Perform view change first
-    handleViewChange(view)(e);
-    // Then close menu
-    setLocalIsOpen(false);
-  };
-
-  // Optimize rendering - prevent unnecessary DOM operations when menu is closed
-  if (!isOpen && !localIsOpen) {
-    return null;
-  }
-
   return (
     <div 
-      className={`fixed inset-0 z-40 transition-all duration-500 ${localIsOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+      ref={menuRef}
+      className="fixed inset-0 z-40 transition-opacity duration-300"
       style={{ 
         backgroundColor: 'rgba(0, 0, 0, 0.9)',
         backdropFilter: 'blur(3px)',
-        willChange: localIsOpen ? 'opacity' : 'auto'
+        opacity: isOpen ? 1 : 0,
+        pointerEvents: isOpen ? 'auto' : 'none',
+        visibility: isOpen ? 'visible' : 'hidden',
+        willChange: 'opacity, transform'
       }}
-      aria-hidden={!localIsOpen}
+      aria-hidden={!isOpen}
     >
-      <div className="flex items-center justify-center h-full">
+      <div 
+        className="flex items-center justify-center h-full"
+        style={{
+          transform: isOpen ? 'translateY(0)' : 'translateY(-20px)',
+          transition: 'transform 300ms ease-out',
+          willChange: 'transform'
+        }}
+      >
         <div className="menu-items">
           <ul className="space-y-6 p-8 text-center">
             <li>
               <NavigationButton
-                onClick={handleMenuItemClick('company')}
+                onClick={handleViewChange('company')}
                 className="cursor-pointer hover:opacity-70 transition-all duration-300 py-2 w-full text-xl text-[#c8c5ad]"
               >
                 C O M P A N Y
@@ -82,7 +71,7 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
             </li>
             <li>
               <NavigationButton
-                onClick={handleMenuItemClick('projects')}
+                onClick={handleViewChange('projects')}
                 className="cursor-pointer hover:opacity-70 transition-all duration-300 py-2 w-full text-xl text-[#c8c5ad]"
               >
                 P R O D U C T
@@ -90,7 +79,7 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
             </li>
             <li>
               <NavigationButton
-                onClick={handleMenuItemClick('gallery')}
+                onClick={handleViewChange('gallery')}
                 className="cursor-pointer hover:opacity-70 transition-all duration-300 py-2 w-full text-xl text-[#c8c5ad]"
               >
                 G A L L E R Y
@@ -98,7 +87,7 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
             </li>
             <li>
               <NavigationButton
-                onClick={handleMenuItemClick('contact')}
+                onClick={handleViewChange('contact')}
                 className="cursor-pointer hover:opacity-70 transition-all duration-300 py-2 w-full text-xl text-[#c8c5ad]"
               >
                 C O N T A C T
