@@ -16,7 +16,7 @@ import { useScrollBehavior } from "@/hooks/useScrollBehavior";
 const Index = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const { isBackgroundLoaded } = useBackgroundLoader();
-  const { currentView, setCurrentView } = useViewTransition(isPlaying);
+  const { currentView, setCurrentView, handleViewTransition } = useViewTransition(isPlaying);
   const { activeVideo, video1Ref, video2Ref, handleTimeUpdate } = useVideoTransition();
   const { audioRef } = usePageAudio(isPlaying, currentView);
   const { 
@@ -26,8 +26,8 @@ const Index = () => {
     setCurrentTime
   } = useAudio();
   
-  // Apply scroll behavior settings (now conditionally based on device)
-  useScrollBehavior();
+  // Pass handleViewTransition to useScrollBehavior
+  useScrollBehavior(handleViewTransition);
 
   const handleViewChange = useCallback((view: ContentView) => {
     setCurrentView(view);

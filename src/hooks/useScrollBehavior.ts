@@ -1,11 +1,10 @@
 
 import { useEffect } from "react";
 import { useIsMobile } from "./use-mobile";
-import { useViewTransition } from "./useViewTransition";
 
-export const useScrollBehavior = () => {
+// Update to accept handleViewTransition as a parameter
+export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down') => void) => {
   const isMobile = useIsMobile();
-  const { handleViewTransition } = useViewTransition(false);
 
   useEffect(() => {
     // Only prevent scrolling on mobile devices
