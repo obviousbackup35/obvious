@@ -63,7 +63,7 @@ export const Navigation = memo(({
 
   return (
     <div 
-      className="absolute top-0 w-full z-50 transition-opacity duration-1000" 
+      className="absolute top-2 w-full z-50 transition-opacity duration-1000" 
       style={{
         opacity: isVisible ? 1 : 0,
         pointerEvents: isVisible ? 'auto' : 'none',
@@ -72,7 +72,7 @@ export const Navigation = memo(({
       role="navigation"
       aria-label="Main Navigation"
     >
-      <nav className="absolute top-4 w-full">
+      <nav className="absolute top-0 w-full">
         <div 
           className="flex justify-center items-center font-montserrat text-[1.38rem] relative transition-colors duration-700" 
           style={{ color: getTextColor() }}
