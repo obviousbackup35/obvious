@@ -11,6 +11,44 @@ import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import { useEffect } from "react";
 
+// Define the Screen Orientation API types
+interface ScreenOrientation {
+  lock(orientation: OrientationLockType): Promise<void>;
+  unlock(): void;
+  type: OrientationType;
+  angle: number;
+  onchange: ((this: ScreenOrientation, ev: Event) => any) | null;
+  addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+  removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+  dispatchEvent(event: Event): boolean;
+}
+
+interface ScreenWithOrientation extends Screen {
+  orientation?: ScreenOrientation;
+}
+
+type OrientationLockType = 
+  | "any"
+  | "natural"
+  | "landscape"
+  | "portrait"
+  | "portrait-primary"
+  | "portrait-secondary"
+  | "landscape-primary"
+  | "landscape-secondary";
+
+type OrientationType = 
+  | "portrait-primary" 
+  | "portrait-secondary" 
+  | "landscape-primary" 
+  | "landscape-secondary";
+
+declare global {
+  interface Window {
+    screen: ScreenWithOrientation;
+  }
+}
+
 const queryClient = new QueryClient();
 
 const App = () => {
