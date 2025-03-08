@@ -97,6 +97,7 @@ export const Navigation = memo(({
               isOpen={mobileMenuOpen}
               handleViewChange={handleViewChange}
               closeMobileMenu={closeMobileMenu}
+              key={`mobile-menu-${mobileMenuOpen ? 'open' : 'closed'}`}
             />
           )}
           
