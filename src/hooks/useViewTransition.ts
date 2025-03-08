@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback, useRef } from 'react';
 import type { ContentView } from '@/types/navigation';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -54,10 +55,21 @@ export const useViewTransition = (isPlaying: boolean) => {
   }, [handleViewTransition]);
 
   const handleTouchStart = useCallback((e: TouchEvent) => {
+    // Only handle main view transitions, not internal menu navigation
+    if (currentView === 'dunes' && isMobile) {
+      // Let the PolicyMenu handle its own touch events
+      return;
+    }
+    
     touchStartY.current = e.touches[0].clientY;
-  }, []);
+  }, [currentView, isMobile]);
 
   const handleTouchMove = useCallback((e: TouchEvent) => {
+    // Skip handling in dunes view on mobile (let PolicyMenu handle it)
+    if (currentView === 'dunes' && isMobile) {
+      return;
+    }
+    
     if (!touchStartY.current || isTransitioning.current) return;
     
     const touchY = e.touches[0].clientY;
@@ -70,7 +82,7 @@ export const useViewTransition = (isPlaying: boolean) => {
       // Reset touch start to prevent multiple triggers in same movement
       touchStartY.current = 0;
     }
-  }, [handleViewTransition]);
+  }, [handleViewTransition, currentView, isMobile]);
 
   useEffect(() => {
     if (!isPlaying) return;
