@@ -49,7 +49,7 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
           willChange: isOpen ? 'opacity, transform' : 'auto'
         }}
       >
-        <div className="bg-black/70 backdrop-blur-sm mx-auto w-[300px] aspect-[4/3.5] p-6 text-center mobile-menu-content clip-hexagon flex items-center justify-center">
+        <div className="bg-black/70 backdrop-blur-sm mx-auto w-[300px] aspect-[1/1] p-6 text-center mobile-menu-content clip-hexagon flex items-center justify-center">
           <ul className="space-y-4">
             <li>
               <NavigationButton
