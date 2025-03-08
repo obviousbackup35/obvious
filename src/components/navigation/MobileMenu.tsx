@@ -1,5 +1,5 @@
 
-import { memo, useEffect } from "react";
+import { memo, useEffect, useState, useRef } from "react";
 import NavigationButton from "./NavigationButton";
 import type { ContentView } from "@/types/navigation";
 
@@ -10,51 +10,66 @@ interface MobileMenuProps {
 }
 
 const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMenuProps) => {
-  // Add body class to prevent scrolling when menu is open
-  useEffect(() => {
-    if (isOpen) {
-      document.body.classList.add('no-bounce');
-    } else {
-      document.body.classList.remove('no-bounce');
-    }
-    
-    return () => {
-      document.body.classList.remove('no-bounce');
-    };
-  }, [isOpen]);
+  const [localIsOpen, setLocalIsOpen] = useState(isOpen);
+  const prevOpenState = useRef(isOpen);
   
-  // Handle clicks outside the menu
+  // Optimize state updates
   useEffect(() => {
+    if (prevOpenState.current !== isOpen) {
+      setLocalIsOpen(isOpen);
+      prevOpenState.current = isOpen;
+    }
+  }, [isOpen]);
+
+  // Add effect to handle clicks outside the menu - optimized version
+  useEffect(() => {
+    // Only add listener when menu is open
     if (!isOpen) return;
     
     const handleOutsideClick = (e: MouseEvent) => {
+      // Allow clicks anywhere on the overlay to close the menu
+      // except for clicks on the menu items themselves
       const target = e.target as HTMLElement;
       if (!target.closest('.menu-items') && !target.closest('.mobile-menu-toggle')) {
         closeMobileMenu();
       }
     };
-    
-    document.addEventListener('click', handleOutsideClick);
+
+    // Add global click listener with a slight delay to prevent immediate closure
+    const timerId = setTimeout(() => {
+      document.addEventListener('click', handleOutsideClick);
+    }, 10);
+
     return () => {
+      clearTimeout(timerId);
       document.removeEventListener('click', handleOutsideClick);
     };
   }, [isOpen, closeMobileMenu]);
-  
-  // Helper function to handle menu item clicks
+
+  // Wrapper function to handle view change and close menu
   const handleMenuItemClick = (view: ContentView) => (e: React.MouseEvent) => {
+    // Perform view change first
     handleViewChange(view)(e);
-    closeMobileMenu();
+    // Then close menu
+    setLocalIsOpen(false);
   };
-  
+
+  // Optimize rendering - prevent unnecessary DOM operations when menu is closed
+  if (!isOpen && !localIsOpen) {
+    return null;
+  }
+
   return (
     <div 
-      className={`mobile-menu-backdrop ${isOpen ? 'open' : ''}`}
+      className={`fixed inset-0 z-40 transition-all duration-500 ${localIsOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
       style={{ 
-        pointerEvents: isOpen ? 'auto' : 'none'
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        backdropFilter: 'blur(3px)',
+        willChange: localIsOpen ? 'opacity' : 'auto'
       }}
-      aria-hidden={!isOpen}
+      aria-hidden={!localIsOpen}
     >
-      <div className={`mobile-menu-content ${isOpen ? 'open' : ''}`}>
+      <div className="flex items-center justify-center h-full">
         <div className="menu-items">
           <ul className="space-y-6 p-8 text-center">
             <li>

@@ -1,5 +1,5 @@
 
-import { useCallback, memo, useState } from "react";
+import { useCallback, memo, useState, useEffect } from "react";
 import type { ContentView } from "@/types/navigation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import NavigationButton from "./navigation/NavigationButton";
@@ -27,10 +27,21 @@ export const Navigation = memo(({
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  // Only close mobile menu when view changes and a menu item was clicked
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      // We don't auto-close the menu anymore; it will be closed by explicit user action
+      // (either clicking a menu item or clicking outside the menu)
+    }
+  }, [currentView, mobileMenuOpen]);
+
   const handleViewChange = useCallback((view: ContentView) => (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     onViewChange(view);
+    
+    // Close the menu after view change only when a menu item was clicked
+    setMobileMenuOpen(false);
   }, [onViewChange]);
 
   const handleHomeClick = useCallback((e: React.MouseEvent) => {
@@ -49,12 +60,6 @@ export const Navigation = memo(({
     e.preventDefault();
     e.stopPropagation();
     setMobileMenuOpen(prev => !prev);
-    console.log('Mobile menu toggled:', !mobileMenuOpen);
-  }, [mobileMenuOpen]);
-
-  const closeMobileMenu = useCallback(() => {
-    setMobileMenuOpen(false);
-    console.log('Mobile menu closed');
   }, []);
 
   // Reimplementing adaptive text color based on the current view
@@ -92,16 +97,13 @@ export const Navigation = memo(({
             isMobileMenuOpen={mobileMenuOpen}
           />
           
-          {isMobile && (
+          {isMobile ? (
             <MobileMenu 
               isOpen={mobileMenuOpen}
               handleViewChange={handleViewChange}
-              closeMobileMenu={closeMobileMenu}
-              key={`mobile-menu-${mobileMenuOpen ? 'open' : 'closed'}`}
+              closeMobileMenu={() => setMobileMenuOpen(false)}
             />
-          )}
-          
-          {!isMobile && (
+          ) : (
             <DesktopMenu 
               handleViewChange={handleViewChange}
             />
