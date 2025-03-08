@@ -27,15 +27,11 @@ export const Navigation = memo(({
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Close mobile menu after view transition completes
+  // Only close mobile menu when view changes and a menu item was clicked
   useEffect(() => {
     if (mobileMenuOpen) {
-      // Add a delay to allow for crossfade transition
-      const timer = setTimeout(() => {
-        setMobileMenuOpen(false);
-      }, 1000); // Match this with the transition duration
-      
-      return () => clearTimeout(timer);
+      // We don't auto-close the menu anymore; it will be closed by explicit user action
+      // (either clicking a menu item or clicking outside the menu)
     }
   }, [currentView, mobileMenuOpen]);
 
@@ -44,7 +40,8 @@ export const Navigation = memo(({
     e.stopPropagation();
     onViewChange(view);
     
-    // We'll close the menu after the transition completes via the effect
+    // Close the menu after view change only when a menu item was clicked
+    setMobileMenuOpen(false);
   }, [onViewChange]);
 
   const handleHomeClick = useCallback((e: React.MouseEvent) => {

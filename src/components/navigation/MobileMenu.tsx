@@ -28,7 +28,9 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
         return;
       }
       
-      closeMobileMenu();
+      if (!target.closest('.mobile-menu-toggle')) {
+        closeMobileMenu();
+      }
     };
 
     // Add global click listener when menu is open
@@ -46,8 +48,9 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
     // Call the original handler to change the view
     handleViewChange(view)(e);
     // Close the menu with a slight delay to allow for the transition
-    setLocalIsOpen(false);
-    // The parent component will handle the actual closing
+    setTimeout(() => {
+      setLocalIsOpen(false);
+    }, 300); // Match this with the transition duration
   };
 
   return (

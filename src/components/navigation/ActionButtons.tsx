@@ -42,7 +42,7 @@ const ActionButtons = memo(({
       {isMobile && (
         <NavigationButton
           onClick={toggleMobileMenu}
-          className={`absolute left-1/2 -translate-x-1/2 top-[1.75cm] p-2 transition-all duration-700 rounded-full z-50 ${
+          className={`mobile-menu-toggle absolute left-1/2 -translate-x-1/2 top-[1.75cm] p-2 transition-all duration-700 rounded-full z-50 ${
             isMobileMenuOpen ? 'bg-black/70' : currentView === 'dunes' ? '' : 'bg-black/50 hover:bg-black/70'
           }`}
           aria-label="Menu"
