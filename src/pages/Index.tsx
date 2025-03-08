@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useVideoTransition } from "@/hooks/useVideoTransition";
 import { usePageAudio } from "@/hooks/usePageAudio";
@@ -182,6 +183,11 @@ const Index = () => {
         <NavigationButton
           onClick={handleRefresh}
           className="absolute left-1/2 -translate-x-1/2 bottom-8 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-all duration-700 z-50"
+          style={{
+            opacity: isPlaying ? 1 : 0,
+            transition: 'opacity 1s ease-in-out',
+            willChange: 'opacity'
+          }}
         >
           <RefreshCw 
             className="w-7 h-7" 
