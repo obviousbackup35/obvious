@@ -12,15 +12,12 @@ import NotFound from "./pages/NotFound";
 import { useEffect } from "react";
 
 // Define the Screen Orientation API types
-interface ScreenOrientation {
+interface ScreenOrientation extends EventTarget {
   lock(orientation: OrientationLockType): Promise<void>;
   unlock(): void;
   type: OrientationType;
   angle: number;
   onchange: ((this: ScreenOrientation, ev: Event) => any) | null;
-  addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-  removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
-  dispatchEvent(event: Event): boolean;
 }
 
 type OrientationLockType = 
@@ -41,7 +38,7 @@ type OrientationType =
 
 declare global {
   interface Screen {
-    orientation?: ScreenOrientation;
+    orientation: ScreenOrientation;
   }
 }
 
