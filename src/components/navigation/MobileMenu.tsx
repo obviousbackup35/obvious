@@ -12,30 +12,30 @@ interface MobileMenuProps {
 const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMenuProps) => {
   const [localIsOpen, setLocalIsOpen] = useState(isOpen);
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
-  const prevOpenState = useRef(isOpen);
   
-  // Reset animation states when isOpen changes
+  // Completely reset the component state when isOpen changes
   useEffect(() => {
-    if (prevOpenState.current !== isOpen) {
-      if (isOpen) {
-        // Opening menu - immediate state change
+    if (isOpen) {
+      // Opening menu - immediate state change
+      setIsAnimatingOut(false);
+      setLocalIsOpen(true);
+      console.log("MobileMenu: Opening menu");
+    } else if (localIsOpen) {
+      // Only trigger closing animation if the menu was previously open
+      setIsAnimatingOut(true);
+      console.log("MobileMenu: Starting close animation");
+      
+      // Delay the actual removal from DOM
+      const timer = setTimeout(() => {
+        setLocalIsOpen(false);
         setIsAnimatingOut(false);
-        setLocalIsOpen(true);
-      } else {
-        // Closing menu - start exit animation first
-        setIsAnimatingOut(true);
-        // Delay the actual removal from DOM
-        const timer = setTimeout(() => {
-          setLocalIsOpen(false);
-          setIsAnimatingOut(false);
-        }, 500); // Match the CSS transition duration
-        return () => clearTimeout(timer);
-      }
-      prevOpenState.current = isOpen;
+        console.log("MobileMenu: Finished closing");
+      }, 500); // Match the CSS transition duration
+      return () => clearTimeout(timer);
     }
-  }, [isOpen]);
+  }, [isOpen, localIsOpen]);
 
-  // Add effect to handle clicks outside the menu - optimized version
+  // Add effect to handle clicks outside the menu
   useEffect(() => {
     // Only add listener when menu is open
     if (!isOpen) return;
@@ -70,10 +70,13 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
     closeMobileMenu();
   };
 
-  // Prevent rendering when menu is completely closed
+  // Prevent rendering when menu is completely closed and not animating
   if (!isOpen && !localIsOpen && !isAnimatingOut) {
+    console.log("MobileMenu: Not rendering (completely closed)");
     return null;
   }
+
+  console.log(`MobileMenu rendering: isOpen=${isOpen}, localIsOpen=${localIsOpen}, isAnimatingOut=${isAnimatingOut}`);
 
   return (
     <div 

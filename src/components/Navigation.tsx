@@ -49,13 +49,11 @@ export const Navigation = memo(({
     e.preventDefault();
     e.stopPropagation();
     setMobileMenuOpen(prev => !prev);
-    // Add this console.log to debug
     console.log('Mobile menu toggled:', !mobileMenuOpen);
   }, [mobileMenuOpen]);
 
   const closeMobileMenu = useCallback(() => {
     setMobileMenuOpen(false);
-    // Add this console.log to debug
     console.log('Mobile menu closed');
   }, []);
 
@@ -94,13 +92,16 @@ export const Navigation = memo(({
             isMobileMenuOpen={mobileMenuOpen}
           />
           
-          {isMobile ? (
+          {isMobile && (
             <MobileMenu 
               isOpen={mobileMenuOpen}
               handleViewChange={handleViewChange}
               closeMobileMenu={closeMobileMenu}
+              key={`mobile-menu-${mobileMenuOpen ? 'open' : 'closed'}`}
             />
-          ) : (
+          )}
+          
+          {!isMobile && (
             <DesktopMenu 
               handleViewChange={handleViewChange}
             />
