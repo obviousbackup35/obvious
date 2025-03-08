@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import type { ContentView, PolicyView } from '@/types/navigation';
 import { useAuth } from './AuthProvider';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface PolicyMenuProps {
   onViewChange: (view: ContentView) => void;
@@ -31,72 +33,186 @@ export const PolicyMenu = ({
   isVisible
 }: PolicyMenuProps) => {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [currentGroupIndex, setCurrentGroupIndex] = useState(0);
   const { user } = useAuth();
+  const isMobile = useIsMobile();
 
   const handlePolicyClick = (policy: PolicyView) => {
     onViewChange(policy);
   };
 
+  const handleNext = () => {
+    if (currentGroupIndex < policyGroups.length - 1) {
+      setCurrentGroupIndex(prev => prev + 1);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentGroupIndex > 0) {
+      setCurrentGroupIndex(prev => prev - 1);
+    }
+  };
+
+  const currentGroup = policyGroups[currentGroupIndex];
+  const showLeftArrow = currentGroupIndex > 0;
+  const showRightArrow = currentGroupIndex < policyGroups.length - 1;
+
+  // Desktop layout with all groups
+  if (!isMobile) {
+    return (
+      <div className={`absolute inset-0 w-full h-full transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+        <div className="absolute top-[85%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 px-4">
+            {policyGroups.map(group => (
+              <div key={group.title} className="text-center">
+                <h3 className="text-sm font-black mb-3 tracking-wider uppercase" style={{
+                  color: '#d4d1b9'
+                }}>
+                  {group.title}
+                </h3>
+                <ul className="space-y-2">
+                  {group.items.map(item => (
+                    <li 
+                      key={item} 
+                      onClick={() => handlePolicyClick(item)}
+                      onMouseEnter={() => setHoveredItem(item)}
+                      onMouseLeave={() => setHoveredItem(null)}
+                      className={`
+                        cursor-pointer
+                        text-xs
+                        font-montserrat
+                        font-medium
+                        transition-opacity
+                        duration-300
+                        py-0.5
+                        ${hoveredItem === item 
+                          ? 'text-white' 
+                          : 'text-white/80'
+                        }
+                      `}
+                    >
+                      {item.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                    </li>
+                  ))}
+                  {group.title === "Other" && (
+                    <li className="relative mt-4">
+                      <div className="pt-2">
+                        {user ? (
+                          <Button 
+                            variant="outline" 
+                            className="border-0 bg-white/10 hover:bg-white/20 text-white font-montserrat font-medium text-xs px-6 py-2 rounded-full transition-all duration-300" 
+                            onClick={() => onViewChange('profile')}
+                          >
+                            My Profile
+                          </Button>
+                        ) : (
+                          <Button 
+                            variant="outline" 
+                            className="border-0 bg-white/10 hover:bg-white/20 text-white font-montserrat font-medium text-xs px-6 py-2 rounded-full transition-all duration-300" 
+                            onClick={() => onViewChange('auth')}
+                          >
+                            Login / Register
+                          </Button>
+                        )}
+                      </div>
+                    </li>
+                  )}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Mobile layout with pagination
   return (
     <div className={`absolute inset-0 w-full h-full transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-      <div className="absolute top-[85%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-5xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 px-4">
-          {policyGroups.map(group => (
-            <div key={group.title} className="text-center">
-              <h3 className="text-sm font-black mb-3 tracking-wider uppercase" style={{
-                color: '#d4d1b9'
-              }}>
-                {group.title}
-              </h3>
-              <ul className="space-y-2">
-                {group.items.map(item => (
-                  <li 
-                    key={item} 
-                    onClick={() => handlePolicyClick(item)}
-                    onMouseEnter={() => setHoveredItem(item)}
-                    onMouseLeave={() => setHoveredItem(null)}
-                    className={`
-                      cursor-pointer
-                      text-xs
-                      font-montserrat
-                      font-medium
-                      transition-opacity
-                      duration-300
-                      py-0.5
-                      ${hoveredItem === item 
-                        ? 'text-white' 
-                        : 'text-white/80'
-                      }
-                    `}
-                  >
-                    {item.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
-                  </li>
-                ))}
-                {group.title === "Other" && (
-                  <li className="relative mt-4">
-                    <div className="pt-2">
-                      {user ? (
-                        <Button 
-                          variant="outline" 
-                          className="border-0 bg-white/10 hover:bg-white/20 text-white font-montserrat font-medium text-xs px-6 py-2 rounded-full transition-all duration-300" 
-                          onClick={() => onViewChange('profile')}
-                        >
-                          My Profile
-                        </Button>
-                      ) : (
-                        <Button 
-                          variant="outline" 
-                          className="border-0 bg-white/10 hover:bg-white/20 text-white font-montserrat font-medium text-xs px-6 py-2 rounded-full transition-all duration-300" 
-                          onClick={() => onViewChange('auth')}
-                        >
-                          Login / Register
-                        </Button>
-                      )}
-                    </div>
-                  </li>
-                )}
-              </ul>
-            </div>
+      <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 w-full max-w-xs mx-auto px-4">
+        <div className="relative flex items-center justify-center">
+          {/* Left Arrow */}
+          {showLeftArrow && (
+            <button 
+              onClick={handlePrevious}
+              className="absolute left-0 z-10 p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors duration-300"
+              aria-label="Previous policy group"
+            >
+              <ChevronLeft className="text-white" size={24} />
+            </button>
+          )}
+          
+          {/* Policy Group */}
+          <div 
+            key={currentGroup.title} 
+            className="text-center w-full animate-fade-in"
+          >
+            <h3 className="text-sm font-black mb-3 tracking-wider uppercase" style={{
+              color: '#d4d1b9'
+            }}>
+              {currentGroup.title}
+            </h3>
+            <ul className="space-y-2">
+              {currentGroup.items.map(item => (
+                <li 
+                  key={item} 
+                  onClick={() => handlePolicyClick(item)}
+                  className="cursor-pointer text-xs font-montserrat font-medium transition-opacity duration-300 py-1 text-white/80 hover:text-white active:text-white"
+                >
+                  {item.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                </li>
+              ))}
+              {currentGroup.title === "Other" && (
+                <li className="relative mt-4">
+                  <div className="pt-2">
+                    {user ? (
+                      <Button 
+                        variant="outline" 
+                        className="border-0 bg-white/10 hover:bg-white/20 text-white font-montserrat font-medium text-xs px-6 py-2 rounded-full transition-all duration-300" 
+                        onClick={() => onViewChange('profile')}
+                      >
+                        My Profile
+                      </Button>
+                    ) : (
+                      <Button 
+                        variant="outline" 
+                        className="border-0 bg-white/10 hover:bg-white/20 text-white font-montserrat font-medium text-xs px-6 py-2 rounded-full transition-all duration-300" 
+                        onClick={() => onViewChange('auth')}
+                      >
+                        Login / Register
+                      </Button>
+                    )}
+                  </div>
+                </li>
+              )}
+            </ul>
+          </div>
+          
+          {/* Right Arrow */}
+          {showRightArrow && (
+            <button 
+              onClick={handleNext}
+              className="absolute right-0 z-10 p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors duration-300"
+              aria-label="Next policy group"
+            >
+              <ChevronRight className="text-white" size={24} />
+            </button>
+          )}
+        </div>
+        
+        {/* Pagination Dots */}
+        <div className="flex justify-center mt-6 space-x-2">
+          {policyGroups.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentGroupIndex(index)}
+              className={`w-2 h-2 rounded-full ${
+                index === currentGroupIndex 
+                  ? 'bg-white' 
+                  : 'bg-white/40 hover:bg-white/60'
+              } transition-colors duration-300`}
+              aria-label={`Go to policy group ${index + 1}`}
+            />
           ))}
         </div>
       </div>
