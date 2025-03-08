@@ -33,6 +33,8 @@ export const VideoPlayer = memo(forwardRef<HTMLVideoElement, VideoPlayerProps>(
           transition: 'opacity 1s ease-in-out',
           willChange: 'opacity', // Optimize for GPU acceleration
           objectFit: isMobile ? 'contain' : 'cover',
+          // Aplicar escala de 115% (aumento de 15%) apenas em dispositivos móveis
+          transform: isMobile ? 'scale(1.15)' : 'none',
           ...style
         }}
         src={src}
