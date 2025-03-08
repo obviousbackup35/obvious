@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useVideoTransition } from "@/hooks/useVideoTransition";
 import { usePageAudio } from "@/hooks/usePageAudio";
@@ -153,8 +152,7 @@ const Index = () => {
     return '#c8c5ad';
   };
 
-  // Always show the refresh button on all screens
-  const showRefreshButton = true;
+  const showRefreshButton = isPlaying;
 
   return (
     <div 
