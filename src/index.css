@@ -33,49 +33,33 @@
     width: 100%;
   }
 
-  /* Mobile menu animations */
+  /* Mobile menu animations - REVISED */
   .mobile-menu-backdrop {
     background-color: rgba(0, 0, 0, 0.9);
     backdrop-filter: blur(3px);
     opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    transition: opacity 0.3s ease;
+    will-change: opacity;
   }
   
   .mobile-menu-backdrop.open {
     opacity: 1;
-    visibility: visible;
   }
   
   .mobile-menu-content {
     opacity: 0;
-    visibility: hidden;
     transform: translateY(-20px);
-    transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s ease;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    will-change: opacity, transform;
   }
   
   .mobile-menu-content.open {
     opacity: 1;
-    visibility: visible;
     transform: translateY(0);
   }
   
-  /* Keeping existing menu animations */
-  .menu-backdrop-enter {
-    animation: backdropFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-  
-  .menu-backdrop-exit {
-    animation: backdropFadeOut 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-  
-  .menu-content-enter {
-    animation: contentSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-  
-  .menu-content-exit {
-    animation: contentSlideOut 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
+  /* Removing unused keyframe animations */
+  /* End of mobile menu styles */
 }
 
 @keyframes backdropFadeIn {

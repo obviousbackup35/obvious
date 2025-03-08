@@ -50,8 +50,7 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
     <div 
       className={`fixed inset-0 z-40 mobile-menu-backdrop ${isOpen ? 'open' : ''}`}
       style={{ 
-        pointerEvents: isOpen ? 'auto' : 'none',
-        willChange: 'opacity'
+        pointerEvents: isOpen ? 'auto' : 'none'
       }}
       aria-hidden={!isOpen}
     >
