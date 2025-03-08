@@ -11,6 +11,7 @@ interface ActionButtonsProps {
   isMobile: boolean;
   toggleMobileMenu: (e: React.MouseEvent) => void;
   getTextColor: () => string;
+  currentView: ContentView;
 }
 
 const ActionButtons = memo(({
@@ -19,7 +20,8 @@ const ActionButtons = memo(({
   isMuted,
   isMobile,
   toggleMobileMenu,
-  getTextColor
+  getTextColor,
+  currentView
 }: ActionButtonsProps) => {
   return (
     <>
@@ -38,12 +40,15 @@ const ActionButtons = memo(({
       {isMobile && (
         <NavigationButton
           onClick={toggleMobileMenu}
-          className="absolute left-1/2 -translate-x-1/2 top-[1.55cm] p-2 transition-all duration-700 rounded-full bg-black/50 hover:bg-black/70"
+          className={`absolute left-1/2 -translate-x-1/2 top-[1.55cm] p-2 transition-all duration-700 rounded-full ${currentView === 'dunes' ? '' : 'bg-black/50 hover:bg-black/70'}`}
           aria-label="Menu"
         >
           <Menu 
             className="w-7 h-7" 
-            style={{ color: getTextColor(), transition: 'color 0.7s ease-in-out' }} 
+            style={{ 
+              color: currentView === 'dunes' ? '#555555' : getTextColor(), 
+              transition: 'color 0.7s ease-in-out' 
+            }} 
             aria-hidden="true"
           />
           <span className="sr-only">Menu</span>

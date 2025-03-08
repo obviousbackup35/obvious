@@ -85,6 +85,7 @@ export const Navigation = memo(({
             isMobile={isMobile}
             toggleMobileMenu={toggleMobileMenu}
             getTextColor={getTextColor}
+            currentView={currentView}
           />
           
           {isMobile ? (
