@@ -13,7 +13,7 @@ interface AudioContextType {
 
 const AudioContext = createContext<AudioContextType | undefined>(undefined);
 
-const FADE_DURATION = 1000; // 1 second fade duration
+const FADE_DURATION = 1500; // Aumentado para 1.5 segundos para um fade mais suave
 
 export const AudioProvider = ({ children }: { children: ReactNode }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -33,7 +33,7 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
     }
     
     const audio = audioRef.current;
-    const steps = 20; // Number of steps in the fade
+    const steps = 30; // Aumentado o número de steps para uma transição mais suave
     const stepTime = FADE_DURATION / steps;
     
     // Set initial volume based on whether we're fading in or out
@@ -82,15 +82,26 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
       if (isPlaying) {
         // Start fade out
         fadeAudio(false);
+        // Atualizamos o estado somente depois de iniciar o fade para melhorar a UX
         setIsPlaying(false);
       } else {
         // Start playback and fade in
         const audio = audioRef.current;
-        audio.play().catch(error => {
-          console.error("Error playing audio:", error);
-        });
-        fadeAudio(true);
-        setIsPlaying(true);
+        const playPromise = audio.play();
+        
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              fadeAudio(true);
+              setIsPlaying(true);
+            })
+            .catch(error => {
+              console.error("Error playing audio:", error);
+            });
+        } else {
+          fadeAudio(true);
+          setIsPlaying(true);
+        }
       }
     }
   }, [isPlaying, fadeAudio]);

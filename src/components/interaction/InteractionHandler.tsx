@@ -12,7 +12,7 @@ interface InteractionHandlerProps {
   children: React.ReactNode;
 }
 
-const FADE_DURATION = 1000; // 1 second fade duration
+const FADE_DURATION = 1500; // Aumentando também para 1.5 segundos
 
 const InteractionHandler = ({
   audioRef,
@@ -37,7 +37,7 @@ const InteractionHandler = ({
     // Start with volume at 0
     audio.volume = 0;
     
-    const steps = 20; // Number of steps in the fade
+    const steps = 30; // Aumentado para transição mais suave
     const stepTime = FADE_DURATION / steps;
     let currentStep = 0;
     
@@ -69,9 +69,20 @@ const InteractionHandler = ({
         audioRef.current.currentTime = 0;
         // Initialize volume to 0 for fade-in
         audioRef.current.volume = 0;
-        await audioRef.current.play();
-        // Start fade-in effect
-        fadeAudioIn(audioRef.current);
+        const audioPromise = audioRef.current.play();
+        
+        if (audioPromise !== undefined) {
+          audioPromise
+            .then(() => {
+              // Start fade-in effect
+              fadeAudioIn(audioRef.current!);
+            })
+            .catch(error => {
+              console.error("Error playing audio:", error);
+            });
+        } else {
+          fadeAudioIn(audioRef.current);
+        }
       }
 
       const videos = [video1Ref.current, video2Ref.current].filter(Boolean);
