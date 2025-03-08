@@ -1,5 +1,5 @@
 
-import { memo, useRef, useEffect, useMemo, useCallback } from "react";
+import { memo, useRef, useCallback } from "react";
 import NavigationButton from "./NavigationButton";
 import type { ContentView } from "@/types/navigation";
 
@@ -12,72 +12,49 @@ interface MobileMenuProps {
 const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMenuProps) => {
   const menuRef = useRef<HTMLDivElement>(null);
   
-  // Memoize styles to prevent recalculations on re-renders
-  const menuStyles = useMemo(() => ({
-    opacity: isOpen ? 1 : 0,
-    visibility: isOpen ? 'visible' as const : 'hidden' as const,
-    transition: 'opacity 600ms ease-in-out, visibility 600ms ease-in-out',
-    willChange: isOpen ? 'opacity, visibility' : 'auto',
-    contain: 'content' as const,
-  }), [isOpen]);
-  
-  const containerStyles = useMemo(() => ({
-    transform: isOpen ? 'translate3d(0,0,0)' : 'translate3d(0,-20px,0)',
-    transition: 'transform 700ms cubic-bezier(0.22, 1, 0.36, 1)',
-    willChange: isOpen ? 'transform' : 'auto',
-    contain: 'layout style' as const,
-  }), [isOpen]);
-  
   // Use optimized callbacks for event handlers
   const handleCompanyClick = useCallback(handleViewChange('company'), [handleViewChange]);
   const handleProductClick = useCallback(handleViewChange('projects'), [handleViewChange]);
   const handleGalleryClick = useCallback(handleViewChange('gallery'), [handleViewChange]);
   const handleContactClick = useCallback(handleViewChange('contact'), [handleViewChange]);
 
-  // Add a global click listener to close the menu when clicking outside
-  useEffect(() => {
-    if (!isOpen) return;
-    
-    const handleOutsideClick = (event: MouseEvent) => {
-      // Check if the click is outside the menu content
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        console.log('Outside click detected - closing menu');
-        closeMobileMenu();
-      }
-    };
-    
-    // Add the event listener with a slight delay to prevent immediate closing
-    const timeoutId = setTimeout(() => {
-      document.addEventListener('click', handleOutsideClick);
-    }, 100);
-    
-    return () => {
-      clearTimeout(timeoutId);
-      document.removeEventListener('click', handleOutsideClick);
-    };
-  }, [isOpen, closeMobileMenu]);
+  // Direct handler for clicking the backdrop
+  const handleBackdropClick = useCallback((e: React.MouseEvent) => {
+    // Only close if clicking directly on the backdrop (not on child elements)
+    if (e.target === e.currentTarget) {
+      closeMobileMenu();
+    }
+  }, [closeMobileMenu]);
 
-  // Prevent clicks inside the menu from bubbling to the document
+  // Prevent menu content clicks from propagating to the backdrop
   const handleMenuContentClick = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
   }, []);
 
+  if (!isOpen) return null;
+
   return (
+    // Base layer - the full screen backdrop that closes the menu when clicked
     <div 
-      className="fixed inset-0 z-40 bg-black/90 backdrop-blur-sm"
-      style={menuStyles}
+      className="fixed inset-0 z-40 bg-black/90 backdrop-blur-sm flex items-center justify-center"
+      onClick={handleBackdropClick}
       aria-hidden={!isOpen}
       id="mobile-menu"
+      data-testid="mobile-menu-backdrop"
     >
-      {/* Menu content */}
+      {/* Menu content - stops propagation to prevent backdrop clicks */}
       <div 
         ref={menuRef}
-        className="flex items-center justify-center h-full relative z-10"
-        style={containerStyles}
+        className="relative z-50 bg-black/80 rounded-lg p-4 transform transition-all duration-300 ease-out"
         onClick={handleMenuContentClick}
+        style={{
+          maxWidth: "90%",
+          width: "300px",
+          boxShadow: "0 10px 25px rgba(0,0,0,0.5)"
+        }}
       >
-        <div className="menu-items content-visibility-auto">
-          <ul className="space-y-6 p-8 text-center">
+        <div className="menu-items">
+          <ul className="space-y-6 p-4 text-center">
             <li>
               <NavigationButton
                 onClick={handleCompanyClick}
