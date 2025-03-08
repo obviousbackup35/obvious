@@ -1,5 +1,5 @@
 
-import { useCallback, memo, useState, useEffect } from "react";
+import { useCallback, memo, useState } from "react";
 import type { ContentView } from "@/types/navigation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import NavigationButton from "./navigation/NavigationButton";
@@ -48,6 +48,7 @@ export const Navigation = memo(({
   const toggleMobileMenu = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    // Toggle the menu state directly
     setMobileMenuOpen(prev => !prev);
   }, []);
 

@@ -16,6 +16,7 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
   
   // Optimize state updates
   useEffect(() => {
+    // We need to always update localIsOpen state when isOpen changes
     if (prevOpenState.current !== isOpen) {
       if (isOpen) {
         // Opening menu - immediate state change
