@@ -99,6 +99,17 @@ const Index = () => {
     };
   }, [isPlaying, handleTimeUpdate, video1Ref, video2Ref, setCurrentTime]);
 
+  // Adicionar classe para prevenir o scroll do documento inteiro
+  useEffect(() => {
+    document.documentElement.classList.add('no-bounce');
+    document.body.classList.add('no-bounce');
+    
+    return () => {
+      document.documentElement.classList.remove('no-bounce');
+      document.body.classList.remove('no-bounce');
+    };
+  }, []);
+
   const memoizedVideoManager = useMemo(() => (
     <VideoManager
       isPlaying={isPlaying}
@@ -130,7 +141,7 @@ const Index = () => {
 
   return (
     <div 
-      className="relative h-screen w-full overflow-hidden cursor-pointer bg-white prevent-overscroll"
+      className="relative viewport-height w-full overflow-hidden cursor-pointer bg-white prevent-overscroll no-bounce"
       onClick={handleInteraction}
       onTouchStart={handleInteraction}
       role="application"
