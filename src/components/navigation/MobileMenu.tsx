@@ -45,9 +45,9 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
   const handleMenuItemClick = (view: ContentView) => (e: React.MouseEvent) => {
     // Call the original handler to change the view
     handleViewChange(view)(e);
-    
-    // We don't immediately close the menu here anymore.
-    // The Navigation component will handle closing the menu after the transition
+    // Close the menu with a slight delay to allow for the transition
+    setLocalIsOpen(false);
+    // The parent component will handle the actual closing
   };
 
   return (
