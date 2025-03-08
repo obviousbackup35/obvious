@@ -1,5 +1,5 @@
 
-import { useCallback, memo, useState } from "react";
+import { useCallback, memo, useState, useEffect } from "react";
 import type { ContentView } from "@/types/navigation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import NavigationButton from "./navigation/NavigationButton";
@@ -27,14 +27,24 @@ export const Navigation = memo(({
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  // Close mobile menu after view transition completes
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      // Add a delay to allow for crossfade transition
+      const timer = setTimeout(() => {
+        setMobileMenuOpen(false);
+      }, 1000); // Match this with the transition duration
+      
+      return () => clearTimeout(timer);
+    }
+  }, [currentView, mobileMenuOpen]);
+
   const handleViewChange = useCallback((view: ContentView) => (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     onViewChange(view);
     
-    // We don't immediately close the mobile menu anymore
-    // Let the transition to the new view happen with the menu still visible
-    // The menu opacity will naturally fade during the view transition
+    // We'll close the menu after the transition completes via the effect
   }, [onViewChange]);
 
   const handleHomeClick = useCallback((e: React.MouseEvent) => {
