@@ -1,5 +1,5 @@
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import { useVideoTransition } from "@/hooks/useVideoTransition";
 import { usePageAudio } from "@/hooks/usePageAudio";
 import { useViewTransition } from "@/hooks/useViewTransition";
@@ -28,6 +28,13 @@ const Index = () => {
   
   // Pass handleViewTransition to useScrollBehavior
   useScrollBehavior(handleViewTransition);
+
+  // Store the last main view in sessionStorage when it changes
+  useEffect(() => {
+    if (['video', 'black', 'dunes'].includes(currentView)) {
+      sessionStorage.setItem('lastMainView', currentView);
+    }
+  }, [currentView]);
 
   const handleViewChange = useCallback((view: ContentView) => {
     setCurrentView(view);

@@ -24,19 +24,23 @@ const RefreshButton = memo(({ isPlaying, currentView, onViewChange }: RefreshBut
     e.preventDefault();
     e.stopPropagation();
     
+    // For content pages, we need to store and retrieve the previous main view
+    if (['company', 'projects', 'gallery', 'contact', 'profile', 'auth'].includes(currentView)) {
+      // Get the last main view from sessionStorage, defaulting to 'dunes' if not found
+      const lastView = sessionStorage.getItem('lastMainView') as ContentView || 'dunes';
+      onViewChange(lastView);
+    }
     // Main navigation views
-    if (currentView === 'dunes') {
+    else if (currentView === 'dunes') {
       onViewChange('black');
     } else if (currentView === 'black') {
       onViewChange('video');
     } 
-    // Content pages
-    else if (['company', 'projects', 'gallery', 'contact', 'profile', 'auth'].includes(currentView)) {
-      onViewChange('dunes');
-    } 
     // Policy pages
     else if (currentView !== 'video') {
-      onViewChange('dunes');
+      // For policy pages, also use the stored last main view
+      const lastView = sessionStorage.getItem('lastMainView') as ContentView || 'dunes';
+      onViewChange(lastView);
     }
   }, [currentView, onViewChange]);
 
