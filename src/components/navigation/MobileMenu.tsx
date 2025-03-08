@@ -67,7 +67,7 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
             <li>
               <NavigationButton
                 onClick={handleMenuItemClick('company')}
-                className="cursor-pointer hover:opacity-70 transition-all duration-300 py-2 w-full text-xl text-white"
+                className="cursor-pointer hover:opacity-70 transition-all duration-300 py-2 w-full text-xl text-[#c8c5ad]"
               >
                 C O M P A N Y
               </NavigationButton>
@@ -75,7 +75,7 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
             <li>
               <NavigationButton
                 onClick={handleMenuItemClick('projects')}
-                className="cursor-pointer hover:opacity-70 transition-all duration-300 py-2 w-full text-xl text-white"
+                className="cursor-pointer hover:opacity-70 transition-all duration-300 py-2 w-full text-xl text-[#c8c5ad]"
               >
                 P R O D U C T
               </NavigationButton>
@@ -83,7 +83,7 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
             <li>
               <NavigationButton
                 onClick={handleMenuItemClick('gallery')}
-                className="cursor-pointer hover:opacity-70 transition-all duration-300 py-2 w-full text-xl text-white"
+                className="cursor-pointer hover:opacity-70 transition-all duration-300 py-2 w-full text-xl text-[#c8c5ad]"
               >
                 G A L L E R Y
               </NavigationButton>
@@ -91,7 +91,7 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
             <li>
               <NavigationButton
                 onClick={handleMenuItemClick('contact')}
-                className="cursor-pointer hover:opacity-70 transition-all duration-300 py-2 w-full text-xl text-white"
+                className="cursor-pointer hover:opacity-70 transition-all duration-300 py-2 w-full text-xl text-[#c8c5ad]"
               >
                 C O N T A C T
               </NavigationButton>
