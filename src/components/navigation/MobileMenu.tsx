@@ -36,11 +36,12 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
   
   // Handler for background click to close the menu
   const handleBackgroundClick = useCallback((e: React.MouseEvent) => {
-    // Log to verify the event is firing
-    console.log('Background clicked', e.target, e.currentTarget);
-    // Only close if clicking directly on the background, not on its children
+    console.log('Background clicked');
+    
+    // Check if we're clicking directly on the background element
     if (e.target === e.currentTarget) {
-      e.stopPropagation(); // Prevent event from bubbling up to parent elements
+      e.preventDefault();
+      e.stopPropagation();
       closeMobileMenu();
     }
   }, [closeMobileMenu]);
