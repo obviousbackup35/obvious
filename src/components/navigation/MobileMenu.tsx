@@ -49,41 +49,47 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
           willChange: isOpen ? 'opacity, transform' : 'auto'
         }}
       >
-        <div className="bg-black/70 backdrop-blur-sm mx-auto w-[300px] aspect-[1/1] p-6 text-center mobile-menu-content clip-hexagon flex items-center justify-center">
-          <ul className="space-y-4">
-            <li>
-              <NavigationButton
-                onClick={handleViewChange('company')}
-                className="cursor-pointer hover:opacity-70 transition-all duration-700 py-2 w-full text-sm"
-              >
-                C O M P A N Y
-              </NavigationButton>
-            </li>
-            <li>
-              <NavigationButton
-                onClick={handleViewChange('projects')}
-                className="cursor-pointer hover:opacity-70 transition-all duration-700 py-2 w-full text-sm"
-              >
-                P R O D U C T
-              </NavigationButton>
-            </li>
-            <li>
-              <NavigationButton
-                onClick={handleViewChange('gallery')}
-                className="cursor-pointer hover:opacity-70 transition-all duration-700 py-2 w-full text-sm"
-              >
-                G A L L E R Y
-              </NavigationButton>
-            </li>
-            <li>
-              <NavigationButton
-                onClick={handleViewChange('contact')}
-                className="cursor-pointer hover:opacity-70 transition-all duration-700 py-2 w-full text-sm"
-              >
-                C O N T A C T
-              </NavigationButton>
-            </li>
-          </ul>
+        <div className="relative mx-auto">
+          {/* Square container to ensure perfect hexagon proportions */}
+          <div className="w-[300px] h-[300px] mx-auto">
+            {/* Hexagon with perfectly equal sides */}
+            <div className="absolute inset-0 bg-black/70 backdrop-blur-sm clip-hexagon flex items-center justify-center mobile-menu-content">
+              <ul className="space-y-4 px-6">
+                <li>
+                  <NavigationButton
+                    onClick={handleViewChange('company')}
+                    className="cursor-pointer hover:opacity-70 transition-all duration-700 py-2 w-full text-sm"
+                  >
+                    C O M P A N Y
+                  </NavigationButton>
+                </li>
+                <li>
+                  <NavigationButton
+                    onClick={handleViewChange('projects')}
+                    className="cursor-pointer hover:opacity-70 transition-all duration-700 py-2 w-full text-sm"
+                  >
+                    P R O D U C T
+                  </NavigationButton>
+                </li>
+                <li>
+                  <NavigationButton
+                    onClick={handleViewChange('gallery')}
+                    className="cursor-pointer hover:opacity-70 transition-all duration-700 py-2 w-full text-sm"
+                  >
+                    G A L L E R Y
+                  </NavigationButton>
+                </li>
+                <li>
+                  <NavigationButton
+                    onClick={handleViewChange('contact')}
+                    className="cursor-pointer hover:opacity-70 transition-all duration-700 py-2 w-full text-sm"
+                  >
+                    C O N T A C T
+                  </NavigationButton>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </>
