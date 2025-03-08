@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useVideoTransition } from "@/hooks/useVideoTransition";
 import { usePageAudio } from "@/hooks/usePageAudio";
@@ -152,6 +153,9 @@ const Index = () => {
     return '#c8c5ad';
   };
 
+  // Verificar se deve mostrar o botão de refresh (apenas quando não estiver na tela inicial)
+  const showRefreshButton = currentView !== 'video';
+
   return (
     <div 
       className="relative viewport-height w-full overflow-hidden cursor-pointer bg-white prevent-overscroll no-bounce"
@@ -176,17 +180,19 @@ const Index = () => {
       {memoizedVideoManager}
       {memoizedContentSections}
       
-      <NavigationButton
-        onClick={handleRefresh}
-        className="absolute left-1/2 -translate-x-1/2 bottom-8 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-all duration-700 z-50"
-      >
-        <RefreshCw 
-          className="w-7 h-7" 
-          style={{ color: getTextColor(), transition: 'color 0.7s ease-in-out' }} 
-          aria-hidden="true" 
-        />
-        <span className="sr-only">Refresh</span>
-      </NavigationButton>
+      {showRefreshButton && (
+        <NavigationButton
+          onClick={handleRefresh}
+          className="absolute left-1/2 -translate-x-1/2 bottom-8 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-all duration-700 z-50"
+        >
+          <RefreshCw 
+            className="w-7 h-7" 
+            style={{ color: getTextColor(), transition: 'color 0.7s ease-in-out' }} 
+            aria-hidden="true" 
+          />
+          <span className="sr-only">Refresh</span>
+        </NavigationButton>
+      )}
     </div>
   );
 };
