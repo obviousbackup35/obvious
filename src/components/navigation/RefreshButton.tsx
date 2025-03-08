@@ -25,6 +25,12 @@ const RefreshButton = memo(({ isPlaying, currentView }: RefreshButtonProps) => {
     // Left arrow functionality can be added later
   }, []);
 
+  const handleRightArrow = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // Right arrow functionality can be added later
+  }, []);
+
   const getTextColor = () => {
     if (currentView === 'dunes') {
       return '#555555';
@@ -33,30 +39,32 @@ const RefreshButton = memo(({ isPlaying, currentView }: RefreshButtonProps) => {
   };
 
   return (
-    <div className="absolute bottom-8 flex items-center gap-4 transition-all duration-700 z-50" style={{ left: '12px' }}>
-      <NavigationButton
-        onClick={handleLeftArrow}
-        className="p-2 transition-all duration-700"
-        style={{
-          opacity: isPlaying ? 1 : 0,
-          transition: 'opacity 1s ease-in-out',
-          willChange: 'opacity'
-        }}
-      >
-        <Triangle 
-          className="w-7 h-7 rotate-270" 
-          style={{ 
-            color: getTextColor(), 
-            transition: 'color 0.7s ease-in-out', 
-            transform: 'rotate(270deg)' 
-          }} 
-          aria-hidden="true" 
-          fill={getTextColor()}
-        />
-        <span className="sr-only">Previous</span>
-      </NavigationButton>
+    <div className="absolute bottom-8 flex justify-between w-full transition-all duration-700 z-50 px-4">
+      <div className="flex items-center">
+        <NavigationButton
+          onClick={handleLeftArrow}
+          className="p-2 transition-all duration-700"
+          style={{
+            opacity: isPlaying ? 1 : 0,
+            transition: 'opacity 1s ease-in-out',
+            willChange: 'opacity'
+          }}
+        >
+          <Triangle 
+            className="w-7 h-7 rotate-270" 
+            style={{ 
+              color: getTextColor(), 
+              transition: 'color 0.7s ease-in-out', 
+              transform: 'rotate(270deg)' 
+            }} 
+            aria-hidden="true" 
+            fill={getTextColor()}
+          />
+          <span className="sr-only">Previous</span>
+        </NavigationButton>
+      </div>
       
-      <div className="fixed left-1/2 -translate-x-1/2 bottom-8">
+      <div className="absolute left-1/2 -translate-x-1/2">
         <NavigationButton
           onClick={handleRefresh}
           className="p-2 transition-all duration-700"
@@ -72,6 +80,30 @@ const RefreshButton = memo(({ isPlaying, currentView }: RefreshButtonProps) => {
             aria-hidden="true" 
           />
           <span className="sr-only">Refresh</span>
+        </NavigationButton>
+      </div>
+      
+      <div className="flex items-center">
+        <NavigationButton
+          onClick={handleRightArrow}
+          className="p-2 transition-all duration-700"
+          style={{
+            opacity: isPlaying ? 1 : 0,
+            transition: 'opacity 1s ease-in-out',
+            willChange: 'opacity'
+          }}
+        >
+          <Triangle 
+            className="w-7 h-7" 
+            style={{ 
+              color: getTextColor(), 
+              transition: 'color 0.7s ease-in-out', 
+              transform: 'rotate(90deg)' 
+            }} 
+            aria-hidden="true" 
+            fill={getTextColor()}
+          />
+          <span className="sr-only">Next</span>
         </NavigationButton>
       </div>
     </div>
