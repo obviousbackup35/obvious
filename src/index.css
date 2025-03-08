@@ -47,6 +47,11 @@
   .layer-promoted {
     transform: translateZ(0);
   }
+  
+  /* Force portrait mode on mobile */
+  .force-portrait {
+    transform: rotate(0deg) !important;
+  }
 }
 
 @layer base {
@@ -134,6 +139,23 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  @media (max-width: 768px) and (orientation: landscape) {
+    html, body {
+      /* Force portrait mode by rotating the content */
+      transform-origin: left top;
+      transform: rotate(-90deg) translateX(-100%);
+      width: 100vh;
+      height: 100vw;
+      overflow: hidden;
+      position: fixed;
+    }
+    
+    #root {
+      width: 100vh;
+      height: 100vw;
+    }
   }
 }
 
