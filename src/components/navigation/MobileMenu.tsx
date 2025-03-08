@@ -58,7 +58,7 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
                 <li>
                   <NavigationButton
                     onClick={handleViewChange('company')}
-                    className="cursor-pointer hover:opacity-70 transition-all duration-700 py-2 w-full text-base text-white"
+                    className="cursor-pointer hover:opacity-70 transition-all duration-700 py-2 w-full text-lg text-white"
                   >
                     C O M P A N Y
                   </NavigationButton>
@@ -66,7 +66,7 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
                 <li>
                   <NavigationButton
                     onClick={handleViewChange('projects')}
-                    className="cursor-pointer hover:opacity-70 transition-all duration-700 py-2 w-full text-base text-white"
+                    className="cursor-pointer hover:opacity-70 transition-all duration-700 py-2 w-full text-lg text-white"
                   >
                     P R O D U C T
                   </NavigationButton>
@@ -74,7 +74,7 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
                 <li>
                   <NavigationButton
                     onClick={handleViewChange('gallery')}
-                    className="cursor-pointer hover:opacity-70 transition-all duration-700 py-2 w-full text-base text-white"
+                    className="cursor-pointer hover:opacity-70 transition-all duration-700 py-2 w-full text-lg text-white"
                   >
                     G A L L E R Y
                   </NavigationButton>
@@ -82,7 +82,7 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
                 <li>
                   <NavigationButton
                     onClick={handleViewChange('contact')}
-                    className="cursor-pointer hover:opacity-70 transition-all duration-700 py-2 w-full text-base text-white"
+                    className="cursor-pointer hover:opacity-70 transition-all duration-700 py-2 w-full text-lg text-white"
                   >
                     C O N T A C T
                   </NavigationButton>
