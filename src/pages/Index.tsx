@@ -153,8 +153,8 @@ const Index = () => {
     return '#c8c5ad';
   };
 
-  // Verificar se deve mostrar o botão de refresh (apenas quando não estiver na tela inicial)
-  const showRefreshButton = currentView !== 'video';
+  // Always show the refresh button on all screens
+  const showRefreshButton = true;
 
   return (
     <div 
