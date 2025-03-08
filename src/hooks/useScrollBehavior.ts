@@ -49,7 +49,7 @@ export const useScrollBehavior = () => {
           wheelTimeout = window.setTimeout(() => {
             handleWheel(e);
             wheelTimeout = null;
-          }, 800); // Throttle wheel events
+          }, 500); // Slightly reduced throttle time for better responsiveness
         }
       };
       
