@@ -1,7 +1,6 @@
-
 import { useState, useEffect, useCallback, useRef } from 'react';
 import type { ContentView } from '@/types/navigation';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export const useViewTransition = (isPlaying: boolean) => {
   const [currentView, setCurrentView] = useState<ContentView>('video');

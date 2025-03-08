@@ -8,9 +8,10 @@ import { useIsMobile } from "@/hooks/use-mobile";
 interface RefreshButtonProps {
   isPlaying: boolean;
   currentView: ContentView;
+  onViewChange: (view: ContentView) => void;
 }
 
-const RefreshButton = memo(({ isPlaying, currentView }: RefreshButtonProps) => {
+const RefreshButton = memo(({ isPlaying, currentView, onViewChange }: RefreshButtonProps) => {
   const isMobile = useIsMobile();
   
   const handleRefresh = useCallback((e: React.MouseEvent) => {
@@ -19,17 +20,27 @@ const RefreshButton = memo(({ isPlaying, currentView }: RefreshButtonProps) => {
     window.location.reload();
   }, []);
 
-  const handleLeftArrow = useCallback((e: React.MouseEvent) => {
+  const handlePreviousView = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    // Left arrow functionality can be added later
-  }, []);
+    
+    if (currentView === 'dunes') {
+      onViewChange('black');
+    } else if (currentView === 'black') {
+      onViewChange('video');
+    }
+  }, [currentView, onViewChange]);
 
-  const handleRightArrow = useCallback((e: React.MouseEvent) => {
+  const handleNextView = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    // Right arrow functionality can be added later
-  }, []);
+    
+    if (currentView === 'video') {
+      onViewChange('black');
+    } else if (currentView === 'black') {
+      onViewChange('dunes');
+    }
+  }, [currentView, onViewChange]);
 
   const getTextColor = () => {
     if (currentView === 'dunes') {
@@ -42,7 +53,7 @@ const RefreshButton = memo(({ isPlaying, currentView }: RefreshButtonProps) => {
     <div className="absolute bottom-8 flex justify-between w-full transition-all duration-700 z-50">
       <div className="flex items-center" style={{ marginLeft: '1.75rem' }}>
         <NavigationButton
-          onClick={handleLeftArrow}
+          onClick={handlePreviousView}
           className="p-2 transition-all duration-700"
           style={{
             opacity: isPlaying ? 1 : 0,
@@ -85,7 +96,7 @@ const RefreshButton = memo(({ isPlaying, currentView }: RefreshButtonProps) => {
       
       <div className="flex items-center" style={{ marginRight: '1.75rem' }}>
         <NavigationButton
-          onClick={handleRightArrow}
+          onClick={handleNextView}
           className="p-2 transition-all duration-700"
           style={{
             opacity: isPlaying ? 1 : 0,

@@ -1,4 +1,3 @@
-
 import { useState, useCallback, useMemo } from "react";
 import { useVideoTransition } from "@/hooks/useVideoTransition";
 import { usePageAudio } from "@/hooks/usePageAudio";
@@ -95,6 +94,7 @@ const Index = () => {
       <RefreshButton
         isPlaying={isPlaying}
         currentView={currentView}
+        onViewChange={handleViewChange}
       />
     </InteractionHandler>
   );
