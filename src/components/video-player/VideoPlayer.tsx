@@ -41,7 +41,7 @@ export const VideoPlayer = memo(forwardRef<HTMLVideoElement, VideoPlayerProps>(
         loop={false}
         playsInline
         preload="auto"
-        className="absolute inset-0 w-full h-full object-cover opacity-0"
+        className="absolute inset-0 w-full h-full object-cover"
         style={{
           opacity: isPlaying ? (isActive ? 1 : 0) : 0,
           transition: 'opacity 1s ease-in-out',
