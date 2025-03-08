@@ -11,7 +11,7 @@ interface MobileMenuProps {
 export const MobileMenu = memo(({ isOpen, handleViewChange }: MobileMenuProps) => {
   return (
     <div 
-      className={`absolute top-24 left-0 w-full transition-all duration-300 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+      className={`absolute top-1/3 left-0 w-full transition-all duration-300 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
       style={{ 
         willChange: isOpen ? 'opacity, transform' : 'auto'
       }}
