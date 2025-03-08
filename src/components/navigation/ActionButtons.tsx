@@ -25,6 +25,34 @@ const ActionButtons = memo(({
   currentView,
   isMobileMenuOpen
 }: ActionButtonsProps) => {
+  // Handle close button click with animation
+  const handleMenuToggle = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (isMobileMenuOpen) {
+      // If menu is open, we trigger a smooth closing animation
+      const menuEl = document.querySelector('.menu-items');
+      if (menuEl) {
+        menuEl.classList.add('transition-all', 'duration-500', 'opacity-0', 'translate-y-[-20px]');
+        const overlay = menuEl.closest('.fixed');
+        if (overlay) {
+          overlay.classList.add('opacity-0', 'scale-98');
+        }
+        
+        // Only after animation delay do we actually toggle the menu state
+        setTimeout(() => {
+          toggleMobileMenu(e);
+        }, 300);
+      } else {
+        toggleMobileMenu(e);
+      }
+    } else {
+      // If menu is closed, just open it normally
+      toggleMobileMenu(e);
+    }
+  };
+
   return (
     <>
       <NavigationButton
@@ -41,7 +69,7 @@ const ActionButtons = memo(({
 
       {isMobile && (
         <NavigationButton
-          onClick={toggleMobileMenu}
+          onClick={handleMenuToggle}
           className={`mobile-menu-toggle absolute left-1/2 -translate-x-1/2 top-[1.75cm] p-2 transition-all duration-700 rounded-full z-50 ${
             isMobileMenuOpen ? 'bg-black/70' : currentView === 'dunes' ? '' : 'bg-black/50 hover:bg-black/70'
           }`}

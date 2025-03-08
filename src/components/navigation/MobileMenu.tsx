@@ -44,7 +44,11 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
       // except for clicks on the menu items themselves
       const target = e.target as HTMLElement;
       if (!target.closest('.menu-items') && !target.closest('.mobile-menu-toggle')) {
-        closeMobileMenu();
+        // Instead of immediately closing, trigger smooth animation first
+        setIsAnimating(true);
+        setTimeout(() => {
+          closeMobileMenu();
+        }, 300); // Slightly shorter than full animation to feel responsive
       }
     };
 
