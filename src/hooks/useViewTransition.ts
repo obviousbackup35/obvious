@@ -1,3 +1,4 @@
+
 import { useState, useCallback, useRef } from 'react';
 import type { ContentView } from '@/types/navigation';
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -32,11 +33,9 @@ export const useViewTransition = (isPlaying: boolean) => {
     }
   }, [currentView]);
 
-  // We're keeping the handleViewTransition function for the triangle buttons
-  // but removing all the wheel and touch event handling code and listeners
-
   return { 
     currentView, 
-    setCurrentView 
+    setCurrentView,
+    handleViewTransition
   };
 };

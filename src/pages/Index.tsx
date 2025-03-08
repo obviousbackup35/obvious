@@ -1,3 +1,4 @@
+
 import { useState, useCallback, useMemo } from "react";
 import { useVideoTransition } from "@/hooks/useVideoTransition";
 import { usePageAudio } from "@/hooks/usePageAudio";
@@ -25,7 +26,7 @@ const Index = () => {
     setCurrentTime
   } = useAudio();
   
-  // Apply scroll behavior settings
+  // Apply scroll behavior settings (now conditionally based on device)
   useScrollBehavior();
 
   const handleViewChange = useCallback((view: ContentView) => {
