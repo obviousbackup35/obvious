@@ -31,10 +31,11 @@ export const Navigation = memo(({
     e.preventDefault();
     e.stopPropagation();
     onViewChange(view);
-    if (isMobile) {
-      setMobileMenuOpen(false);
-    }
-  }, [onViewChange, isMobile]);
+    
+    // We don't immediately close the mobile menu anymore
+    // Let the transition to the new view happen with the menu still visible
+    // The menu opacity will naturally fade during the view transition
+  }, [onViewChange]);
 
   const handleHomeClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
