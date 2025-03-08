@@ -14,14 +14,14 @@ export const VideoPlayer = memo(forwardRef<HTMLVideoElement, VideoPlayerProps>(
     const isMobile = useIsMobile();
     const videoLoaded = useRef(false);
     
-    // Otimizado: useEffect com dependências corretas e limpeza
+    // Optimized: useEffect with proper dependencies and cleanup
     useEffect(() => {
-      // Otimizado: Carregamento sob demanda (lazy loading)
+      // Optimized: On-demand loading (lazy loading)
       if (ref && 'current' in ref && ref.current && !videoLoaded.current) {
-        // Marcado como carregado para evitar recargas redundantes
+        // Mark as loaded to prevent redundant reloads
         videoLoaded.current = true;
         
-        // Otimizado: Verificar se a URL já está definida para evitar recargas desnecessárias
+        // Optimized: Check if URL is already set to avoid unnecessary reloads
         if (ref.current.src !== src) {
           ref.current.src = src;
           ref.current.load();
@@ -29,17 +29,17 @@ export const VideoPlayer = memo(forwardRef<HTMLVideoElement, VideoPlayerProps>(
         }
       }
       
-      // Sem lógica de limpeza aqui - será tratado no componente pai
-    }, [ref, src]); // Dependências minimizadas e corretas
+      // No cleanup logic here - will be handled in parent component
+    }, [ref, src]); // Minimized and correct dependencies
 
-    // Otimizado: Estilos memoizados para evitar recálculos
+    // Optimized: Memoized styles to avoid recalculations
     const videoStyles = useMemo(() => ({
       opacity: isPlaying ? (isActive ? 1 : 0) : 0,
       transition: 'opacity 1s ease-in-out',
-      // Otimizado: Uso seletivo de willChange apenas quando necessário
+      // Optimized: Selective use of willChange only when needed
       willChange: isPlaying && isActive ? 'opacity' : 'auto',
       objectFit: isMobile ? 'contain' as const : 'cover' as const,
-      // Otimizado: Usar transform para acionar compositing de GPU
+      // Optimized: Use transform to trigger GPU compositing
       transform: isMobile ? 'translate3d(0,0,0) scale(1.15)' : 'translate3d(0,0,0)',
       contain: 'content' as const,
       ...style
