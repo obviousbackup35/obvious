@@ -39,8 +39,8 @@ const RefreshButton = memo(({ isPlaying, currentView }: RefreshButtonProps) => {
   };
 
   return (
-    <div className="absolute bottom-8 flex justify-between w-full transition-all duration-700 z-50 px-4">
-      <div className="flex items-center">
+    <div className="absolute bottom-8 flex justify-between w-full transition-all duration-700 z-50">
+      <div className="flex items-center ml-4">
         <NavigationButton
           onClick={handleLeftArrow}
           className="p-2 transition-all duration-700"
@@ -83,7 +83,7 @@ const RefreshButton = memo(({ isPlaying, currentView }: RefreshButtonProps) => {
         </NavigationButton>
       </div>
       
-      <div className="flex items-center">
+      <div className="flex items-center mr-4">
         <NavigationButton
           onClick={handleRightArrow}
           className="p-2 transition-all duration-700"
