@@ -10,8 +10,8 @@ interface LogoProps {
 export const Logo = memo(({ isBackgroundLoaded, style }: LogoProps) => {
   const isMobile = useIsMobile();
   
-  // Calculate the mobile logo size (15% larger)
-  const logoWidth = isMobile ? 759 : 660; // 660 * 1.15 = 759
+  // Calculate the mobile logo size (30% larger than desktop)
+  const logoWidth = isMobile ? 873 : 660; // Desktop: 660px, Mobile: 873px (759px * 1.15)
   
   return (
     <div 
