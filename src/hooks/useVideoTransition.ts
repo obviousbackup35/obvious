@@ -10,13 +10,14 @@ export const useVideoTransition = () => {
   const timeUpdateFrame = useRef<number>();
   const lastUpdateTime = useRef(0);
   
-  // Reduced throttling for timeupdate events (50ms instead of 100ms)
+  // Otimizado: Reduzido throttle para timeupdate para transições mais suaves (50ms)
   const handleTimeUpdate = useCallback(() => {
     const now = Date.now();
-    // Reduced throttle time to ensure smoother transitions
+    // Throttle otimizado para garantir transições mais suaves
     if (now - lastUpdateTime.current < 50) return;
     lastUpdateTime.current = now;
     
+    // Otimizado: Uso de requestAnimationFrame para sincronização com o ciclo de renderização
     if (timeUpdateFrame.current) {
       cancelAnimationFrame(timeUpdateFrame.current);
     }
@@ -27,14 +28,14 @@ export const useVideoTransition = () => {
       
       if (!video1 || !video2 || isTransitioning.current) return;
 
-      // Set transition point if not set yet
+      // Definir ponto de transição se ainda não estiver definido
       if (transitionPoint.current === 0 && video1.duration) {
-        // Set transition 1 second before end (safer margin)
+        // Otimizado: Margem de segurança para transição (1 segundo antes do fim)
         transitionPoint.current = Math.max(video1.duration - 1, 0);
         console.log("Set transition point:", transitionPoint.current);
       }
       
-      // Enhanced logging to debug transition issues
+      // Otimizado: Melhor logging para debug de problemas de transição
       if (activeVideo === 1 && video1.currentTime > 0 && transitionPoint.current > 0) {
         const timeRemaining = transitionPoint.current - video1.currentTime;
         if (timeRemaining < 0.5) {
@@ -47,14 +48,15 @@ export const useVideoTransition = () => {
         }
       }
       
+      // Otimizado: Lógica de transição mais robusta com tratamento adequado de promises
       if (activeVideo === 1 && video1.currentTime >= transitionPoint.current) {
         isTransitioning.current = true;
         console.log("Starting transition to video 2");
         
-        // Ensure video2 is ready before transition
+        // Garantir que video2 esteja pronto antes da transição
         video2.currentTime = 0;
         
-        // Use more stable promise chaining for playback
+        // Otimizado: Uso de promise chaining mais estável para playback
         video2.play()
           .then(() => {
             console.log("Transitioned to video 2");
@@ -63,7 +65,7 @@ export const useVideoTransition = () => {
           })
           .catch(err => {
             console.error("Video 2 playback error:", err);
-            // Try one more time with a delay
+            // Otimizado: Tentativa adicional com delay em caso de falha
             setTimeout(() => {
               video2.play()
                 .then(() => {
@@ -83,6 +85,7 @@ export const useVideoTransition = () => {
         
         video1.currentTime = 0;
         
+        // Mesmo padrão de tratamento para transição de volta ao vídeo 1
         video1.play()
           .then(() => {
             console.log("Transitioned to video 1");
@@ -91,7 +94,6 @@ export const useVideoTransition = () => {
           })
           .catch(err => {
             console.error("Video 1 playback error:", err);
-            // Try one more time with a delay
             setTimeout(() => {
               video1.play()
                 .then(() => {
@@ -108,14 +110,14 @@ export const useVideoTransition = () => {
     });
   }, [activeVideo]);
 
-  // Clean up resources on unmount but don't clear sources during app operation
+  // Otimizado: Limpeza de recursos no unmount sem limpar sources durante operação
   useEffect(() => {
     return () => {
       if (timeUpdateFrame.current) {
         cancelAnimationFrame(timeUpdateFrame.current);
       }
       
-      // Only clear videos on complete component unmount, not during regular operation
+      // Limpar vídeos apenas no desmonte completo do componente
       if (video1Ref.current) {
         video1Ref.current.pause();
       }

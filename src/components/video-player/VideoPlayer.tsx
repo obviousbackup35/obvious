@@ -14,34 +14,32 @@ export const VideoPlayer = memo(forwardRef<HTMLVideoElement, VideoPlayerProps>(
     const isMobile = useIsMobile();
     const videoLoaded = useRef(false);
     
-    // Optimize with useEffect cleanup
+    // Otimizado: useEffect com dependências corretas e limpeza
     useEffect(() => {
-      // Only preload video when needed and not already loaded
+      // Otimizado: Carregamento sob demanda (lazy loading)
       if (ref && 'current' in ref && ref.current && !videoLoaded.current) {
-        // Mark as loaded to avoid redundant loads
+        // Marcado como carregado para evitar recargas redundantes
         videoLoaded.current = true;
         
-        // Explicitly set the source to ensure it's loaded
+        // Otimizado: Verificar se a URL já está definida para evitar recargas desnecessárias
         if (ref.current.src !== src) {
           ref.current.src = src;
+          ref.current.load();
+          console.log("Video source loaded:", src);
         }
-        
-        ref.current.load();
-        console.log("Video source loaded:", src);
       }
       
-      // Clean up only when component unmounts, NOT on every effect run
-      return () => {
-        // No cleanup logic here - we'll handle cleanup in the parent component
-      };
-    }, [ref, src]);
+      // Sem lógica de limpeza aqui - será tratado no componente pai
+    }, [ref, src]); // Dependências minimizadas e corretas
 
-    // Memoize style calculations to avoid recalculation
+    // Otimizado: Estilos memoizados para evitar recálculos
     const videoStyles = useMemo(() => ({
       opacity: isPlaying ? (isActive ? 1 : 0) : 0,
       transition: 'opacity 1s ease-in-out',
+      // Otimizado: Uso seletivo de willChange apenas quando necessário
       willChange: isPlaying && isActive ? 'opacity' : 'auto',
       objectFit: isMobile ? 'contain' as const : 'cover' as const,
+      // Otimizado: Usar transform para acionar compositing de GPU
       transform: isMobile ? 'translate3d(0,0,0) scale(1.15)' : 'translate3d(0,0,0)',
       contain: 'content' as const,
       ...style

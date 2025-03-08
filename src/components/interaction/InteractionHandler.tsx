@@ -12,7 +12,7 @@ interface InteractionHandlerProps {
   children: React.ReactNode;
 }
 
-const FADE_DURATION = 1500; // Aumentando também para 1.5 segundos
+const FADE_DURATION = 1500; // Mantendo em 1.5 segundos para fade suave
 
 const InteractionHandler = ({
   audioRef,
@@ -26,7 +26,7 @@ const InteractionHandler = ({
   const { hasInitialInteraction, setHasInitialInteraction } = useAudio();
   const fadeInterval = useRef<number | null>(null);
 
-  // Fade audio in
+  // Otimizado: Memoized fade audio function com useCallback
   const fadeAudioIn = useCallback((audio: HTMLAudioElement) => {
     // Clear any existing fade interval
     if (fadeInterval.current !== null) {
@@ -37,44 +37,49 @@ const InteractionHandler = ({
     // Start with volume at 0
     audio.volume = 0;
     
-    const steps = 30; // Aumentado para transição mais suave
+    const steps = 30; // Mantido para transição suave
     const stepTime = FADE_DURATION / steps;
     let currentStep = 0;
     
+    // Usar setInterval é mais eficiente que setTimeout recursivo
     fadeInterval.current = window.setInterval(() => {
       currentStep++;
+      // Math.min garante que o volume nunca ultrapasse 1 (proteção extra)
       audio.volume = Math.min(currentStep / steps, 1);
       
+      // Limpar o intervalo quando a animação terminar
       if (audio.volume >= 1) {
-        window.clearInterval(fadeInterval.current!);
-        fadeInterval.current = null;
+        if (fadeInterval.current !== null) {
+          window.clearInterval(fadeInterval.current);
+          fadeInterval.current = null;
+        }
       }
     }, stepTime);
   }, []);
 
-  // Clean up fade interval on unmount
+  // Garantir limpeza adequada para evitar memory leaks
   useEffect(() => {
     return () => {
       if (fadeInterval.current !== null) {
         window.clearInterval(fadeInterval.current);
+        fadeInterval.current = null;
       }
     };
   }, []);
 
+  // Otimizado: Uso correto de async/await com tratamento adequado de promises
   const startPlayback = useCallback(async () => {
     if (isPlaying) return;
 
     try {
       if (audioRef.current) {
         audioRef.current.currentTime = 0;
-        // Initialize volume to 0 for fade-in
         audioRef.current.volume = 0;
         const audioPromise = audioRef.current.play();
         
         if (audioPromise !== undefined) {
           audioPromise
             .then(() => {
-              // Start fade-in effect
               fadeAudioIn(audioRef.current!);
             })
             .catch(error => {
@@ -85,6 +90,7 @@ const InteractionHandler = ({
         }
       }
 
+      // Otimizado: Processamento de vídeos em paralelo
       const videos = [video1Ref.current, video2Ref.current].filter(Boolean);
       await Promise.all(
         videos.map(video => {
@@ -102,8 +108,9 @@ const InteractionHandler = ({
     }
   }, [isPlaying, audioRef, currentTime, video1Ref, video2Ref, setIsPlaying, fadeAudioIn]);
 
+  // Otimizado: Consolidação de lógicas de click e touch em uma única função
   const handleInteraction = useCallback((event: React.MouseEvent | React.TouchEvent) => {
-    event.preventDefault(); // Prevent default behavior for better control
+    event.preventDefault(); // Evitar comportamento padrão para melhor controle
     
     if (!hasInitialInteraction) {
       setHasInitialInteraction(true);
