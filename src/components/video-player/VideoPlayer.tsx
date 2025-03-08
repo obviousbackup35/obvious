@@ -1,5 +1,6 @@
 
 import { forwardRef, CSSProperties, useEffect, memo } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface VideoPlayerProps {
   isPlaying: boolean;
@@ -10,6 +11,8 @@ interface VideoPlayerProps {
 
 export const VideoPlayer = memo(forwardRef<HTMLVideoElement, VideoPlayerProps>(
   ({ isPlaying, isActive, src, style }, ref) => {
+    const isMobile = useIsMobile();
+    
     useEffect(() => {
       // Preload video when component mounts
       if (ref && 'current' in ref && ref.current) {
@@ -29,6 +32,7 @@ export const VideoPlayer = memo(forwardRef<HTMLVideoElement, VideoPlayerProps>(
           opacity: isPlaying ? (isActive ? 1 : 0) : 0,
           transition: 'opacity 1s ease-in-out',
           willChange: 'opacity', // Optimize for GPU acceleration
+          objectFit: isMobile ? 'contain' : 'cover',
           ...style
         }}
         src={src}

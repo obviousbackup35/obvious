@@ -3,6 +3,7 @@ import { VideoPlayer } from "./VideoPlayer";
 import { VideoOverlay } from "./VideoOverlay";
 import { Logo } from "./Logo";
 import { RefObject, memo } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface VideoManagerProps {
   isPlaying: boolean;
@@ -21,6 +22,8 @@ export const VideoManager = memo(({
   video1Ref,
   video2Ref
 }: VideoManagerProps) => {
+  const isMobile = useIsMobile();
+  
   return (
     <>
       <VideoOverlay 
@@ -30,6 +33,16 @@ export const VideoManager = memo(({
           transition: 'opacity 2s ease-in-out',
         }}
       />
+      {/* Fundo preto para melhor visualização em dispositivos móveis */}
+      {isMobile && (
+        <div 
+          className="absolute inset-0 bg-black z-10"
+          style={{
+            opacity: currentView === 'video' && isPlaying ? 1 : 0,
+            transition: 'opacity 1s ease-in-out',
+          }}
+        />
+      )}
       <VideoPlayer
         ref={video1Ref}
         isPlaying={isPlaying}

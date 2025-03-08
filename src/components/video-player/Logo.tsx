@@ -10,9 +10,8 @@ interface LogoProps {
 export const Logo = memo(({ isBackgroundLoaded, style }: LogoProps) => {
   const isMobile = useIsMobile();
   
-  // Aumentando significativamente o tamanho do logo principal 
-  // (aproximadamente 50% maior que o desktop para mobile)
-  const logoWidth = isMobile ? 990 : 660; // Desktop: 660px, Mobile: 990px
+  // Tamanho ajustado para melhor visualização em mobile
+  const logoWidth = isMobile ? 320 : 660; // Desktop: 660px, Mobile: 320px
   
   return (
     <div 
@@ -35,7 +34,7 @@ export const Logo = memo(({ isBackgroundLoaded, style }: LogoProps) => {
         className="h-auto"
         style={{ 
           width: `${logoWidth}px`,
-          maxWidth: '90vw' // Aumentado de 80vw para 90vw para permitir que o logo ocupe mais espaço na tela
+          maxWidth: '80vw'
         }}
         loading="eager"
       />
