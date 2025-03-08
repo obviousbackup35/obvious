@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import type { ContentView, PolicyView } from '@/types/navigation';
 import { useAuth } from './AuthProvider';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Hexagon } from 'lucide-react';
 
 interface PolicyMenuProps {
   onViewChange: (view: ContentView) => void;
@@ -111,7 +112,7 @@ export const PolicyMenu = ({
     );
   }
 
-  // Mobile layout with pagination dots only
+  // Mobile layout with pagination dots as hexagons
   return (
     <div className={`absolute inset-0 w-full h-full transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
       <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 w-full max-w-xs mx-auto px-4">
@@ -163,19 +164,23 @@ export const PolicyMenu = ({
           </div>
         </div>
         
-        {/* Pagination Dots */}
-        <div className="flex justify-center mt-6 space-x-2">
+        {/* Pagination Hexagons */}
+        <div className="flex justify-center mt-6 space-x-3">
           {policyGroups.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentGroupIndex(index)}
-              className={`w-2 h-2 rounded-full ${
-                index === currentGroupIndex 
-                  ? 'bg-white' 
-                  : 'bg-white/40 hover:bg-white/60'
-              } transition-colors duration-300`}
+              className="flex items-center justify-center transition-colors duration-300 hover:opacity-90"
               aria-label={`Go to policy group ${index + 1}`}
-            />
+            >
+              <Hexagon 
+                size={18}
+                fill={index === currentGroupIndex ? "white" : "transparent"}
+                color="white"
+                strokeWidth={1.5}
+                className="transform rotate-0"
+              />
+            </button>
           ))}
         </div>
       </div>
