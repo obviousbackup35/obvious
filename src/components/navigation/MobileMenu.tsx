@@ -1,7 +1,8 @@
 
-import { memo, useEffect, useState, useRef } from "react";
+import { memo, useEffect, useState, useCallback } from "react";
 import NavigationButton from "./NavigationButton";
 import type { ContentView } from "@/types/navigation";
+import { cn } from "@/lib/utils";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -9,44 +10,47 @@ interface MobileMenuProps {
   closeMobileMenu: () => void;
 }
 
+// Define menu states for better control
+type MenuState = 'closed' | 'opening' | 'open' | 'closing';
+
 const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMenuProps) => {
-  const [localIsOpen, setLocalIsOpen] = useState(isOpen);
-  const [isAnimatingOut, setIsAnimatingOut] = useState(false);
-  
-  // Completely reset the component state when isOpen changes
-  useEffect(() => {
-    if (isOpen) {
-      // Opening menu - immediate state change
-      setIsAnimatingOut(false);
-      setLocalIsOpen(true);
-      console.log("MobileMenu: Opening menu");
-    } else if (localIsOpen) {
-      // Only trigger closing animation if the menu was previously open
-      setIsAnimatingOut(true);
-      console.log("MobileMenu: Starting close animation");
-      
-      // Delay the actual removal from DOM
-      const timer = setTimeout(() => {
-        setLocalIsOpen(false);
-        setIsAnimatingOut(false);
-        console.log("MobileMenu: Finished closing");
-      }, 500); // Match the CSS transition duration
-      return () => clearTimeout(timer);
+  const [menuState, setMenuState] = useState<MenuState>(isOpen ? 'open' : 'closed');
+
+  // Use a callback for transitioning between states with proper timing
+  const transitionToState = useCallback((newState: MenuState, delay = 0) => {
+    if (delay) {
+      setTimeout(() => setMenuState(newState), delay);
+    } else {
+      setMenuState(newState);
     }
-  }, [isOpen, localIsOpen]);
+    console.log(`MobileMenu: Transitioning to ${newState}${delay ? ` with ${delay}ms delay` : ''}`);
+  }, []);
+
+  // Handle incoming prop changes
+  useEffect(() => {
+    if (isOpen && (menuState === 'closed' || menuState === 'closing')) {
+      // Start opening animation
+      transitionToState('opening');
+      // Complete opening after animation duration
+      transitionToState('open', 500);
+    } else if (!isOpen && (menuState === 'open' || menuState === 'opening')) {
+      // Start closing animation
+      transitionToState('closing');
+      // Complete closing after animation duration
+      transitionToState('closed', 500);
+    }
+  }, [isOpen, menuState, transitionToState]);
 
   // Add effect to handle clicks outside the menu
   useEffect(() => {
-    // Only add listener when menu is open
-    if (!isOpen) return;
+    // Only add listener when menu is visible in any state
+    if (menuState === 'closed') return;
     
     const handleOutsideClick = (e: MouseEvent) => {
       // Allow clicks anywhere on the overlay to close the menu
-      // except for clicks on the menu items themselves
+      // except for clicks on the menu items themselves or the toggle button
       const target = e.target as HTMLElement;
       if (!target.closest('.menu-items') && !target.closest('.mobile-menu-toggle')) {
-        // Don't call setLocalIsOpen directly, use the closer function
-        // that will handle the animation
         closeMobileMenu();
       }
     };
@@ -60,36 +64,44 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
       clearTimeout(timerId);
       document.removeEventListener('click', handleOutsideClick);
     };
-  }, [isOpen, closeMobileMenu]);
+  }, [menuState, closeMobileMenu]);
 
-  // Wrapper function to handle view change and close menu with animation
+  // Wrapper function to handle view change and close menu
   const handleMenuItemClick = (view: ContentView) => (e: React.MouseEvent) => {
-    // First call the external handler
     handleViewChange(view)(e);
-    // Then trigger the animated closing
     closeMobileMenu();
   };
 
-  // Prevent rendering when menu is completely closed and not animating
-  if (!isOpen && !localIsOpen && !isAnimatingOut) {
-    console.log("MobileMenu: Not rendering (completely closed)");
+  // Don't render anything if the menu is fully closed
+  if (menuState === 'closed') {
     return null;
   }
 
-  console.log(`MobileMenu rendering: isOpen=${isOpen}, localIsOpen=${localIsOpen}, isAnimatingOut=${isAnimatingOut}`);
+  // Map state to CSS classes
+  const getStateClasses = () => {
+    switch (menuState) {
+      case 'opening':
+        return 'opacity-0 animate-in fade-in duration-500';
+      case 'open':
+        return 'opacity-100';
+      case 'closing':
+        return 'opacity-100 animate-out fade-out duration-500';
+      default:
+        return 'opacity-0';
+    }
+  };
 
   return (
     <div 
-      className={`fixed inset-0 z-40 transition-all duration-500 ${
-        isAnimatingOut ? 'opacity-0 pointer-events-none' : 
-        localIsOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-      }`}
+      className={cn(
+        "fixed inset-0 z-40 transition-all duration-500 backdrop-blur-[3px]",
+        getStateClasses()
+      )}
       style={{ 
         backgroundColor: 'rgba(0, 0, 0, 0.9)',
-        backdropFilter: 'blur(3px)',
-        willChange: 'opacity'
+        willChange: 'opacity, backdrop-filter'
       }}
-      aria-hidden={!localIsOpen}
+      aria-hidden={menuState === 'closing' || menuState === 'closed'}
     >
       <div className="flex items-center justify-center h-full">
         <div className="menu-items">
