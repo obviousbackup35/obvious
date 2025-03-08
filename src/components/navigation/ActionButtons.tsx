@@ -1,6 +1,6 @@
 
 import { memo } from "react";
-import { Volume2, VolumeX, Hexagon, Menu } from "lucide-react";
+import { Volume2, VolumeX, Hexagon, Menu, X } from "lucide-react";
 import NavigationButton from "./NavigationButton";
 import type { ContentView } from "@/types/navigation";
 
@@ -12,6 +12,7 @@ interface ActionButtonsProps {
   toggleMobileMenu: (e: React.MouseEvent) => void;
   getTextColor: () => string;
   currentView: ContentView;
+  isMobileMenuOpen: boolean;
 }
 
 const ActionButtons = memo(({
@@ -21,7 +22,8 @@ const ActionButtons = memo(({
   isMobile,
   toggleMobileMenu,
   getTextColor,
-  currentView
+  currentView,
+  isMobileMenuOpen
 }: ActionButtonsProps) => {
   return (
     <>
@@ -40,18 +42,31 @@ const ActionButtons = memo(({
       {isMobile && (
         <NavigationButton
           onClick={toggleMobileMenu}
-          className={`absolute left-1/2 -translate-x-1/2 top-[1.75cm] p-2 transition-all duration-700 rounded-full ${currentView === 'dunes' ? '' : 'bg-black/50 hover:bg-black/70'}`}
+          className={`absolute left-1/2 -translate-x-1/2 top-[1.75cm] p-2 transition-all duration-700 rounded-full z-50 ${
+            isMobileMenuOpen ? 'bg-black/70' : currentView === 'dunes' ? '' : 'bg-black/50 hover:bg-black/70'
+          }`}
           aria-label="Menu"
         >
-          <Menu 
-            className="w-7 h-7" 
-            style={{ 
-              color: currentView === 'dunes' ? '#555555' : getTextColor(), 
-              transition: 'color 0.7s ease-in-out' 
-            }} 
-            aria-hidden="true"
-          />
-          <span className="sr-only">Menu</span>
+          {isMobileMenuOpen ? (
+            <X 
+              className="w-7 h-7" 
+              style={{ 
+                color: '#ffffff',
+                transition: 'color 0.7s ease-in-out' 
+              }} 
+              aria-hidden="true"
+            />
+          ) : (
+            <Menu 
+              className="w-7 h-7" 
+              style={{ 
+                color: currentView === 'dunes' ? '#555555' : getTextColor(), 
+                transition: 'color 0.7s ease-in-out' 
+              }} 
+              aria-hidden="true"
+            />
+          )}
+          <span className="sr-only">{isMobileMenuOpen ? 'Close Menu' : 'Menu'}</span>
         </NavigationButton>
       )}
 
