@@ -33,14 +33,6 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
   const handleProductClick = useCallback(handleViewChange('projects'), [handleViewChange]);
   const handleGalleryClick = useCallback(handleViewChange('gallery'), [handleViewChange]);
   const handleContactClick = useCallback(handleViewChange('contact'), [handleViewChange]);
-  
-  // Handler for background click to close the menu
-  const handleBackgroundClick = useCallback((e: React.MouseEvent) => {
-    // Only close if clicking directly on the background, not on its children
-    if (e.target === e.currentTarget) {
-      closeMobileMenu();
-    }
-  }, [closeMobileMenu]);
 
   return (
     <div 
@@ -49,7 +41,6 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
       style={menuStyles}
       aria-hidden={!isOpen}
       id="mobile-menu"
-      onClick={handleBackgroundClick}
     >
       <div 
         className="flex items-center justify-center h-full"
