@@ -1,5 +1,5 @@
 
-import { memo, useEffect, useState, useRef } from "react";
+import { memo, useEffect } from "react";
 import NavigationButton from "./NavigationButton";
 import type { ContentView } from "@/types/navigation";
 
@@ -10,45 +10,22 @@ interface MobileMenuProps {
 }
 
 const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMenuProps) => {
-  const [animationState, setAnimationState] = useState<'entering' | 'entered' | 'exiting' | 'exited'>('exited');
-  const animationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  
-  // Clean up any timeouts when component unmounts
+  // Add body class to prevent scrolling when menu is open
   useEffect(() => {
-    return () => {
-      if (animationTimeoutRef.current) {
-        clearTimeout(animationTimeoutRef.current);
-      }
-    };
-  }, []);
-  
-  // Handle animation state changes when isOpen changes
-  useEffect(() => {
-    // Clear any existing timeouts to prevent race conditions
-    if (animationTimeoutRef.current) {
-      clearTimeout(animationTimeoutRef.current);
+    if (isOpen) {
+      document.body.classList.add('no-bounce');
+    } else {
+      document.body.classList.remove('no-bounce');
     }
     
-    if (isOpen) {
-      // Start opening animation
-      setAnimationState('entering');
-      // After animation completes, update state
-      animationTimeoutRef.current = setTimeout(() => {
-        setAnimationState('entered');
-      }, 400); // Match the duration of the CSS animation
-    } else if (animationState === 'entering' || animationState === 'entered') {
-      // Start closing animation
-      setAnimationState('exiting');
-      // After animation completes, update state
-      animationTimeoutRef.current = setTimeout(() => {
-        setAnimationState('exited');
-      }, 300); // Match the duration of the CSS animation
-    }
-  }, [isOpen, animationState]);
+    return () => {
+      document.body.classList.remove('no-bounce');
+    };
+  }, [isOpen]);
   
   // Handle clicks outside the menu
   useEffect(() => {
-    if (animationState !== 'entered') return;
+    if (!isOpen) return;
     
     const handleOutsideClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -61,7 +38,7 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
     return () => {
       document.removeEventListener('click', handleOutsideClick);
     };
-  }, [animationState, closeMobileMenu]);
+  }, [isOpen, closeMobileMenu]);
   
   // Helper function to handle menu item clicks
   const handleMenuItemClick = (view: ContentView) => (e: React.MouseEvent) => {
@@ -69,31 +46,22 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
     closeMobileMenu();
   };
   
-  // Don't render anything if the menu is completely exited
-  if (animationState === 'exited') {
+  // Don't render anything if the menu is closed
+  if (!isOpen) {
     return null;
   }
   
-  // Determine CSS classes based on animation state
-  const backdropClass = animationState === 'entering' || animationState === 'entered' 
-    ? 'menu-backdrop-enter' 
-    : 'menu-backdrop-exit';
-    
-  const contentClass = animationState === 'entering' || animationState === 'entered' 
-    ? 'menu-content-enter' 
-    : 'menu-content-exit';
-  
   return (
     <div 
-      className={`fixed inset-0 z-40 ${backdropClass}`}
+      className={`fixed inset-0 z-40 menu-backdrop ${isOpen ? 'open' : ''}`}
       style={{ 
         backgroundColor: 'rgba(0, 0, 0, 0.9)',
         backdropFilter: 'blur(3px)',
         willChange: 'opacity'
       }}
-      aria-hidden={animationState === 'exiting' || animationState === 'exited'}
+      aria-hidden={!isOpen}
     >
-      <div className={`flex items-center justify-center h-full ${contentClass}`}>
+      <div className={`flex items-center justify-center h-full menu-content ${isOpen ? 'open' : ''}`}>
         <div className="menu-items">
           <ul className="space-y-6 p-8 text-center">
             <li>
