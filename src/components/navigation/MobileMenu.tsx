@@ -91,8 +91,7 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
     }
   };
 
-  // Fix: Instead of comparing the menuState to specific string literals,
-  // we should use proper boolean logic or check against the actual MenuState type
+  // Fix: Create a boolean variable instead of comparing string literals with different types
   const isMenuHidden = menuState === 'closing' || menuState === 'closed';
 
   return (
