@@ -1,5 +1,5 @@
 
-import { memo, useRef, useMemo, useCallback, useEffect } from "react";
+import { memo, useRef, useEffect, useMemo, useCallback } from "react";
 import NavigationButton from "./NavigationButton";
 import type { ContentView } from "@/types/navigation";
 
@@ -11,7 +11,6 @@ interface MobileMenuProps {
 
 const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMenuProps) => {
   const menuRef = useRef<HTMLDivElement>(null);
-  const backdropRef = useRef<HTMLDivElement>(null);
   
   // Memoize styles to prevent recalculations on re-renders
   const menuStyles = useMemo(() => ({
@@ -35,21 +34,33 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
   const handleGalleryClick = useCallback(handleViewChange('gallery'), [handleViewChange]);
   const handleContactClick = useCallback(handleViewChange('contact'), [handleViewChange]);
 
-  // Handle clicks outside the menu content
+  // Add a global click listener to close the menu when clicking outside
   useEffect(() => {
-    const handleBackdropClick = (e: MouseEvent) => {
-      if (isOpen && backdropRef.current && backdropRef.current === e.target) {
-        console.log('Backdrop clicked via effect - closing menu');
+    if (!isOpen) return;
+    
+    const handleOutsideClick = (event: MouseEvent) => {
+      // Check if the click is outside the menu content
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        console.log('Outside click detected - closing menu');
         closeMobileMenu();
       }
     };
-
-    document.addEventListener('click', handleBackdropClick);
+    
+    // Add the event listener with a slight delay to prevent immediate closing
+    const timeoutId = setTimeout(() => {
+      document.addEventListener('click', handleOutsideClick);
+    }, 100);
     
     return () => {
-      document.removeEventListener('click', handleBackdropClick);
+      clearTimeout(timeoutId);
+      document.removeEventListener('click', handleOutsideClick);
     };
   }, [isOpen, closeMobileMenu]);
+
+  // Prevent clicks inside the menu from bubbling to the document
+  const handleMenuContentClick = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+  }, []);
 
   return (
     <div 
@@ -58,27 +69,12 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
       aria-hidden={!isOpen}
       id="mobile-menu"
     >
-      {/* Backdrop element - specifically for handling clicks outside the menu */}
-      <div 
-        ref={backdropRef}
-        className="absolute inset-0" 
-        onClick={(e) => {
-          // Only trigger if this exact element was clicked (not children)
-          if (e.target === e.currentTarget) {
-            e.stopPropagation();
-            console.log('Backdrop clicked - closing menu');
-            closeMobileMenu();
-          }
-        }}
-        data-testid="mobile-menu-backdrop"
-      />
-      
       {/* Menu content */}
       <div 
         ref={menuRef}
         className="flex items-center justify-center h-full relative z-10"
         style={containerStyles}
-        onClick={(e) => e.stopPropagation()} // Prevent clicks on menu from closing it
+        onClick={handleMenuContentClick}
       >
         <div className="menu-items content-visibility-auto">
           <ul className="space-y-6 p-8 text-center">
