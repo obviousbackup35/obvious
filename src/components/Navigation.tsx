@@ -48,12 +48,15 @@ export const Navigation = memo(({
   const toggleMobileMenu = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    // Toggle the menu state directly
     setMobileMenuOpen(prev => !prev);
-  }, []);
+    // Add this console.log to debug
+    console.log('Mobile menu toggled:', !mobileMenuOpen);
+  }, [mobileMenuOpen]);
 
   const closeMobileMenu = useCallback(() => {
     setMobileMenuOpen(false);
+    // Add this console.log to debug
+    console.log('Mobile menu closed');
   }, []);
 
   // Reimplementing adaptive text color based on the current view

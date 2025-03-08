@@ -14,9 +14,8 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
   const prevOpenState = useRef(isOpen);
   
-  // Optimize state updates
+  // Reset animation states when isOpen changes
   useEffect(() => {
-    // We need to always update localIsOpen state when isOpen changes
     if (prevOpenState.current !== isOpen) {
       if (isOpen) {
         // Opening menu - immediate state change
@@ -71,7 +70,7 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
     closeMobileMenu();
   };
 
-  // Optimize rendering - prevent unnecessary DOM operations when menu is completely closed
+  // Prevent rendering when menu is completely closed
   if (!isOpen && !localIsOpen && !isAnimatingOut) {
     return null;
   }
