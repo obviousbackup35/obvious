@@ -20,6 +20,11 @@ export const VideoPlayer = memo(forwardRef<HTMLVideoElement, VideoPlayerProps>(
       }
     }, [ref]);
 
+    // Skip rendering if the video is not playing and not active
+    if (!isPlaying && !isActive) {
+      return null;
+    }
+
     return (
       <video
         ref={ref}
@@ -27,13 +32,12 @@ export const VideoPlayer = memo(forwardRef<HTMLVideoElement, VideoPlayerProps>(
         loop={false}
         playsInline
         preload="auto"
-        className="absolute inset-0 w-full h-full object-cover opacity-0"
+        className="absolute inset-0 w-full h-full object-cover"
         style={{
           opacity: isPlaying ? (isActive ? 1 : 0) : 0,
           transition: 'opacity 1s ease-in-out',
-          willChange: 'opacity', // Optimize for GPU acceleration
+          willChange: 'opacity',
           objectFit: isMobile ? 'contain' : 'cover',
-          // Aplicar escala de 115% (aumento de 15%) apenas em dispositivos móveis
           transform: isMobile ? 'scale(1.15)' : 'none',
           ...style
         }}

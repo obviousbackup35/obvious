@@ -1,13 +1,17 @@
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, Suspense, lazy } from "react";
 import { useVideoTransition } from "@/hooks/useVideoTransition";
 import { usePageAudio } from "@/hooks/usePageAudio";
 import { useViewTransition } from "@/hooks/useViewTransition";
 import { Navigation } from "@/components/Navigation";
 import { useAudio } from "@/contexts/AudioContext";
 import { VideoManager } from "@/components/video-player/VideoManager";
-import { ContentSections } from "@/components/sections/ContentSections";
 import type { ContentView } from "@/types/navigation";
+
+// Lazy load the content sections to improve initial load time
+const ContentSections = lazy(() => import("@/components/sections/ContentSections").then(
+  module => ({ default: module.ContentSections })
+));
 
 const Index = () => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -35,7 +39,9 @@ const Index = () => {
       if (audioRef.current) {
         audioRef.current.currentTime = 0;
         audioRef.current.volume = 1;
-        await audioRef.current.play();
+        await audioRef.current.play().catch(() => {
+          console.log('Audio playback was prevented by the browser');
+        });
       }
 
       const videos = [video1Ref.current, video2Ref.current].filter(Boolean);
@@ -43,7 +49,9 @@ const Index = () => {
         videos.map(video => {
           if (video) {
             video.currentTime = currentTime;
-            return video.play();
+            return video.play().catch(() => {
+              console.log('Video playback was prevented by the browser');
+            });
           }
           return Promise.resolve();
         })
@@ -52,11 +60,14 @@ const Index = () => {
       setIsPlaying(true);
     } catch (error) {
       console.error('Error starting playback:', error);
+      // Still set isPlaying to true even if there was an error
+      // This ensures the UI moves forward even if media playback fails
+      setIsPlaying(true);
     }
   }, [isPlaying, audioRef, currentTime, video1Ref, video2Ref]);
 
   const handleInteraction = useCallback((event: React.MouseEvent | React.TouchEvent) => {
-    event.preventDefault(); // Prevent default behavior for better control
+    event.preventDefault();
     
     if (!hasInitialInteraction) {
       setHasInitialInteraction(true);
@@ -70,11 +81,18 @@ const Index = () => {
     }
   }, [hasInitialInteraction, isPlaying, startPlayback]);
 
+  // Preload background image
   useEffect(() => {
     const backgroundImage = new Image();
     backgroundImage.src = "/fundo.webp";
-    backgroundImage.loading = "eager"; // Prioritize loading
+    backgroundImage.loading = "eager";
+    backgroundImage.fetchPriority = "high";
     backgroundImage.onload = () => setIsBackgroundLoaded(true);
+    
+    // Preload dunes image
+    const dunesImage = new Image();
+    dunesImage.src = "/dunes.webp";
+    dunesImage.loading = "eager";
   }, []);
 
   useEffect(() => {
@@ -90,16 +108,21 @@ const Index = () => {
       }
     };
 
-    video1?.addEventListener('timeupdate', handleVideoTimeUpdate);
-    video2?.addEventListener('timeupdate', handleVideoTimeUpdate);
+    const timeUpdateThrottled = () => {
+      // Use requestAnimationFrame to throttle time updates
+      requestAnimationFrame(handleVideoTimeUpdate);
+    };
+
+    video1?.addEventListener('timeupdate', timeUpdateThrottled);
+    video2?.addEventListener('timeupdate', timeUpdateThrottled);
 
     return () => {
-      video1?.removeEventListener('timeupdate', handleVideoTimeUpdate);
-      video2?.removeEventListener('timeupdate', handleVideoTimeUpdate);
+      video1?.removeEventListener('timeupdate', timeUpdateThrottled);
+      video2?.removeEventListener('timeupdate', timeUpdateThrottled);
     };
   }, [isPlaying, handleTimeUpdate, video1Ref, video2Ref, setCurrentTime]);
 
-  // Adicionar classe para prevenir o scroll do documento inteiro
+  // Disable document bounce scrolling
   useEffect(() => {
     document.documentElement.classList.add('no-bounce');
     document.body.classList.add('no-bounce');
@@ -132,16 +155,9 @@ const Index = () => {
     />
   ), [audioRef, isMuted, toggleAudio, isPlaying, handleViewChange, currentView]);
 
-  const memoizedContentSections = useMemo(() => (
-    <ContentSections 
-      currentView={currentView} 
-      onViewChange={handleViewChange}
-    />
-  ), [currentView, handleViewChange]);
-
   return (
     <div 
-      className="relative viewport-height w-full overflow-hidden cursor-pointer bg-white prevent-overscroll no-bounce"
+      className="relative viewport-height w-full overflow-hidden cursor-pointer bg-black prevent-overscroll no-bounce"
       onClick={handleInteraction}
       onTouchStart={handleInteraction}
       role="application"
@@ -153,15 +169,20 @@ const Index = () => {
         className="absolute inset-0 w-full h-full z-10"
         style={{ 
           backgroundColor: 'black',
-          opacity: isPlaying ? 1 : 0,
-          transition: 'opacity 0.5s ease-in-out',
+          opacity: 1,
           willChange: 'opacity',
         }}
         aria-hidden="true"
       />
 
       {memoizedVideoManager}
-      {memoizedContentSections}
+      
+      <Suspense fallback={null}>
+        <ContentSections 
+          currentView={currentView} 
+          onViewChange={handleViewChange}
+        />
+      </Suspense>
     </div>
   );
 };

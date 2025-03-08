@@ -27,20 +27,10 @@ export const Navigation = memo(({
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Only close mobile menu when view changes and a menu item was clicked
-  useEffect(() => {
-    if (mobileMenuOpen) {
-      // We don't auto-close the menu anymore; it will be closed by explicit user action
-      // (either clicking a menu item or clicking outside the menu)
-    }
-  }, [currentView, mobileMenuOpen]);
-
   const handleViewChange = useCallback((view: ContentView) => (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     onViewChange(view);
-    
-    // Close the menu after view change only when a menu item was clicked
     setMobileMenuOpen(false);
   }, [onViewChange]);
 
@@ -63,20 +53,24 @@ export const Navigation = memo(({
   }, []);
 
   // Reimplementing adaptive text color based on the current view
-  const getTextColor = () => {
+  const getTextColor = useCallback(() => {
     if (currentView === 'dunes') {
       return '#555555';
     }
     return '#c8c5ad';
-  };
+  }, [currentView]);
+
+  // If not visible, return null to save memory
+  if (!isVisible) {
+    return null;
+  }
 
   return (
     <div 
       className="absolute top-8 w-full z-50 transition-opacity duration-1000" 
       style={{
-        opacity: isVisible ? 1 : 0,
-        pointerEvents: isVisible ? 'auto' : 'none',
-        willChange: isVisible ? 'opacity' : 'auto'
+        opacity: 1,
+        willChange: 'opacity'
       }}
       role="navigation"
       aria-label="Main Navigation"

@@ -23,55 +23,53 @@ export const VideoManager = memo(({
   video2Ref
 }: VideoManagerProps) => {
   const isMobile = useIsMobile();
+  const isVideoView = currentView === 'video';
   
   return (
     <>
       <VideoOverlay 
         isBackgroundLoaded={isBackgroundLoaded} 
-        style={{ 
-          opacity: !isPlaying && currentView === 'video' ? (isBackgroundLoaded ? 1 : 0) : 0,
-          transition: 'opacity 2s ease-in-out',
-        }}
+        isVisible={!isPlaying && isVideoView}
       />
+      
       {/* Fundo preto para melhor visualização em dispositivos móveis */}
-      {isMobile && (
+      {isMobile && isVideoView && isPlaying && (
         <div 
           className="absolute inset-0 bg-black z-10"
           style={{
-            opacity: currentView === 'video' && isPlaying ? 1 : 0,
+            opacity: 1,
             transition: 'opacity 1s ease-in-out',
           }}
         />
       )}
+      
       <VideoPlayer
         ref={video1Ref}
         isPlaying={isPlaying}
         isActive={activeVideo === 1}
         src="/loft-video.webm"
         style={{
-          opacity: currentView === 'video' && isPlaying ? (activeVideo === 1 ? 1 : 0) : 0,
+          opacity: isVideoView && isPlaying ? (activeVideo === 1 ? 1 : 0) : 0,
           transition: 'opacity 1s ease-in-out',
           zIndex: 20
         }}
       />
+      
       <VideoPlayer
         ref={video2Ref}
         isPlaying={isPlaying}
         isActive={activeVideo === 2}
         src="/loft-video.webm"
         style={{
-          opacity: currentView === 'video' && isPlaying ? (activeVideo === 2 ? 1 : 0) : 0,
+          opacity: isVideoView && isPlaying ? (activeVideo === 2 ? 1 : 0) : 0,
           transition: 'opacity 1s ease-in-out',
           zIndex: 20
         }}
       />
+      
       <Logo 
         isBackgroundLoaded={isBackgroundLoaded}
-        style={{
-          opacity: currentView === 'video' ? (isBackgroundLoaded ? 1 : 0) : 0,
-          transition: 'opacity 2s ease-in-out',
-          transitionDelay: '2s'
-        }}
+        isVisible={isVideoView}
       />
     </>
   );

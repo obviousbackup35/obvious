@@ -3,25 +3,27 @@ import { CSSProperties, memo } from "react";
 
 interface VideoOverlayProps {
   isBackgroundLoaded: boolean;
+  isVisible?: boolean;
   style?: CSSProperties;
 }
 
-export const VideoOverlay = memo(({ isBackgroundLoaded, style }: VideoOverlayProps) => {
+export const VideoOverlay = memo(({ isBackgroundLoaded, isVisible = false, style }: VideoOverlayProps) => {
+  // Skip rendering if not loaded and not visible
+  if (!isBackgroundLoaded && !isVisible) {
+    return null;
+  }
+  
   return (
     <div 
       className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat z-0"
       style={{ 
         backgroundImage: 'url("/fundo.webp")',
-        opacity: isBackgroundLoaded ? 1 : 0,
-        willChange: isBackgroundLoaded ? 'opacity' : 'auto',
+        opacity: isBackgroundLoaded && isVisible ? 1 : 0,
+        willChange: 'opacity',
         transition: 'opacity 2s ease-in-out',
-        ...style,
-        // Combina as transições mantendo a suavidade
-        transitionProperty: 'opacity',
-        transitionDuration: '2s',
-        transitionTimingFunction: 'ease-in-out'
+        ...style
       }}
-      aria-hidden="true"
+      aria-hidden={!isVisible}
       role="presentation"
     />
   );
