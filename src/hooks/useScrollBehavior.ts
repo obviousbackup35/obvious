@@ -43,23 +43,28 @@ export const useScrollBehavior = () => {
       };
       
       // Use a more optimized approach with requestAnimationFrame for better performance
-      let wheelTimeout: number | null = null;
+      let isScrolling = false;
+      
       const throttledWheelHandler = (e: WheelEvent) => {
-        if (wheelTimeout === null) {
-          wheelTimeout = window.setTimeout(() => {
+        if (!isScrolling) {
+          isScrolling = true;
+          
+          // Use requestAnimationFrame for smoother performance
+          window.requestAnimationFrame(() => {
             handleWheel(e);
-            wheelTimeout = null;
-          }, 500); // Slightly reduced throttle time for better responsiveness
+            
+            // Add a small delay to prevent rapid navigation changes
+            setTimeout(() => {
+              isScrolling = false;
+            }, 300); // Slightly reduced throttle time for better responsiveness
+          });
         }
       };
       
-      window.addEventListener('wheel', throttledWheelHandler);
+      window.addEventListener('wheel', throttledWheelHandler, { passive: true });
       
       return () => {
         window.removeEventListener('wheel', throttledWheelHandler);
-        if (wheelTimeout !== null) {
-          window.clearTimeout(wheelTimeout);
-        }
       };
     }
   }, [isMobile, handleViewTransition]);
