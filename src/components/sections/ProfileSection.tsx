@@ -37,7 +37,7 @@ export const ProfileSection = ({ isVisible, onBack }: ProfileSectionProps) => {
     >
       <button 
         onClick={onBack}
-        className="absolute left-0 top-20 text-white hover:opacity-70 transition-opacity p-3"
+        className="absolute left-0 top-28 text-white hover:opacity-70 transition-opacity p-3"
         aria-label="Voltar para dunas"
       >
         <ChevronLeft size={40} />
