@@ -51,8 +51,8 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
       >
         <div className="relative mx-auto">
           {/* Square container to ensure perfect hexagon proportions */}
-          <div className="w-[300px] h-[300px] mx-auto">
-            {/* Hexagon with perfectly equal sides */}
+          <div className="w-[300px] h-[360px] mx-auto">
+            {/* Hexagon with perfectly equal sides but stretched vertically */}
             <div className="absolute inset-0 bg-black/70 backdrop-blur-sm clip-hexagon flex items-center justify-center mobile-menu-content">
               <ul className="space-y-4 px-6">
                 <li>

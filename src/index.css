@@ -5,8 +5,8 @@
 
 @layer utilities {
   .clip-hexagon {
-    /* Perfect regular hexagon with exactly equal sides */
-    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    /* Modified hexagon to be stretched vertically */
+    clip-path: polygon(50% 0%, 100% 20%, 100% 80%, 50% 100%, 0% 80%, 0% 20%);
   }
   
   .prevent-overscroll {
