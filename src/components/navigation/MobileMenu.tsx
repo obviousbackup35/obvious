@@ -11,25 +11,12 @@ interface MobileMenuProps {
 
 const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMenuProps) => {
   const [localIsOpen, setLocalIsOpen] = useState(isOpen);
-  const [isAnimating, setIsAnimating] = useState(false);
   const prevOpenState = useRef(isOpen);
   
-  // Optimize state updates with crossfade animation
+  // Optimize state updates
   useEffect(() => {
     if (prevOpenState.current !== isOpen) {
-      if (isOpen) {
-        // Opening - show immediately then animate in
-        setLocalIsOpen(true);
-        setIsAnimating(true);
-      } else {
-        // Closing - animate out then hide
-        setIsAnimating(true);
-        const timer = setTimeout(() => {
-          setLocalIsOpen(false);
-          setIsAnimating(false);
-        }, 500); // Match this with CSS transition duration
-        return () => clearTimeout(timer);
-      }
+      setLocalIsOpen(isOpen);
       prevOpenState.current = isOpen;
     }
   }, [isOpen]);
@@ -44,11 +31,7 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
       // except for clicks on the menu items themselves
       const target = e.target as HTMLElement;
       if (!target.closest('.menu-items') && !target.closest('.mobile-menu-toggle')) {
-        // Instead of immediately closing, trigger smooth animation first
-        setIsAnimating(true);
-        setTimeout(() => {
-          closeMobileMenu();
-        }, 300); // Slightly shorter than full animation to feel responsive
+        closeMobileMenu();
       }
     };
 
@@ -63,16 +46,12 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
     };
   }, [isOpen, closeMobileMenu]);
 
-  // Wrapper function to handle view change and close menu with animation
+  // Wrapper function to handle view change and close menu
   const handleMenuItemClick = (view: ContentView) => (e: React.MouseEvent) => {
     // Perform view change first
     handleViewChange(view)(e);
-    // Then close menu with animation
-    setIsAnimating(true);
-    setTimeout(() => {
-      setLocalIsOpen(false);
-      setIsAnimating(false);
-    }, 500);
+    // Then close menu
+    setLocalIsOpen(false);
   };
 
   // Optimize rendering - prevent unnecessary DOM operations when menu is closed
@@ -82,24 +61,16 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
 
   return (
     <div 
-      className={`fixed inset-0 z-40 transition-all duration-500 ${isOpen || isAnimating ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+      className={`fixed inset-0 z-40 transition-all duration-500 ${localIsOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
       style={{ 
         backgroundColor: 'rgba(0, 0, 0, 0.9)',
         backdropFilter: 'blur(3px)',
-        willChange: 'opacity, transform',
-        transform: `scale(${isOpen ? '1' : '0.98'})`,
-        opacity: isOpen ? 1 : (isAnimating ? 0 : 0)
+        willChange: localIsOpen ? 'opacity' : 'auto'
       }}
       aria-hidden={!localIsOpen}
     >
       <div className="flex items-center justify-center h-full">
-        <div 
-          className="menu-items transition-all duration-500"
-          style={{
-            opacity: isOpen ? 1 : (isAnimating ? 0 : 1),
-            transform: `translateY(${isOpen ? '0' : (isAnimating ? '-20px' : '0')})`,
-          }}
-        >
+        <div className="menu-items">
           <ul className="space-y-6 p-8 text-center">
             <li>
               <NavigationButton
