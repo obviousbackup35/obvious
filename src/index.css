@@ -1,11 +1,116 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import "./styles/animations.css";
-@import "./styles/utilities.css";
 
 @layer utilities {
-  /* Utility classes moved to utilities.css */
+  .clip-hexagon {
+    clip-path: polygon(50% 0%, 100% 15%, 100% 85%, 50% 100%, 0% 85%, 0% 15%);
+  }
+  
+  .prevent-overscroll {
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .improved-touch {
+    touch-action: manipulation;
+  }
+  
+  .fixed-viewport {
+    height: 100dvh;
+    position: fixed;
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .viewport-height {
+    height: 100dvh;
+  }
+  
+  .no-bounce {
+    position: fixed;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  /* Mobile menu animations */
+  .menu-backdrop {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .menu-backdrop.open {
+    opacity: 1;
+  }
+  
+  .menu-content {
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  
+  .menu-content.open {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* Keeping existing animations */
+  .menu-backdrop-enter {
+    animation: backdropFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  .menu-backdrop-exit {
+    animation: backdropFadeOut 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  .menu-content-enter {
+    animation: contentSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  .menu-content-exit {
+    animation: contentSlideOut 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+}
+
+@keyframes backdropFadeIn {
+  from { 
+    opacity: 0; 
+  }
+  to { 
+    opacity: 1; 
+  }
+}
+
+@keyframes backdropFadeOut {
+  from { 
+    opacity: 1; 
+  }
+  to { 
+    opacity: 0; 
+  }
+}
+
+@keyframes contentSlideIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(-10px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes contentSlideOut {
+  from { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+  to { 
+    opacity: 0; 
+    transform: translateY(-10px); 
+  }
 }
 
 @layer base {
@@ -107,10 +212,7 @@
   }
 
   body {
-    @apply bg-background text-foreground;
-    overscroll-behavior: none;
-    -webkit-overflow-scrolling: touch;
-    touch-action: manipulation;
+    @apply bg-background text-foreground prevent-overscroll improved-touch;
     min-height: -webkit-fill-available;
     overflow: hidden;
     position: fixed;
