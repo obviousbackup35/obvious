@@ -43,7 +43,7 @@ const ActionButtons = memo(({
           className={`absolute left-1/2 -translate-x-1/2 top-[2.05cm] p-2 transition-all duration-700 rounded-full ${currentView === 'dunes' ? '' : 'bg-black/50 hover:bg-black/70'}`}
           aria-label="Menu"
         >
-          <div className="w-7 h-7 flex flex-col justify-center items-center gap-1.5">
+          <div className="w-7 h-7 flex flex-col justify-center items-center gap-1">
             <div className="wavy-line" style={{ backgroundColor: currentView === 'dunes' ? '#555555' : getTextColor() }}></div>
             <div className="wavy-line" style={{ backgroundColor: currentView === 'dunes' ? '#555555' : getTextColor() }}></div>
             <div className="wavy-line" style={{ backgroundColor: currentView === 'dunes' ? '#555555' : getTextColor() }}></div>
