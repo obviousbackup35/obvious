@@ -24,10 +24,19 @@ const RefreshButton = memo(({ isPlaying, currentView, onViewChange }: RefreshBut
     e.preventDefault();
     e.stopPropagation();
     
+    // Main navigation views
     if (currentView === 'dunes') {
       onViewChange('black');
     } else if (currentView === 'black') {
       onViewChange('video');
+    } 
+    // Content pages
+    else if (['company', 'projects', 'gallery', 'contact', 'profile', 'auth'].includes(currentView)) {
+      onViewChange('dunes');
+    } 
+    // Policy pages
+    else if (currentView !== 'video') {
+      onViewChange('dunes');
     }
   }, [currentView, onViewChange]);
 
@@ -35,6 +44,7 @@ const RefreshButton = memo(({ isPlaying, currentView, onViewChange }: RefreshBut
     e.preventDefault();
     e.stopPropagation();
     
+    // Main navigation views
     if (currentView === 'video') {
       onViewChange('black');
     } else if (currentView === 'black') {

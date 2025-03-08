@@ -1,6 +1,7 @@
 
 import { CSSProperties, memo } from "react";
 import { ChevronLeft } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface SectionContentProps {
   isVisible: boolean;
@@ -19,6 +20,7 @@ export const SectionContent = memo(({
   style, 
   onBack 
 }: SectionContentProps) => {
+  const isMobile = useIsMobile();
   const backgroundStyle = backgroundImage 
     ? {
         backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url(${backgroundImage})`,
@@ -42,7 +44,7 @@ export const SectionContent = memo(({
       aria-hidden={!isVisible}
       aria-label={title}
     >
-      {onBack && (
+      {onBack && !isMobile && (
         <button 
           onClick={onBack}
           className="absolute left-0 top-36 text-white hover:opacity-70 transition-opacity p-3"
@@ -51,7 +53,6 @@ export const SectionContent = memo(({
           <ChevronLeft size={40} />
         </button>
       )}
-      {/* Removed the text content div that was displaying "{title} Content" */}
     </div>
   );
 });

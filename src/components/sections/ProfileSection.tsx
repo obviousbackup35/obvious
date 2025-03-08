@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/use-toast";
 import { ChevronLeft } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ProfileSectionProps {
   isVisible: boolean;
@@ -10,6 +11,8 @@ interface ProfileSectionProps {
 }
 
 export const ProfileSection = ({ isVisible, onBack }: ProfileSectionProps) => {
+  const isMobile = useIsMobile();
+  
   const handleLogout = async () => {
     try {
       await supabase.auth.signOut();
@@ -35,13 +38,15 @@ export const ProfileSection = ({ isVisible, onBack }: ProfileSectionProps) => {
         pointerEvents: isVisible ? 'auto' : 'none'
       }}
     >
-      <button 
-        onClick={onBack}
-        className="absolute left-0 top-36 text-white hover:opacity-70 transition-opacity p-3"
-        aria-label="Voltar para dunas"
-      >
-        <ChevronLeft size={40} />
-      </button>
+      {!isMobile && (
+        <button 
+          onClick={onBack}
+          className="absolute left-0 top-36 text-white hover:opacity-70 transition-opacity p-3"
+          aria-label="Voltar para dunas"
+        >
+          <ChevronLeft size={40} />
+        </button>
+      )}
       <div className="absolute bottom-8 right-8">
         <Button 
           variant="outline" 
