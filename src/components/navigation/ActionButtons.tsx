@@ -1,6 +1,6 @@
 
 import { memo } from "react";
-import { Volume2, VolumeX, Hexagon, Menu } from "lucide-react";
+import { Volume2, VolumeX, Hexagon, AudioLines } from "lucide-react";
 import NavigationButton from "./NavigationButton";
 import type { ContentView } from "@/types/navigation";
 
@@ -43,7 +43,7 @@ const ActionButtons = memo(({
           className={`absolute left-1/2 -translate-x-1/2 top-[2.05cm] p-2 transition-all duration-700 rounded-full ${currentView === 'dunes' ? '' : 'bg-black/50 hover:bg-black/70'}`}
           aria-label="Menu"
         >
-          <Menu 
+          <AudioLines 
             className="w-7 h-7" 
             style={{ 
               color: currentView === 'dunes' ? '#555555' : getTextColor(), 
