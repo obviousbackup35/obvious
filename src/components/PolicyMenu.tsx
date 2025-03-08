@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import type { ContentView, PolicyView } from '@/types/navigation';
@@ -112,7 +113,7 @@ export const PolicyMenu = ({
 
   return (
     <div className={`absolute inset-0 w-full h-full transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-      <div className="absolute bottom-64 left-1/2 transform -translate-x-1/2 w-full max-w-xs mx-auto px-4">
+      <div className="absolute bottom-64 left-1/2 transform -translate-x-1/2 translate-y-[11.34px] w-full max-w-xs mx-auto px-4">
         <div className="relative flex items-center justify-center">
           <div 
             key={currentGroup.title} 
