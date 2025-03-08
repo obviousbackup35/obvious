@@ -87,10 +87,10 @@ const ActionButtons = memo(({
         <span className="sr-only">{!isPlaying ? 'Play' : 'Pause'}</span>
       </NavigationButton>
 
-      {/* Botão de atualização reposicionado para o centro da tela, mais visível */}
+      {/* Botão de atualização reposicionado para a base da tela */}
       <NavigationButton
         onClick={handleRefresh}
-        className="absolute left-1/2 -translate-x-1/2 bottom-[25%] p-2 rounded-full bg-black/50 hover:bg-black/70 transition-all duration-700"
+        className="absolute left-1/2 -translate-x-1/2 bottom-8 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-all duration-700"
       >
         <RefreshCw 
           className="w-7 h-7" 
