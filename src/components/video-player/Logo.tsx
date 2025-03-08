@@ -1,5 +1,6 @@
 
 import { CSSProperties, memo } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface LogoProps {
   isBackgroundLoaded: boolean;
@@ -7,6 +8,11 @@ interface LogoProps {
 }
 
 export const Logo = memo(({ isBackgroundLoaded, style }: LogoProps) => {
+  const isMobile = useIsMobile();
+  
+  // Calculate the mobile logo size (15% larger)
+  const logoWidth = isMobile ? 759 : 660; // 660 * 1.15 = 759
+  
   return (
     <div 
       className="absolute inset-0 flex items-center justify-center z-30"
@@ -25,8 +31,11 @@ export const Logo = memo(({ isBackgroundLoaded, style }: LogoProps) => {
       <img
         src="/logo.svg"
         alt="Logo"
-        className="w-[660px] h-auto"
-        style={{ maxWidth: '80vw' }}
+        className="h-auto"
+        style={{ 
+          width: `${logoWidth}px`,
+          maxWidth: '80vw'
+        }}
         loading="eager"
       />
     </div>
