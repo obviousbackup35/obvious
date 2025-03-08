@@ -1,13 +1,41 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import type { ContentView } from '@/types/navigation';
+import { useMobile } from '@/hooks/use-mobile';
 
 export const useViewTransition = (isPlaying: boolean) => {
   const [currentView, setCurrentView] = useState<ContentView>('video');
   const wheelTimeout = useRef<number>();
   const isTransitioning = useRef(false);
   const lastWheelTime = useRef<number>(0);
+  const touchStartY = useRef<number>(0);
   const WHEEL_THRESHOLD = 50; // ms between wheel events
+  const TOUCH_THRESHOLD = 50; // minimum touch move distance to trigger transition
+  const isMobile = useMobile();
+
+  const handleViewTransition = useCallback((direction: 'up' | 'down') => {
+    if (isTransitioning.current) return;
+    
+    isTransitioning.current = true;
+    
+    if (direction === 'down') {
+      if (currentView === 'video') {
+        setCurrentView('black');
+      } else if (currentView === 'black') {
+        setCurrentView('dunes');
+      }
+    } else if (direction === 'up') {
+      if (currentView === 'dunes') {
+        setCurrentView('black');
+      } else if (currentView === 'black') {
+        setCurrentView('video');
+      }
+    }
+    
+    setTimeout(() => {
+      isTransitioning.current = false;
+    }, 1000);
+  }, [currentView]);
 
   const handleWheel = useCallback((event: WheelEvent) => {
     event.preventDefault();
@@ -21,29 +49,29 @@ export const useViewTransition = (isPlaying: boolean) => {
     }
     
     wheelTimeout.current = window.setTimeout(() => {
-      if (event.deltaY > 0) {
-        isTransitioning.current = true;
-        if (currentView === 'video') {
-          setCurrentView('black');
-        } else if (currentView === 'black') {
-          setCurrentView('dunes');
-        }
-        setTimeout(() => {
-          isTransitioning.current = false;
-        }, 1000);
-      } else if (event.deltaY < 0) {
-        isTransitioning.current = true;
-        if (currentView === 'dunes') {
-          setCurrentView('black');
-        } else if (currentView === 'black') {
-          setCurrentView('video');
-        }
-        setTimeout(() => {
-          isTransitioning.current = false;
-        }, 1000);
-      }
+      const direction = event.deltaY > 0 ? 'down' : 'up';
+      handleViewTransition(direction);
     }, 50);
-  }, [currentView]);
+  }, [handleViewTransition]);
+
+  const handleTouchStart = useCallback((e: TouchEvent) => {
+    touchStartY.current = e.touches[0].clientY;
+  }, []);
+
+  const handleTouchMove = useCallback((e: TouchEvent) => {
+    if (!touchStartY.current || isTransitioning.current) return;
+    
+    const touchY = e.touches[0].clientY;
+    const diff = touchStartY.current - touchY;
+    
+    // Only trigger if touch moved enough distance
+    if (Math.abs(diff) > TOUCH_THRESHOLD) {
+      const direction = diff > 0 ? 'down' : 'up';
+      handleViewTransition(direction);
+      // Reset touch start to prevent multiple triggers in same movement
+      touchStartY.current = 0;
+    }
+  }, [handleViewTransition]);
 
   useEffect(() => {
     if (!isPlaying) return;
@@ -53,14 +81,31 @@ export const useViewTransition = (isPlaying: boolean) => {
       handleWheel(e);
     };
 
+    const touchStartHandler = (e: TouchEvent) => {
+      handleTouchStart(e);
+    };
+
+    const touchMoveHandler = (e: TouchEvent) => {
+      handleTouchMove(e);
+    };
+
+    // Add wheel event listener for desktop
     window.addEventListener('wheel', wheelHandler, { passive: false });
+    
+    // Add touch event listeners for mobile
+    window.addEventListener('touchstart', touchStartHandler, { passive: true });
+    window.addEventListener('touchmove', touchMoveHandler, { passive: true });
+
     return () => {
       window.removeEventListener('wheel', wheelHandler);
+      window.removeEventListener('touchstart', touchStartHandler);
+      window.removeEventListener('touchmove', touchMoveHandler);
+      
       if (wheelTimeout.current) {
         window.clearTimeout(wheelTimeout.current);
       }
     };
-  }, [isPlaying, handleWheel]);
+  }, [isPlaying, handleWheel, handleTouchStart, handleTouchMove]);
 
   return { 
     currentView, 

@@ -55,7 +55,9 @@ const Index = () => {
     }
   }, [isPlaying, audioRef, currentTime, video1Ref, video2Ref]);
 
-  const handleClick = useCallback((event: React.MouseEvent | React.TouchEvent) => {
+  const handleInteraction = useCallback((event: React.MouseEvent | React.TouchEvent) => {
+    event.preventDefault(); // Prevent default behavior for better control
+    
     if (!hasInitialInteraction) {
       setHasInitialInteraction(true);
     }
@@ -71,6 +73,7 @@ const Index = () => {
   useEffect(() => {
     const backgroundImage = new Image();
     backgroundImage.src = "/fundo.webp";
+    backgroundImage.loading = "eager"; // Prioritize loading
     backgroundImage.onload = () => setIsBackgroundLoaded(true);
   }, []);
 
@@ -127,9 +130,11 @@ const Index = () => {
 
   return (
     <div 
-      className="relative h-screen w-full overflow-hidden cursor-pointer bg-white"
-      onClick={handleClick}
-      onTouchStart={handleClick}
+      className="relative h-screen w-full overflow-hidden cursor-pointer bg-white prevent-overscroll"
+      onClick={handleInteraction}
+      onTouchStart={handleInteraction}
+      role="application"
+      aria-label="Interactive video experience"
     >
       {memoizedNavigation}
 
@@ -139,7 +144,9 @@ const Index = () => {
           backgroundColor: 'black',
           opacity: isPlaying ? 1 : 0,
           transition: 'opacity 0.5s ease-in-out',
+          willChange: 'opacity',
         }}
+        aria-hidden="true"
       />
 
       {memoizedVideoManager}

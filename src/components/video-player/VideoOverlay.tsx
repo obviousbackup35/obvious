@@ -13,7 +13,7 @@ export const VideoOverlay = memo(({ isBackgroundLoaded, style }: VideoOverlayPro
       style={{ 
         backgroundImage: 'url("/fundo.webp")',
         opacity: isBackgroundLoaded ? 1 : 0,
-        willChange: 'opacity',
+        willChange: isBackgroundLoaded ? 'opacity' : 'auto',
         transition: 'opacity 2s ease-in-out',
         ...style,
         // Combina as transições mantendo a suavidade
@@ -22,6 +22,8 @@ export const VideoOverlay = memo(({ isBackgroundLoaded, style }: VideoOverlayPro
         transitionTimingFunction: 'ease-in-out'
       }}
       aria-hidden="true"
+      role="presentation"
+      loading="eager"
     />
   );
 });
