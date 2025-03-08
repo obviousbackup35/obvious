@@ -27,25 +27,31 @@ export const Navigation = memo(({
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Close mobile menu after view transition completes
+  // Modified: Only close mobile menu when view actually changes
   useEffect(() => {
+    // Close the menu only if we've navigated to a new view AND the menu was previously open
     if (mobileMenuOpen) {
-      // Add a delay to allow for crossfade transition
-      const timer = setTimeout(() => {
+      // Make sure this is a view change initiated by a menu item click,
+      // not the initial menu opening
+      const viewChangeTimer = setTimeout(() => {
+        // We'll close the menu only after a view has fully loaded
         setMobileMenuOpen(false);
-      }, 1000); // Match this with the transition duration
+      }, 1500); // Match this with the transition duration
       
-      return () => clearTimeout(timer);
+      return () => clearTimeout(viewChangeTimer);
     }
-  }, [currentView, mobileMenuOpen]);
+  }, [currentView]); // Only depend on currentView, not mobileMenuOpen
 
   const handleViewChange = useCallback((view: ContentView) => (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    onViewChange(view);
     
-    // We'll close the menu after the transition completes via the effect
-  }, [onViewChange]);
+    // Only change the view if it's different from the current view
+    if (view !== currentView) {
+      onViewChange(view);
+      // The effect will handle closing the menu after the transition
+    }
+  }, [onViewChange, currentView]);
 
   const handleHomeClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
