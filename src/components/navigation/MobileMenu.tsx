@@ -45,7 +45,9 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
 
   // Wrapper function to handle view change and close menu
   const handleMenuItemClick = (view: ContentView) => (e: React.MouseEvent) => {
+    // Primeiro muda a view, depois fecha o menu (sem delay)
     handleViewChange(view)(e);
+    // Fecha o menu imediatamente
     setLocalIsOpen(false);
   };
 
@@ -55,7 +57,7 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
       style={{ 
         backgroundColor: 'rgba(0, 0, 0, 0.9)',
         backdropFilter: 'blur(3px)',
-        willChange: 'opacity'
+        willChange: localIsOpen ? 'opacity' : 'auto'
       }}
       aria-hidden={!localIsOpen}
     >

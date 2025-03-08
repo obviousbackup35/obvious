@@ -23,53 +23,55 @@ export const VideoManager = memo(({
   video2Ref
 }: VideoManagerProps) => {
   const isMobile = useIsMobile();
-  const isVideoView = currentView === 'video';
   
   return (
     <>
       <VideoOverlay 
         isBackgroundLoaded={isBackgroundLoaded} 
-        isVisible={!isPlaying && isVideoView}
+        style={{ 
+          opacity: !isPlaying && currentView === 'video' ? (isBackgroundLoaded ? 1 : 0) : 0,
+          transition: 'opacity 2s ease-in-out',
+        }}
       />
-      
       {/* Fundo preto para melhor visualização em dispositivos móveis */}
-      {isMobile && isVideoView && isPlaying && (
+      {isMobile && (
         <div 
           className="absolute inset-0 bg-black z-10"
           style={{
-            opacity: 1,
+            opacity: currentView === 'video' && isPlaying ? 1 : 0,
             transition: 'opacity 1s ease-in-out',
           }}
         />
       )}
-      
       <VideoPlayer
         ref={video1Ref}
         isPlaying={isPlaying}
         isActive={activeVideo === 1}
         src="/loft-video.webm"
         style={{
-          opacity: isVideoView && isPlaying ? (activeVideo === 1 ? 1 : 0) : 0,
+          opacity: currentView === 'video' && isPlaying ? (activeVideo === 1 ? 1 : 0) : 0,
           transition: 'opacity 1s ease-in-out',
           zIndex: 20
         }}
       />
-      
       <VideoPlayer
         ref={video2Ref}
         isPlaying={isPlaying}
         isActive={activeVideo === 2}
         src="/loft-video.webm"
         style={{
-          opacity: isVideoView && isPlaying ? (activeVideo === 2 ? 1 : 0) : 0,
+          opacity: currentView === 'video' && isPlaying ? (activeVideo === 2 ? 1 : 0) : 0,
           transition: 'opacity 1s ease-in-out',
           zIndex: 20
         }}
       />
-      
       <Logo 
         isBackgroundLoaded={isBackgroundLoaded}
-        isVisible={isVideoView}
+        style={{
+          opacity: currentView === 'video' ? (isBackgroundLoaded ? 1 : 0) : 0,
+          transition: 'opacity 2s ease-in-out',
+          transitionDelay: '2s'
+        }}
       />
     </>
   );

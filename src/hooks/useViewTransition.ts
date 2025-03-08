@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback, useRef } from 'react';
 import type { ContentView } from '@/types/navigation';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -76,16 +75,30 @@ export const useViewTransition = (isPlaying: boolean) => {
   useEffect(() => {
     if (!isPlaying) return;
 
-    // Passive: false for wheel to enable preventDefault
-    // Passive: true for touch events as we're not preventing default there
-    window.addEventListener('wheel', handleWheel, { passive: false });
-    window.addEventListener('touchstart', handleTouchStart, { passive: true });
-    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    const wheelHandler = (e: WheelEvent) => {
+      e.preventDefault();
+      handleWheel(e);
+    };
+
+    const touchStartHandler = (e: TouchEvent) => {
+      handleTouchStart(e);
+    };
+
+    const touchMoveHandler = (e: TouchEvent) => {
+      handleTouchMove(e);
+    };
+
+    // Add wheel event listener for desktop
+    window.addEventListener('wheel', wheelHandler, { passive: false });
+    
+    // Add touch event listeners for mobile
+    window.addEventListener('touchstart', touchStartHandler, { passive: true });
+    window.addEventListener('touchmove', touchMoveHandler, { passive: true });
 
     return () => {
-      window.removeEventListener('wheel', handleWheel);
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('wheel', wheelHandler);
+      window.removeEventListener('touchstart', touchStartHandler);
+      window.removeEventListener('touchmove', touchMoveHandler);
       
       if (wheelTimeout.current) {
         window.clearTimeout(wheelTimeout.current);
