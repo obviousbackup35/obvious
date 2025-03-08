@@ -40,6 +40,7 @@ export const SectionContent = memo(({
       }}
       role={isVisible ? "region" : "presentation"}
       aria-hidden={!isVisible}
+      aria-label={title}
     >
       {onBack && (
         <button 
@@ -50,9 +51,7 @@ export const SectionContent = memo(({
           <ChevronLeft size={40} />
         </button>
       )}
-      <div className="flex items-center justify-center h-full text-white text-4xl font-montserrat">
-        {title} Content
-      </div>
+      {/* Removed the text content div that was displaying "{title} Content" */}
     </div>
   );
 });
