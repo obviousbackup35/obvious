@@ -62,41 +62,43 @@ export const Navigation = memo(({
   };
 
   return (
-    <div 
-      className="absolute top-0 w-full z-50 transition-opacity duration-1000" 
-      style={{
-        opacity: isVisible ? 1 : 0,
-        pointerEvents: isVisible ? 'auto' : 'none',
-        willChange: isVisible ? 'opacity' : 'auto'
-      }}
-      role="navigation"
-      aria-label="Main Navigation"
-    >
-      <nav className="absolute top-8 w-full">
-        <div 
-          className="flex justify-center items-center font-montserrat text-[1.38rem] relative transition-colors duration-700" 
-          style={{ color: getTextColor() }}
-        >
-          <ControlButtons 
-            getTextColor={getTextColor}
-            handleHomeClick={handleHomeClick}
-            handleAudioToggle={handleAudioToggle}
-            toggleMobileMenu={toggleMobileMenu}
-            isMuted={isMuted}
-            isMobile={isMobile}
-          />
-          
-          {isMobile ? (
-            <MobileMenu 
-              isOpen={mobileMenuOpen}
-              handleViewChange={handleViewChange}
+    <>
+      <div 
+        className="absolute top-0 w-full z-50 transition-opacity duration-1000" 
+        style={{
+          opacity: isVisible ? 1 : 0,
+          pointerEvents: isVisible ? 'auto' : 'none',
+          willChange: isVisible ? 'opacity' : 'auto'
+        }}
+        role="navigation"
+        aria-label="Main Navigation"
+      >
+        <nav className="absolute top-8 w-full">
+          <div 
+            className="flex justify-center items-center font-montserrat text-[1.38rem] relative transition-colors duration-700" 
+            style={{ color: getTextColor() }}
+          >
+            <ControlButtons 
+              getTextColor={getTextColor}
+              handleHomeClick={handleHomeClick}
+              handleAudioToggle={handleAudioToggle}
+              toggleMobileMenu={toggleMobileMenu}
+              isMuted={isMuted}
+              isMobile={isMobile}
             />
-          ) : (
-            <DesktopMenu handleViewChange={handleViewChange} />
-          )}
-        </div>
-      </nav>
-    </div>
+            
+            {!isMobile && <DesktopMenu handleViewChange={handleViewChange} />}
+          </div>
+        </nav>
+      </div>
+      
+      {isMobile && (
+        <MobileMenu 
+          isOpen={mobileMenuOpen}
+          handleViewChange={handleViewChange}
+        />
+      )}
+    </>
   );
 });
 
