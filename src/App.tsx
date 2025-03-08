@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -23,10 +22,6 @@ interface ScreenOrientation {
   dispatchEvent(event: Event): boolean;
 }
 
-interface ScreenWithOrientation extends Screen {
-  orientation?: ScreenOrientation;
-}
-
 type OrientationLockType = 
   | "any"
   | "natural"
@@ -45,7 +40,9 @@ type OrientationType =
 
 declare global {
   interface Window {
-    screen: ScreenWithOrientation;
+    screen: Screen & {
+      orientation?: ScreenOrientation;
+    }
   }
 }
 
@@ -55,7 +52,7 @@ const App = () => {
   // Try to lock screen orientation to portrait on mobile devices
   useEffect(() => {
     const attemptScreenLock = async () => {
-      if (window.screen && window.screen.orientation && 'lock' in window.screen.orientation) {
+      if (window.screen && window.screen.orientation && typeof window.screen.orientation.lock === 'function') {
         try {
           await window.screen.orientation.lock('portrait');
           console.log('Screen locked to portrait');

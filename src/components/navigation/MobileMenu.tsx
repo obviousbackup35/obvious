@@ -48,13 +48,13 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
   
   return (
     <div 
-      className={`fixed inset-0 z-40 mobile-menu-backdrop ${isOpen ? 'open' : ''}`}
+      className={`mobile-menu-backdrop ${isOpen ? 'open' : ''}`}
       style={{ 
         pointerEvents: isOpen ? 'auto' : 'none'
       }}
       aria-hidden={!isOpen}
     >
-      <div className={`flex items-center justify-center h-full mobile-menu-content ${isOpen ? 'open' : ''}`}>
+      <div className={`mobile-menu-content ${isOpen ? 'open' : ''}`}>
         <div className="menu-items">
           <ul className="space-y-6 p-8 text-center">
             <li>
