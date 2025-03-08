@@ -11,12 +11,26 @@ interface MobileMenuProps {
 
 const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMenuProps) => {
   const [localIsOpen, setLocalIsOpen] = useState(isOpen);
+  const [isAnimatingOut, setIsAnimatingOut] = useState(false);
   const prevOpenState = useRef(isOpen);
   
   // Optimize state updates
   useEffect(() => {
     if (prevOpenState.current !== isOpen) {
-      setLocalIsOpen(isOpen);
+      if (isOpen) {
+        // Opening menu - immediate state change
+        setIsAnimatingOut(false);
+        setLocalIsOpen(true);
+      } else {
+        // Closing menu - start exit animation first
+        setIsAnimatingOut(true);
+        // Delay the actual removal from DOM
+        const timer = setTimeout(() => {
+          setLocalIsOpen(false);
+          setIsAnimatingOut(false);
+        }, 500); // Match the CSS transition duration
+        return () => clearTimeout(timer);
+      }
       prevOpenState.current = isOpen;
     }
   }, [isOpen]);
@@ -31,6 +45,8 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
       // except for clicks on the menu items themselves
       const target = e.target as HTMLElement;
       if (!target.closest('.menu-items') && !target.closest('.mobile-menu-toggle')) {
+        // Don't call setLocalIsOpen directly, use the closer function
+        // that will handle the animation
         closeMobileMenu();
       }
     };
@@ -46,26 +62,29 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
     };
   }, [isOpen, closeMobileMenu]);
 
-  // Wrapper function to handle view change and close menu
+  // Wrapper function to handle view change and close menu with animation
   const handleMenuItemClick = (view: ContentView) => (e: React.MouseEvent) => {
-    // Perform view change first
+    // First call the external handler
     handleViewChange(view)(e);
-    // Then close menu
-    setLocalIsOpen(false);
+    // Then trigger the animated closing
+    closeMobileMenu();
   };
 
-  // Optimize rendering - prevent unnecessary DOM operations when menu is closed
-  if (!isOpen && !localIsOpen) {
+  // Optimize rendering - prevent unnecessary DOM operations when menu is completely closed
+  if (!isOpen && !localIsOpen && !isAnimatingOut) {
     return null;
   }
 
   return (
     <div 
-      className={`fixed inset-0 z-40 transition-all duration-500 ${localIsOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+      className={`fixed inset-0 z-40 transition-all duration-500 ${
+        isAnimatingOut ? 'opacity-0 pointer-events-none' : 
+        localIsOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+      }`}
       style={{ 
         backgroundColor: 'rgba(0, 0, 0, 0.9)',
         backdropFilter: 'blur(3px)',
-        willChange: localIsOpen ? 'opacity' : 'auto'
+        willChange: 'opacity'
       }}
       aria-hidden={!localIsOpen}
     >

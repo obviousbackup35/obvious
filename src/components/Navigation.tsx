@@ -27,21 +27,10 @@ export const Navigation = memo(({
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Only close mobile menu when view changes and a menu item was clicked
-  useEffect(() => {
-    if (mobileMenuOpen) {
-      // We don't auto-close the menu anymore; it will be closed by explicit user action
-      // (either clicking a menu item or clicking outside the menu)
-    }
-  }, [currentView, mobileMenuOpen]);
-
   const handleViewChange = useCallback((view: ContentView) => (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     onViewChange(view);
-    
-    // Close the menu after view change only when a menu item was clicked
-    setMobileMenuOpen(false);
   }, [onViewChange]);
 
   const handleHomeClick = useCallback((e: React.MouseEvent) => {
@@ -60,6 +49,10 @@ export const Navigation = memo(({
     e.preventDefault();
     e.stopPropagation();
     setMobileMenuOpen(prev => !prev);
+  }, []);
+
+  const closeMobileMenu = useCallback(() => {
+    setMobileMenuOpen(false);
   }, []);
 
   // Reimplementing adaptive text color based on the current view
@@ -101,7 +94,7 @@ export const Navigation = memo(({
             <MobileMenu 
               isOpen={mobileMenuOpen}
               handleViewChange={handleViewChange}
-              closeMobileMenu={() => setMobileMenuOpen(false)}
+              closeMobileMenu={closeMobileMenu}
             />
           ) : (
             <DesktopMenu 
