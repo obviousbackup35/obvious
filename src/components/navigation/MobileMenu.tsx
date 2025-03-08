@@ -11,12 +11,25 @@ interface MobileMenuProps {
 
 const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMenuProps) => {
   const [localIsOpen, setLocalIsOpen] = useState(isOpen);
+  const [isAnimating, setIsAnimating] = useState(false);
   const prevOpenState = useRef(isOpen);
   
-  // Optimize state updates
+  // Optimize state updates with crossfade animation
   useEffect(() => {
     if (prevOpenState.current !== isOpen) {
-      setLocalIsOpen(isOpen);
+      if (isOpen) {
+        // Opening - show immediately then animate in
+        setLocalIsOpen(true);
+        setIsAnimating(true);
+      } else {
+        // Closing - animate out then hide
+        setIsAnimating(true);
+        const timer = setTimeout(() => {
+          setLocalIsOpen(false);
+          setIsAnimating(false);
+        }, 500); // Match this with CSS transition duration
+        return () => clearTimeout(timer);
+      }
       prevOpenState.current = isOpen;
     }
   }, [isOpen]);
@@ -46,12 +59,16 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
     };
   }, [isOpen, closeMobileMenu]);
 
-  // Wrapper function to handle view change and close menu
+  // Wrapper function to handle view change and close menu with animation
   const handleMenuItemClick = (view: ContentView) => (e: React.MouseEvent) => {
     // Perform view change first
     handleViewChange(view)(e);
-    // Then close menu
-    setLocalIsOpen(false);
+    // Then close menu with animation
+    setIsAnimating(true);
+    setTimeout(() => {
+      setLocalIsOpen(false);
+      setIsAnimating(false);
+    }, 500);
   };
 
   // Optimize rendering - prevent unnecessary DOM operations when menu is closed
@@ -61,16 +78,24 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
 
   return (
     <div 
-      className={`fixed inset-0 z-40 transition-all duration-500 ${localIsOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+      className={`fixed inset-0 z-40 transition-all duration-500 ${isOpen || isAnimating ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
       style={{ 
         backgroundColor: 'rgba(0, 0, 0, 0.9)',
         backdropFilter: 'blur(3px)',
-        willChange: localIsOpen ? 'opacity' : 'auto'
+        willChange: 'opacity, transform',
+        transform: `scale(${isOpen ? '1' : '0.98'})`,
+        opacity: isOpen ? 1 : (isAnimating ? 0 : 0)
       }}
       aria-hidden={!localIsOpen}
     >
       <div className="flex items-center justify-center h-full">
-        <div className="menu-items">
+        <div 
+          className="menu-items transition-all duration-500"
+          style={{
+            opacity: isOpen ? 1 : (isAnimating ? 0 : 1),
+            transform: `translateY(${isOpen ? '0' : (isAnimating ? '-20px' : '0')})`,
+          }}
+        >
           <ul className="space-y-6 p-8 text-center">
             <li>
               <NavigationButton
