@@ -54,14 +54,17 @@ export const Navigation = memo(({
     setMobileMenuOpen(prev => !prev);
   }, []);
 
-  // Always return the brighter color regardless of view
+  // Reimplementing adaptive text color based on the current view
   const getTextColor = () => {
+    if (currentView === 'dunes') {
+      return '#555555';
+    }
     return '#c8c5ad';
   };
 
   return (
     <div 
-      className="absolute top-2 w-full z-50 transition-opacity duration-1000" 
+      className="absolute top-8 w-full z-50 transition-opacity duration-1000" 
       style={{
         opacity: isVisible ? 1 : 0,
         pointerEvents: isVisible ? 'auto' : 'none',
