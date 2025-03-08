@@ -44,12 +44,12 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
       )}
       
       <div 
-        className={`absolute top-24 left-0 w-full transition-all duration-300 z-50 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        className={`absolute top-48 left-0 w-full transition-all duration-300 z-50 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
         style={{ 
           willChange: isOpen ? 'opacity, transform' : 'auto'
         }}
       >
-        <div className="bg-black/70 backdrop-blur-sm rounded-lg mx-4 p-4 text-center mobile-menu-content">
+        <div className="bg-black/70 backdrop-blur-sm mx-auto max-w-[300px] p-6 text-center mobile-menu-content clip-hexagon">
           <ul className="space-y-4">
             <li>
               <NavigationButton
