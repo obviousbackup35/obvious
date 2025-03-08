@@ -32,6 +32,21 @@
     overflow: hidden;
     width: 100%;
   }
+  
+  /* Add optimized mobile utilities */
+  .gpu-accelerated {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+  
+  .content-visibility-auto {
+    content-visibility: auto;
+  }
+  
+  .layer-promoted {
+    transform: translateZ(0);
+  }
 }
 
 @layer base {

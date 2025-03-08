@@ -1,5 +1,5 @@
 
-import { forwardRef, CSSProperties, useEffect, memo, useRef } from "react";
+import { forwardRef, CSSProperties, useEffect, memo, useRef, useMemo } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface VideoPlayerProps {
@@ -14,6 +14,7 @@ export const VideoPlayer = memo(forwardRef<HTMLVideoElement, VideoPlayerProps>(
     const isMobile = useIsMobile();
     const videoLoaded = useRef(false);
     
+    // Optimize with useEffect cleanup
     useEffect(() => {
       // Only preload video when needed and not already loaded
       if (ref && 'current' in ref && ref.current && !videoLoaded.current) {
@@ -35,6 +36,17 @@ export const VideoPlayer = memo(forwardRef<HTMLVideoElement, VideoPlayerProps>(
       };
     }, [ref, src]);
 
+    // Memoize style calculations to avoid recalculation
+    const videoStyles = useMemo(() => ({
+      opacity: isPlaying ? (isActive ? 1 : 0) : 0,
+      transition: 'opacity 1s ease-in-out',
+      willChange: isPlaying && isActive ? 'opacity' : 'auto',
+      objectFit: isMobile ? 'contain' : 'cover',
+      transform: isMobile ? 'translate3d(0,0,0) scale(1.15)' : 'translate3d(0,0,0)',
+      contain: 'content',
+      ...style
+    }), [isPlaying, isActive, isMobile, style]);
+
     return (
       <video
         ref={ref}
@@ -43,14 +55,7 @@ export const VideoPlayer = memo(forwardRef<HTMLVideoElement, VideoPlayerProps>(
         playsInline
         preload="auto"
         className="absolute inset-0 w-full h-full object-cover"
-        style={{
-          opacity: isPlaying ? (isActive ? 1 : 0) : 0,
-          transition: 'opacity 1s ease-in-out',
-          willChange: isPlaying && isActive ? 'opacity' : 'auto', // Only use willChange when needed
-          objectFit: isMobile ? 'contain' : 'cover',
-          transform: isMobile ? 'scale(1.15)' : 'none',
-          ...style
-        }}
+        style={videoStyles}
         src={src}
       />
     );
