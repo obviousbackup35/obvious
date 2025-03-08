@@ -56,6 +56,11 @@ const Index = () => {
   }, [isPlaying, audioRef, currentTime, video1Ref, video2Ref]);
 
   const handleInteraction = useCallback((event: React.MouseEvent | React.TouchEvent) => {
+    // Only handle interaction on the application area, not on the mobile menu
+    if ((event.target as HTMLElement).closest('#mobile-menu')) {
+      return;
+    }
+    
     event.preventDefault(); // Prevent default behavior for better control
     
     if (!hasInitialInteraction) {

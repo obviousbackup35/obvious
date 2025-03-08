@@ -53,6 +53,11 @@ export const Navigation = memo(({
     e.stopPropagation();
     setMobileMenuOpen(prev => !prev);
   }, []);
+  
+  const closeMobileMenu = useCallback(() => {
+    console.log('Closing mobile menu');
+    setMobileMenuOpen(false);
+  }, []);
 
   // Reimplementing adaptive text color based on the current view
   const getTextColor = () => {
@@ -93,7 +98,7 @@ export const Navigation = memo(({
             <MobileMenu 
               isOpen={mobileMenuOpen}
               handleViewChange={handleViewChange}
-              closeMobileMenu={() => setMobileMenuOpen(false)}
+              closeMobileMenu={closeMobileMenu}
             />
           )}
           
