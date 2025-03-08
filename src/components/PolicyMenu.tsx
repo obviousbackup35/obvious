@@ -43,11 +43,11 @@ export const PolicyMenu = ({
 
   const currentGroup = policyGroups[currentGroupIndex];
 
-  // Desktop layout with all groups
+  // Desktop layout with all groups - moved up by 1cm
   if (!isMobile) {
     return (
       <div className={`absolute inset-0 w-full h-full transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-        <div className="absolute top-[85%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-5xl mx-auto">
+        <div className="absolute top-[75%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-5xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 px-4">
             {policyGroups.map(group => (
               <div key={group.title} className="text-center">
@@ -112,10 +112,10 @@ export const PolicyMenu = ({
     );
   }
 
-  // Mobile layout with pagination dots as hexagons
+  // Mobile layout with pagination dots as hexagons - moved up by 1cm
   return (
     <div className={`absolute inset-0 w-full h-full transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-      <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 w-full max-w-xs mx-auto px-4">
+      <div className="absolute bottom-36 left-1/2 transform -translate-x-1/2 w-full max-w-xs mx-auto px-4">
         <div className="relative flex items-center justify-center">
           {/* Policy Group */}
           <div 
