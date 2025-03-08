@@ -55,7 +55,7 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
     <div 
       className={`fixed inset-0 z-40 transition-all duration-500 ${localIsOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
       style={{ 
-        backgroundColor: 'rgba(0, 0, 0, 0.75)',
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',
         backdropFilter: 'blur(3px)',
         willChange: localIsOpen ? 'opacity' : 'auto'
       }}
