@@ -29,17 +29,11 @@ export const VideoPlayer = memo(forwardRef<HTMLVideoElement, VideoPlayerProps>(
         console.log("Video source loaded:", src);
       }
       
-      // Clean up when component unmounts
+      // Clean up only when component unmounts, NOT on every effect run
       return () => {
-        if (ref && 'current' in ref && ref.current) {
-          if (!isPlaying) {
-            // If not playing, we can free up resources
-            ref.current.src = '';
-            videoLoaded.current = false;
-          }
-        }
+        // No cleanup logic here - we'll handle cleanup in the parent component
       };
-    }, [ref, isPlaying, src]);
+    }, [ref, src]);
 
     return (
       <video

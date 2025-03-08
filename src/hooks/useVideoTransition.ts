@@ -10,11 +10,11 @@ export const useVideoTransition = () => {
   const timeUpdateFrame = useRef<number>();
   const lastUpdateTime = useRef(0);
   
-  // Use throttling for timeupdate events to reduce CPU usage
+  // Reduced throttling for timeupdate events (50ms instead of 100ms)
   const handleTimeUpdate = useCallback(() => {
     const now = Date.now();
-    // Only process updates every 100ms to reduce CPU load
-    if (now - lastUpdateTime.current < 100) return;
+    // Reduced throttle time to ensure smoother transitions
+    if (now - lastUpdateTime.current < 50) return;
     lastUpdateTime.current = now;
     
     if (timeUpdateFrame.current) {
@@ -27,13 +27,31 @@ export const useVideoTransition = () => {
       
       if (!video1 || !video2 || isTransitioning.current) return;
 
+      // Set transition point if not set yet
       if (transitionPoint.current === 0 && video1.duration) {
-        transitionPoint.current = video1.duration - 1;
+        // Set transition 1 second before end (safer margin)
+        transitionPoint.current = Math.max(video1.duration - 1, 0);
         console.log("Set transition point:", transitionPoint.current);
+      }
+      
+      // Enhanced logging to debug transition issues
+      if (activeVideo === 1 && video1.currentTime > 0 && transitionPoint.current > 0) {
+        const timeRemaining = transitionPoint.current - video1.currentTime;
+        if (timeRemaining < 0.5) {
+          console.log(`Video 1 near transition: ${timeRemaining.toFixed(2)}s remaining`);
+        }
+      } else if (activeVideo === 2 && video2.currentTime > 0 && transitionPoint.current > 0) {
+        const timeRemaining = transitionPoint.current - video2.currentTime;
+        if (timeRemaining < 0.5) {
+          console.log(`Video 2 near transition: ${timeRemaining.toFixed(2)}s remaining`);
+        }
       }
       
       if (activeVideo === 1 && video1.currentTime >= transitionPoint.current) {
         isTransitioning.current = true;
+        console.log("Starting transition to video 2");
+        
+        // Ensure video2 is ready before transition
         video2.currentTime = 0;
         
         // Use more stable promise chaining for playback
@@ -44,7 +62,7 @@ export const useVideoTransition = () => {
             isTransitioning.current = false;
           })
           .catch(err => {
-            console.error("Video playback error:", err);
+            console.error("Video 2 playback error:", err);
             // Try one more time with a delay
             setTimeout(() => {
               video2.play()
@@ -53,7 +71,7 @@ export const useVideoTransition = () => {
                   isTransitioning.current = false;
                 })
                 .catch(deepErr => {
-                  console.error("Retry video playback failed:", deepErr);
+                  console.error("Retry video 2 playback failed:", deepErr);
                   isTransitioning.current = false;
                 });
             }, 200);
@@ -61,6 +79,8 @@ export const useVideoTransition = () => {
           
       } else if (activeVideo === 2 && video2.currentTime >= transitionPoint.current) {
         isTransitioning.current = true;
+        console.log("Starting transition to video 1");
+        
         video1.currentTime = 0;
         
         video1.play()
@@ -70,7 +90,7 @@ export const useVideoTransition = () => {
             isTransitioning.current = false;
           })
           .catch(err => {
-            console.error("Video playback error:", err);
+            console.error("Video 1 playback error:", err);
             // Try one more time with a delay
             setTimeout(() => {
               video1.play()
@@ -79,7 +99,7 @@ export const useVideoTransition = () => {
                   isTransitioning.current = false;
                 })
                 .catch(deepErr => {
-                  console.error("Retry video playback failed:", deepErr);
+                  console.error("Retry video 1 playback failed:", deepErr);
                   isTransitioning.current = false;
                 });
             }, 200);
@@ -88,24 +108,20 @@ export const useVideoTransition = () => {
     });
   }, [activeVideo]);
 
-  // Clean up resources on unmount
+  // Clean up resources on unmount but don't clear sources during app operation
   useEffect(() => {
     return () => {
       if (timeUpdateFrame.current) {
         cancelAnimationFrame(timeUpdateFrame.current);
       }
       
-      // Make sure to clear videos to free up memory
+      // Only clear videos on complete component unmount, not during regular operation
       if (video1Ref.current) {
         video1Ref.current.pause();
-        video1Ref.current.src = '';
-        video1Ref.current.load();
       }
       
       if (video2Ref.current) {
         video2Ref.current.pause();
-        video2Ref.current.src = '';
-        video2Ref.current.load();
       }
     };
   }, []);

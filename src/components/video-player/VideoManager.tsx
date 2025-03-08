@@ -29,6 +29,24 @@ export const VideoManager = memo(({
     console.log(`VideoManager: isPlaying=${isPlaying}, currentView=${currentView}, activeVideo=${activeVideo}`);
   }, [isPlaying, currentView, activeVideo]);
   
+  // Ensure video sources are loaded properly
+  useEffect(() => {
+    // When returning to video view, ensure videos are ready
+    if (currentView === 'video' && video1Ref.current && video2Ref.current) {
+      if (!video1Ref.current.src || video1Ref.current.src === '') {
+        video1Ref.current.src = '/loft-video.webm';
+        video1Ref.current.load();
+        console.log("Reloaded video 1 source");
+      }
+      
+      if (!video2Ref.current.src || video2Ref.current.src === '') {
+        video2Ref.current.src = '/loft-video.webm';
+        video2Ref.current.load();
+        console.log("Reloaded video 2 source");
+      }
+    }
+  }, [currentView, video1Ref, video2Ref]);
+  
   // Memoize style calculations to prevent unnecessary re-renders
   const overlayStyle = useMemo(() => ({ 
     opacity: !isPlaying && currentView === 'video' ? (isBackgroundLoaded ? 1 : 0) : 0,
