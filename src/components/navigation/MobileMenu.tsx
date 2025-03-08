@@ -1,5 +1,5 @@
 
-import { memo, useRef, useMemo, useCallback } from "react";
+import { memo, useRef, useMemo, useCallback, useEffect } from "react";
 import NavigationButton from "./NavigationButton";
 import type { ContentView } from "@/types/navigation";
 
@@ -11,6 +11,7 @@ interface MobileMenuProps {
 
 const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMenuProps) => {
   const menuRef = useRef<HTMLDivElement>(null);
+  const backdropRef = useRef<HTMLDivElement>(null);
   
   // Memoize styles to prevent recalculations on re-renders
   const menuStyles = useMemo(() => ({
@@ -34,6 +35,22 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
   const handleGalleryClick = useCallback(handleViewChange('gallery'), [handleViewChange]);
   const handleContactClick = useCallback(handleViewChange('contact'), [handleViewChange]);
 
+  // Handle clicks outside the menu content
+  useEffect(() => {
+    const handleBackdropClick = (e: MouseEvent) => {
+      if (isOpen && backdropRef.current && backdropRef.current === e.target) {
+        console.log('Backdrop clicked via effect - closing menu');
+        closeMobileMenu();
+      }
+    };
+
+    document.addEventListener('click', handleBackdropClick);
+    
+    return () => {
+      document.removeEventListener('click', handleBackdropClick);
+    };
+  }, [isOpen, closeMobileMenu]);
+
   return (
     <div 
       className="fixed inset-0 z-40 bg-black/90 backdrop-blur-sm"
@@ -43,6 +60,7 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
     >
       {/* Backdrop element - specifically for handling clicks outside the menu */}
       <div 
+        ref={backdropRef}
         className="absolute inset-0" 
         onClick={(e) => {
           // Only trigger if this exact element was clicked (not children)
@@ -52,10 +70,12 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
             closeMobileMenu();
           }
         }}
+        data-testid="mobile-menu-backdrop"
       />
       
       {/* Menu content */}
       <div 
+        ref={menuRef}
         className="flex items-center justify-center h-full relative z-10"
         style={containerStyles}
         onClick={(e) => e.stopPropagation()} // Prevent clicks on menu from closing it

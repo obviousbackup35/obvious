@@ -59,6 +59,13 @@ export const Navigation = memo(({
     setMobileMenuOpen(false);
   }, []);
 
+  // Fechar o menu quando a visualização mudar
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      setMobileMenuOpen(false);
+    }
+  }, [currentView]);
+
   // Reimplementing adaptive text color based on the current view
   const getTextColor = () => {
     if (currentView === 'dunes') {
