@@ -64,7 +64,7 @@ const RefreshButton = memo(({ isPlaying, currentView }: RefreshButtonProps) => {
         </NavigationButton>
       </div>
       
-      <div className="absolute left-1/2 -translate-x-1/2">
+      <div className="absolute left-1/2 -translate-x-1/2 transform">
         <NavigationButton
           onClick={handleRefresh}
           className="p-2 transition-all duration-700"
