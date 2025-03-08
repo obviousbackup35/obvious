@@ -33,31 +33,32 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
   const handleProductClick = useCallback(handleViewChange('projects'), [handleViewChange]);
   const handleGalleryClick = useCallback(handleViewChange('gallery'), [handleViewChange]);
   const handleContactClick = useCallback(handleViewChange('contact'), [handleViewChange]);
-  
-  // Handler for background click to close the menu
-  const handleBackgroundClick = useCallback((e: React.MouseEvent) => {
-    console.log('Background clicked');
-    
-    // Check if we're clicking directly on the background element
-    if (e.target === e.currentTarget) {
-      e.preventDefault();
-      e.stopPropagation();
-      closeMobileMenu();
-    }
-  }, [closeMobileMenu]);
 
   return (
     <div 
-      ref={menuRef}
       className="fixed inset-0 z-40 bg-black/90 backdrop-blur-sm"
       style={menuStyles}
       aria-hidden={!isOpen}
       id="mobile-menu"
-      onClick={handleBackgroundClick}
     >
+      {/* Backdrop element - specifically for handling clicks outside the menu */}
       <div 
-        className="flex items-center justify-center h-full"
+        className="absolute inset-0" 
+        onClick={(e) => {
+          // Only trigger if this exact element was clicked (not children)
+          if (e.target === e.currentTarget) {
+            e.stopPropagation();
+            console.log('Backdrop clicked - closing menu');
+            closeMobileMenu();
+          }
+        }}
+      />
+      
+      {/* Menu content */}
+      <div 
+        className="flex items-center justify-center h-full relative z-10"
         style={containerStyles}
+        onClick={(e) => e.stopPropagation()} // Prevent clicks on menu from closing it
       >
         <div className="menu-items content-visibility-auto">
           <ul className="space-y-6 p-8 text-center">
