@@ -86,19 +86,6 @@ const ActionButtons = memo(({
         }
         <span className="sr-only">{!isPlaying ? 'Play' : 'Pause'}</span>
       </NavigationButton>
-
-      {/* Botão de atualização na parte inferior da tela */}
-      <NavigationButton
-        onClick={handleRefresh}
-        className="absolute left-1/2 -translate-x-1/2 bottom-4 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-all duration-700"
-      >
-        <RefreshCw 
-          className="w-7 h-7" 
-          style={{ color: getTextColor(), transition: 'color 0.7s ease-in-out' }} 
-          aria-hidden="true" 
-        />
-        <span className="sr-only">Refresh</span>
-      </NavigationButton>
     </>
   );
 });
