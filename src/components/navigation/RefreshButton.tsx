@@ -56,22 +56,24 @@ const RefreshButton = memo(({ isPlaying, currentView }: RefreshButtonProps) => {
         <span className="sr-only">Previous</span>
       </NavigationButton>
       
-      <NavigationButton
-        onClick={handleRefresh}
-        className="p-2 transition-all duration-700"
-        style={{
-          opacity: isPlaying ? 1 : 0,
-          transition: 'opacity 1s ease-in-out',
-          willChange: 'opacity'
-        }}
-      >
-        <RefreshCw 
-          className="w-7 h-7" 
-          style={{ color: getTextColor(), transition: 'color 0.7s ease-in-out' }} 
-          aria-hidden="true" 
-        />
-        <span className="sr-only">Refresh</span>
-      </NavigationButton>
+      <div className="fixed left-1/2 -translate-x-1/2 bottom-8">
+        <NavigationButton
+          onClick={handleRefresh}
+          className="p-2 transition-all duration-700"
+          style={{
+            opacity: isPlaying ? 1 : 0,
+            transition: 'opacity 1s ease-in-out',
+            willChange: 'opacity'
+          }}
+        >
+          <RefreshCw 
+            className="w-7 h-7" 
+            style={{ color: getTextColor(), transition: 'color 0.7s ease-in-out' }} 
+            aria-hidden="true" 
+          />
+          <span className="sr-only">Refresh</span>
+        </NavigationButton>
+      </div>
     </div>
   );
 });
