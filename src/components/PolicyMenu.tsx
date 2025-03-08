@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import type { ContentView, PolicyView } from '@/types/navigation';
 import { useAuth } from './AuthProvider';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface PolicyMenuProps {
@@ -41,21 +40,7 @@ export const PolicyMenu = ({
     onViewChange(policy);
   };
 
-  const handleNext = () => {
-    if (currentGroupIndex < policyGroups.length - 1) {
-      setCurrentGroupIndex(prev => prev + 1);
-    }
-  };
-
-  const handlePrevious = () => {
-    if (currentGroupIndex > 0) {
-      setCurrentGroupIndex(prev => prev - 1);
-    }
-  };
-
   const currentGroup = policyGroups[currentGroupIndex];
-  const showLeftArrow = currentGroupIndex > 0;
-  const showRightArrow = currentGroupIndex < policyGroups.length - 1;
 
   // Desktop layout with all groups
   if (!isMobile) {
@@ -126,22 +111,11 @@ export const PolicyMenu = ({
     );
   }
 
-  // Mobile layout with pagination
+  // Mobile layout with pagination dots only
   return (
     <div className={`absolute inset-0 w-full h-full transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
       <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 w-full max-w-xs mx-auto px-4">
         <div className="relative flex items-center justify-center">
-          {/* Left Arrow */}
-          {showLeftArrow && (
-            <button 
-              onClick={handlePrevious}
-              className="absolute left-0 z-10 p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors duration-300"
-              aria-label="Previous policy group"
-            >
-              <ChevronLeft className="text-white" size={24} />
-            </button>
-          )}
-          
           {/* Policy Group */}
           <div 
             key={currentGroup.title} 
@@ -187,17 +161,6 @@ export const PolicyMenu = ({
               )}
             </ul>
           </div>
-          
-          {/* Right Arrow */}
-          {showRightArrow && (
-            <button 
-              onClick={handleNext}
-              className="absolute right-0 z-10 p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors duration-300"
-              aria-label="Next policy group"
-            >
-              <ChevronRight className="text-white" size={24} />
-            </button>
-          )}
         </div>
         
         {/* Pagination Dots */}
