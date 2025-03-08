@@ -45,17 +45,15 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
 
   // Wrapper function to handle view change and close menu
   const handleMenuItemClick = (view: ContentView) => (e: React.MouseEvent) => {
-    // Call the original handler to change the view
+    // Primeiro muda a view, depois fecha o menu (sem delay)
     handleViewChange(view)(e);
-    // Close the menu with a slight delay to allow for the transition
-    setTimeout(() => {
-      setLocalIsOpen(false);
-    }, 300); // Match this with the transition duration
+    // Fecha o menu imediatamente
+    setLocalIsOpen(false);
   };
 
   return (
     <div 
-      className={`fixed inset-0 z-40 transition-all duration-300 ${localIsOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+      className={`fixed inset-0 z-40 transition-all duration-500 ${localIsOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
       style={{ 
         backgroundColor: 'rgba(0, 0, 0, 0.75)',
         backdropFilter: 'blur(3px)',
@@ -69,7 +67,7 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
             <li>
               <NavigationButton
                 onClick={handleMenuItemClick('company')}
-                className="cursor-pointer hover:opacity-70 transition-all duration-700 py-2 w-full text-xl text-white"
+                className="cursor-pointer hover:opacity-70 transition-all duration-300 py-2 w-full text-xl text-white"
               >
                 C O M P A N Y
               </NavigationButton>
@@ -77,7 +75,7 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
             <li>
               <NavigationButton
                 onClick={handleMenuItemClick('projects')}
-                className="cursor-pointer hover:opacity-70 transition-all duration-700 py-2 w-full text-xl text-white"
+                className="cursor-pointer hover:opacity-70 transition-all duration-300 py-2 w-full text-xl text-white"
               >
                 P R O D U C T
               </NavigationButton>
@@ -85,7 +83,7 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
             <li>
               <NavigationButton
                 onClick={handleMenuItemClick('gallery')}
-                className="cursor-pointer hover:opacity-70 transition-all duration-700 py-2 w-full text-xl text-white"
+                className="cursor-pointer hover:opacity-70 transition-all duration-300 py-2 w-full text-xl text-white"
               >
                 G A L L E R Y
               </NavigationButton>
@@ -93,7 +91,7 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
             <li>
               <NavigationButton
                 onClick={handleMenuItemClick('contact')}
-                className="cursor-pointer hover:opacity-70 transition-all duration-700 py-2 w-full text-xl text-white"
+                className="cursor-pointer hover:opacity-70 transition-all duration-300 py-2 w-full text-xl text-white"
               >
                 C O N T A C T
               </NavigationButton>
