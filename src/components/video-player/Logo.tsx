@@ -1,5 +1,5 @@
 
-import { CSSProperties, memo } from "react";
+import { CSSProperties, memo, useRef } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface LogoProps {
@@ -9,26 +9,26 @@ interface LogoProps {
 
 export const Logo = memo(({ isBackgroundLoaded, style }: LogoProps) => {
   const isMobile = useIsMobile();
+  const logoRef = useRef<HTMLImageElement>(null);
   
-  // Tamanho ajustado para melhor visualização em mobile
-  const logoWidth = isMobile ? 320 : 660; // Desktop: 660px, Mobile: 320px
+  // Optimize logo size based on device
+  const logoWidth = isMobile ? 320 : 660; 
   
   return (
     <div 
       className="absolute inset-0 flex items-center justify-center z-30"
       style={{ 
         opacity: 0, // Always start invisible
-        willChange: 'opacity',
+        willChange: isBackgroundLoaded ? 'opacity' : 'auto', // Only enable GPU when needed
         ...style,
-        // During first load (when style?.transition is undefined), use slow transition
-        // In transitions between pages, use exactly the same timing as the video
         transition: style?.transition || 'opacity 2s ease-in-out',
-        transitionDelay: style?.transition ? '0ms' : '2500ms', // Increased to 2.5s to ensure background image is loaded
-        visibility: isBackgroundLoaded ? 'visible' : 'hidden', // Ensure logo only appears after background loads
+        transitionDelay: style?.transition ? '0ms' : '2500ms',
+        visibility: isBackgroundLoaded ? 'visible' : 'hidden',
       }}
       aria-label="Brand Logo"
     >
       <img
+        ref={logoRef}
         src="/logo.svg"
         alt="Logo"
         className="h-auto"
@@ -37,6 +37,8 @@ export const Logo = memo(({ isBackgroundLoaded, style }: LogoProps) => {
           maxWidth: '80vw'
         }}
         loading="eager"
+        decoding="async" // Add async decoding for performance
+        fetchPriority="high" // Prioritize this resource
       />
     </div>
   );

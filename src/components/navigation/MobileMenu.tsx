@@ -1,5 +1,5 @@
 
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useState, useRef } from "react";
 import NavigationButton from "./NavigationButton";
 import type { ContentView } from "@/types/navigation";
 
@@ -11,45 +11,53 @@ interface MobileMenuProps {
 
 const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMenuProps) => {
   const [localIsOpen, setLocalIsOpen] = useState(isOpen);
+  const prevOpenState = useRef(isOpen);
   
-  // Sync localIsOpen with the parent's isOpen state
+  // Optimize state updates
   useEffect(() => {
-    setLocalIsOpen(isOpen);
+    if (prevOpenState.current !== isOpen) {
+      setLocalIsOpen(isOpen);
+      prevOpenState.current = isOpen;
+    }
   }, [isOpen]);
 
-  // Add effect to handle clicks outside the menu
+  // Add effect to handle clicks outside the menu - optimized version
   useEffect(() => {
+    // Only add listener when menu is open
+    if (!isOpen) return;
+    
     const handleOutsideClick = (e: MouseEvent) => {
       // Allow clicks anywhere on the overlay to close the menu
       // except for clicks on the menu items themselves
       const target = e.target as HTMLElement;
-      if (target.closest('.menu-items')) {
-        // Don't close if clicking on menu items
-        return;
-      }
-      
-      if (!target.closest('.mobile-menu-toggle')) {
+      if (!target.closest('.menu-items') && !target.closest('.mobile-menu-toggle')) {
         closeMobileMenu();
       }
     };
 
-    // Add global click listener when menu is open
-    if (isOpen) {
+    // Add global click listener with a slight delay to prevent immediate closure
+    const timerId = setTimeout(() => {
       document.addEventListener('click', handleOutsideClick);
-    }
+    }, 10);
 
     return () => {
+      clearTimeout(timerId);
       document.removeEventListener('click', handleOutsideClick);
     };
   }, [isOpen, closeMobileMenu]);
 
   // Wrapper function to handle view change and close menu
   const handleMenuItemClick = (view: ContentView) => (e: React.MouseEvent) => {
-    // Primeiro muda a view, depois fecha o menu (sem delay)
+    // Perform view change first
     handleViewChange(view)(e);
-    // Fecha o menu imediatamente
+    // Then close menu
     setLocalIsOpen(false);
   };
+
+  // Optimize rendering - prevent unnecessary DOM operations when menu is closed
+  if (!isOpen && !localIsOpen) {
+    return null;
+  }
 
   return (
     <div 

@@ -2,7 +2,7 @@
 import { VideoPlayer } from "./VideoPlayer";
 import { VideoOverlay } from "./VideoOverlay";
 import { Logo } from "./Logo";
-import { RefObject, memo } from "react";
+import { RefObject, memo, useMemo } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface VideoManagerProps {
@@ -24,54 +24,75 @@ export const VideoManager = memo(({
 }: VideoManagerProps) => {
   const isMobile = useIsMobile();
   
+  // Memoize style calculations to prevent unnecessary re-renders
+  const overlayStyle = useMemo(() => ({ 
+    opacity: !isPlaying && currentView === 'video' ? (isBackgroundLoaded ? 1 : 0) : 0,
+    transition: 'opacity 2s ease-in-out',
+  }), [isPlaying, currentView, isBackgroundLoaded]);
+  
+  const mobileBackgroundStyle = useMemo(() => ({
+    opacity: currentView === 'video' && isPlaying ? 1 : 0,
+    transition: 'opacity 1s ease-in-out',
+  }), [currentView, isPlaying]);
+  
+  const video1Style = useMemo(() => ({
+    opacity: currentView === 'video' && isPlaying ? (activeVideo === 1 ? 1 : 0) : 0,
+    transition: 'opacity 1s ease-in-out',
+    zIndex: 20
+  }), [currentView, isPlaying, activeVideo]);
+  
+  const video2Style = useMemo(() => ({
+    opacity: currentView === 'video' && isPlaying ? (activeVideo === 2 ? 1 : 0) : 0,
+    transition: 'opacity 1s ease-in-out',
+    zIndex: 20
+  }), [currentView, isPlaying, activeVideo]);
+  
+  const logoStyle = useMemo(() => ({
+    opacity: currentView === 'video' ? (isBackgroundLoaded ? 1 : 0) : 0,
+    transition: 'opacity 2s ease-in-out',
+    transitionDelay: '2s'
+  }), [currentView, isBackgroundLoaded]);
+  
   return (
     <>
       <VideoOverlay 
         isBackgroundLoaded={isBackgroundLoaded} 
-        style={{ 
-          opacity: !isPlaying && currentView === 'video' ? (isBackgroundLoaded ? 1 : 0) : 0,
-          transition: 'opacity 2s ease-in-out',
-        }}
+        style={overlayStyle}
       />
-      {/* Fundo preto para melhor visualização em dispositivos móveis */}
+      
+      {/* Only render mobile background when needed */}
       {isMobile && (
         <div 
           className="absolute inset-0 bg-black z-10"
-          style={{
-            opacity: currentView === 'video' && isPlaying ? 1 : 0,
-            transition: 'opacity 1s ease-in-out',
-          }}
+          style={mobileBackgroundStyle}
         />
       )}
-      <VideoPlayer
-        ref={video1Ref}
-        isPlaying={isPlaying}
-        isActive={activeVideo === 1}
-        src="/loft-video.webm"
-        style={{
-          opacity: currentView === 'video' && isPlaying ? (activeVideo === 1 ? 1 : 0) : 0,
-          transition: 'opacity 1s ease-in-out',
-          zIndex: 20
-        }}
-      />
-      <VideoPlayer
-        ref={video2Ref}
-        isPlaying={isPlaying}
-        isActive={activeVideo === 2}
-        src="/loft-video.webm"
-        style={{
-          opacity: currentView === 'video' && isPlaying ? (activeVideo === 2 ? 1 : 0) : 0,
-          transition: 'opacity 1s ease-in-out',
-          zIndex: 20
-        }}
-      />
+      
+      {/* Only load first video when needed */}
+      {(isPlaying || currentView === 'video') && (
+        <VideoPlayer
+          ref={video1Ref}
+          isPlaying={isPlaying}
+          isActive={activeVideo === 1}
+          src="/loft-video.webm"
+          style={video1Style}
+        />
+      )}
+      
+      {/* Only load second video when needed */}
+      {(isPlaying || currentView === 'video') && (
+        <VideoPlayer
+          ref={video2Ref}
+          isPlaying={isPlaying}
+          isActive={activeVideo === 2}
+          src="/loft-video.webm"
+          style={video2Style}
+        />
+      )}
+      
       <Logo 
         isBackgroundLoaded={isBackgroundLoaded}
-        style={{
-          opacity: currentView === 'video' ? (isBackgroundLoaded ? 1 : 0) : 0,
-          transition: 'opacity 2s ease-in-out',
-          transitionDelay: '2s'
-        }}
+        style={logoStyle}
       />
     </>
   );
