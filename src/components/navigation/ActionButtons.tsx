@@ -1,6 +1,6 @@
 
 import { memo } from "react";
-import { Volume2, VolumeX, Hexagon, Menu, X } from "lucide-react";
+import { Volume2, VolumeX, Hexagon, Menu, X, RefreshCw } from "lucide-react";
 import NavigationButton from "./NavigationButton";
 import type { ContentView } from "@/types/navigation";
 
@@ -25,6 +25,12 @@ const ActionButtons = memo(({
   currentView,
   isMobileMenuOpen
 }: ActionButtonsProps) => {
+  const handleRefresh = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    window.location.reload();
+  };
+
   return (
     <>
       <NavigationButton
@@ -69,6 +75,18 @@ const ActionButtons = memo(({
           <span className="sr-only">{isMobileMenuOpen ? 'Close Menu' : 'Menu'}</span>
         </NavigationButton>
       )}
+
+      <NavigationButton
+        onClick={handleRefresh}
+        className="absolute right-16 top-[1.75cm] p-2 rounded-full bg-black/50 hover:bg-black/70 transition-all duration-700"
+      >
+        <RefreshCw 
+          className="w-7 h-7" 
+          style={{ color: getTextColor(), transition: 'color 0.7s ease-in-out' }} 
+          aria-hidden="true" 
+        />
+        <span className="sr-only">Refresh</span>
+      </NavigationButton>
 
       <NavigationButton
         onClick={handleAudioToggle}
