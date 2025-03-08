@@ -107,7 +107,10 @@
   }
 
   body {
-    @apply bg-background text-foreground prevent-overscroll improved-touch;
+    @apply bg-background text-foreground;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+    touch-action: manipulation;
     min-height: -webkit-fill-available;
     overflow: hidden;
     position: fixed;
