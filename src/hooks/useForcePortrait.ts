@@ -2,23 +2,15 @@
 import { useEffect } from 'react';
 import { useIsMobile } from './use-mobile';
 
-// Define the ScreenOrientation interface correctly
-interface ScreenOrientationAPI {
-  lock(orientation: 'portrait' | 'landscape' | 'portrait-primary' | 'portrait-secondary' | 'landscape-primary' | 'landscape-secondary'): Promise<void>;
-  unlock(): void;
-  type: string;
-  angle: number;
-  addEventListener(type: string, listener: EventListenerOrEventListenerObject): void;
-  removeEventListener(type: string, listener: EventListenerOrEventListenerObject): void;
-  dispatchEvent(event: Event): boolean;
+// Define a type that augments the existing ScreenOrientation interface
+interface ScreenOrientationExtended {
+  lock?(orientation: 'portrait' | 'landscape' | 'portrait-primary' | 'portrait-secondary' | 'landscape-primary' | 'landscape-secondary'): Promise<void>;
+  unlock?(): void;
 }
 
-// Properly extend the global Screen interface
+// Augment the existing ScreenOrientation interface instead of redefining it
 declare global {
-  interface Screen {
-    // Use proper type definition that doesn't conflict with existing definitions
-    orientation: ScreenOrientationAPI;
-  }
+  interface ScreenOrientation extends ScreenOrientationExtended {}
 }
 
 export function useForcePortrait() {
@@ -30,7 +22,8 @@ export function useForcePortrait() {
     // Lock the screen orientation to portrait if supported
     const lockOrientation = async () => {
       try {
-        if (screen.orientation && typeof screen.orientation.lock === 'function') {
+        // Check if screen.orientation exists and has a lock method
+        if (screen.orientation && 'lock' in screen.orientation && typeof screen.orientation.lock === 'function') {
           await screen.orientation.lock('portrait');
           console.log('Screen orientation locked to portrait');
         }
