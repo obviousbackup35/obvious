@@ -19,7 +19,14 @@ export const VideoPlayer = memo(forwardRef<HTMLVideoElement, VideoPlayerProps>(
       if (ref && 'current' in ref && ref.current && !videoLoaded.current) {
         // Mark as loaded to avoid redundant loads
         videoLoaded.current = true;
+        
+        // Explicitly set the source to ensure it's loaded
+        if (ref.current.src !== src) {
+          ref.current.src = src;
+        }
+        
         ref.current.load();
+        console.log("Video source loaded:", src);
       }
       
       // Clean up when component unmounts
@@ -32,7 +39,7 @@ export const VideoPlayer = memo(forwardRef<HTMLVideoElement, VideoPlayerProps>(
           }
         }
       };
-    }, [ref, isPlaying]);
+    }, [ref, isPlaying, src]);
 
     return (
       <video

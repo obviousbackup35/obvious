@@ -37,8 +37,8 @@ export const Logo = memo(({ isBackgroundLoaded, style }: LogoProps) => {
           maxWidth: '80vw'
         }}
         loading="eager"
-        decoding="async" // Add async decoding for performance
-        fetchPriority="high" // Prioritize this resource
+        decoding="async"
+        fetchPriority="high" // Changed to lowercase to fix React warning
       />
     </div>
   );

@@ -2,7 +2,7 @@
 import { VideoPlayer } from "./VideoPlayer";
 import { VideoOverlay } from "./VideoOverlay";
 import { Logo } from "./Logo";
-import { RefObject, memo, useMemo } from "react";
+import { RefObject, memo, useMemo, useEffect } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface VideoManagerProps {
@@ -23,6 +23,11 @@ export const VideoManager = memo(({
   video2Ref
 }: VideoManagerProps) => {
   const isMobile = useIsMobile();
+  
+  // Log when video state changes to help debug
+  useEffect(() => {
+    console.log(`VideoManager: isPlaying=${isPlaying}, currentView=${currentView}, activeVideo=${activeVideo}`);
+  }, [isPlaying, currentView, activeVideo]);
   
   // Memoize style calculations to prevent unnecessary re-renders
   const overlayStyle = useMemo(() => ({ 
@@ -68,27 +73,22 @@ export const VideoManager = memo(({
         />
       )}
       
-      {/* Only load first video when needed */}
-      {(isPlaying || currentView === 'video') && (
-        <VideoPlayer
-          ref={video1Ref}
-          isPlaying={isPlaying}
-          isActive={activeVideo === 1}
-          src="/loft-video.webm"
-          style={video1Style}
-        />
-      )}
+      {/* Always load videos when on video view to ensure they're ready */}
+      <VideoPlayer
+        ref={video1Ref}
+        isPlaying={isPlaying}
+        isActive={activeVideo === 1}
+        src="/loft-video.webm" 
+        style={video1Style}
+      />
       
-      {/* Only load second video when needed */}
-      {(isPlaying || currentView === 'video') && (
-        <VideoPlayer
-          ref={video2Ref}
-          isPlaying={isPlaying}
-          isActive={activeVideo === 2}
-          src="/loft-video.webm"
-          style={video2Style}
-        />
-      )}
+      <VideoPlayer
+        ref={video2Ref}
+        isPlaying={isPlaying}
+        isActive={activeVideo === 2}
+        src="/loft-video.webm"
+        style={video2Style}
+      />
       
       <Logo 
         isBackgroundLoaded={isBackgroundLoaded}

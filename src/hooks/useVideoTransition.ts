@@ -29,6 +29,7 @@ export const useVideoTransition = () => {
 
       if (transitionPoint.current === 0 && video1.duration) {
         transitionPoint.current = video1.duration - 1;
+        console.log("Set transition point:", transitionPoint.current);
       }
       
       if (activeVideo === 1 && video1.currentTime >= transitionPoint.current) {
@@ -38,12 +39,24 @@ export const useVideoTransition = () => {
         // Use more stable promise chaining for playback
         video2.play()
           .then(() => {
+            console.log("Transitioned to video 2");
             setActiveVideo(2);
             isTransitioning.current = false;
           })
           .catch(err => {
-            console.warn("Video playback error:", err);
-            isTransitioning.current = false;
+            console.error("Video playback error:", err);
+            // Try one more time with a delay
+            setTimeout(() => {
+              video2.play()
+                .then(() => {
+                  setActiveVideo(2);
+                  isTransitioning.current = false;
+                })
+                .catch(deepErr => {
+                  console.error("Retry video playback failed:", deepErr);
+                  isTransitioning.current = false;
+                });
+            }, 200);
           });
           
       } else if (activeVideo === 2 && video2.currentTime >= transitionPoint.current) {
@@ -52,12 +65,24 @@ export const useVideoTransition = () => {
         
         video1.play()
           .then(() => {
+            console.log("Transitioned to video 1");
             setActiveVideo(1);
             isTransitioning.current = false;
           })
           .catch(err => {
-            console.warn("Video playback error:", err);
-            isTransitioning.current = false;
+            console.error("Video playback error:", err);
+            // Try one more time with a delay
+            setTimeout(() => {
+              video1.play()
+                .then(() => {
+                  setActiveVideo(1);
+                  isTransitioning.current = false;
+                })
+                .catch(deepErr => {
+                  console.error("Retry video playback failed:", deepErr);
+                  isTransitioning.current = false;
+                });
+            }, 200);
           });
       }
     });
