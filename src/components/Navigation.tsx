@@ -9,7 +9,7 @@ import ActionButtons from "./navigation/ActionButtons";
 
 interface NavigationProps {
   audioRef: React.RefObject<HTMLAudioElement>;
-  isMuted: boolean;
+  isPlaying: boolean;
   toggleAudio: (event: React.MouseEvent) => void;
   isVisible?: boolean;
   onViewChange: (view: ContentView) => void;
@@ -18,7 +18,7 @@ interface NavigationProps {
 
 export const Navigation = memo(({
   audioRef,
-  isMuted,
+  isPlaying,
   toggleAudio,
   isVisible = true,
   onViewChange,
@@ -81,7 +81,7 @@ export const Navigation = memo(({
           <ActionButtons 
             handleHomeClick={handleHomeClick}
             handleAudioToggle={handleAudioToggle}
-            isMuted={isMuted}
+            isPlaying={isPlaying}
             isMobile={isMobile}
             toggleMobileMenu={toggleMobileMenu}
             getTextColor={getTextColor}

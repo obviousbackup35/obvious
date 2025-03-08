@@ -7,7 +7,7 @@ import type { ContentView } from "@/types/navigation";
 interface ActionButtonsProps {
   handleHomeClick: (e: React.MouseEvent) => void;
   handleAudioToggle: (e: React.MouseEvent) => void;
-  isMuted: boolean;
+  isPlaying: boolean;
   isMobile: boolean;
   toggleMobileMenu: (e: React.MouseEvent) => void;
   getTextColor: () => string;
@@ -18,7 +18,7 @@ interface ActionButtonsProps {
 const ActionButtons = memo(({
   handleHomeClick,
   handleAudioToggle,
-  isMuted,
+  isPlaying,
   isMobile,
   toggleMobileMenu,
   getTextColor,
@@ -74,11 +74,11 @@ const ActionButtons = memo(({
         onClick={handleAudioToggle}
         className="absolute right-4 top-[1.75cm] p-2 rounded-full bg-black/50 hover:bg-black/70 transition-all duration-700"
       >
-        {isMuted ? 
+        {!isPlaying ? 
           <VolumeX className="w-7 h-7" style={{ color: getTextColor(), transition: 'color 0.7s ease-in-out' }} aria-hidden="true" /> : 
           <Volume2 className="w-7 h-7" style={{ color: getTextColor(), transition: 'color 0.7s ease-in-out' }} aria-hidden="true" />
         }
-        <span className="sr-only">{isMuted ? 'Unmute' : 'Mute'}</span>
+        <span className="sr-only">{!isPlaying ? 'Play' : 'Pause'}</span>
       </NavigationButton>
     </>
   );

@@ -16,7 +16,7 @@ const Index = () => {
   const { activeVideo, video1Ref, video2Ref, handleTimeUpdate } = useVideoTransition();
   const { audioRef } = usePageAudio(isPlaying, currentView);
   const { 
-    isMuted, 
+    isPlaying: isAudioPlaying, 
     toggleAudio, 
     hasInitialInteraction, 
     setHasInitialInteraction,
@@ -124,13 +124,13 @@ const Index = () => {
   const memoizedNavigation = useMemo(() => (
     <Navigation 
       audioRef={audioRef} 
-      isMuted={isMuted} 
+      isPlaying={isAudioPlaying} 
       toggleAudio={toggleAudio} 
       isVisible={isPlaying}
       onViewChange={handleViewChange}
       currentView={currentView}
     />
-  ), [audioRef, isMuted, toggleAudio, isPlaying, handleViewChange, currentView]);
+  ), [audioRef, isAudioPlaying, toggleAudio, isPlaying, handleViewChange, currentView]);
 
   const memoizedContentSections = useMemo(() => (
     <ContentSections 

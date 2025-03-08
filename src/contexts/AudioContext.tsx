@@ -3,7 +3,7 @@ import { createContext, useContext, useRef, useState, useCallback, ReactNode } f
 
 interface AudioContextType {
   audioRef: React.RefObject<HTMLAudioElement>;
-  isMuted: boolean;
+  isPlaying: boolean;
   toggleAudio: (event: React.MouseEvent) => void;
   hasInitialInteraction: boolean;
   setHasInitialInteraction: (value: boolean) => void;
@@ -15,27 +15,29 @@ const AudioContext = createContext<AudioContextType | undefined>(undefined);
 
 export const AudioProvider = ({ children }: { children: ReactNode }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [hasInitialInteraction, setHasInitialInteraction] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
 
   const toggleAudio = useCallback((event: React.MouseEvent) => {
     event.stopPropagation();
-    setIsMuted(prev => !prev);
     
     if (audioRef.current) {
-      if (isMuted) {
-        audioRef.current.volume = 1;
+      if (isPlaying) {
+        audioRef.current.pause();
       } else {
-        audioRef.current.volume = 0;
+        audioRef.current.play().catch(error => {
+          console.error("Error playing audio:", error);
+        });
       }
+      setIsPlaying(!isPlaying);
     }
-  }, [isMuted]);
+  }, [isPlaying]);
 
   return (
     <AudioContext.Provider value={{ 
       audioRef, 
-      isMuted, 
+      isPlaying, 
       toggleAudio, 
       hasInitialInteraction, 
       setHasInitialInteraction,
