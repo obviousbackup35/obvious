@@ -56,13 +56,6 @@ const Index = () => {
   }, [isPlaying, audioRef, currentTime, video1Ref, video2Ref]);
 
   const handleInteraction = useCallback((event: React.MouseEvent | React.TouchEvent) => {
-    // Check if the click is on the mobile menu
-    const target = event.target as HTMLElement;
-    if (target.closest('#mobile-menu')) {
-      console.log('Ignoring click on mobile menu');
-      return;
-    }
-    
     event.preventDefault(); // Prevent default behavior for better control
     
     if (!hasInitialInteraction) {
