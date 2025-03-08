@@ -44,7 +44,7 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
       )}
       
       <div 
-        className={`absolute top-48 left-0 w-full transition-all duration-300 z-50 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        className={`absolute top-32 left-0 w-full transition-all duration-300 z-50 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
         style={{ 
           willChange: isOpen ? 'opacity, transform' : 'auto'
         }}
