@@ -1,6 +1,6 @@
 
 import { memo, useCallback } from 'react';
-import { Hexagon } from 'lucide-react';
+import { ChevronUp } from 'lucide-react';
 import type { ContentView } from '@/types/navigation';
 
 interface HexagonButtonProps {
@@ -16,8 +16,9 @@ const HexagonButton = memo(({ onViewChange, textColor, isDunesVisible, toggleDun
     e.stopPropagation();
     if (isDunesVisible) {
       toggleDunes();
+      onViewChange('video');
     }
-  }, [isDunesVisible, toggleDunes]);
+  }, [isDunesVisible, toggleDunes, onViewChange]);
 
   if (!isDunesVisible) return null;
 
@@ -27,7 +28,7 @@ const HexagonButton = memo(({ onViewChange, textColor, isDunesVisible, toggleDun
       aria-label="Return to Video"
       onClick={handleClick}
     >
-      <Hexagon
+      <ChevronUp
         className="w-8 h-8"
         style={{
           color: textColor,
