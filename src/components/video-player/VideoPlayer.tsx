@@ -41,7 +41,6 @@ export const VideoPlayer = memo(forwardRef<HTMLVideoElement, VideoPlayerProps>(
       objectFit: isMobile ? 'contain' as const : 'cover' as const,
       // Optimized: Use transform to trigger GPU compositing
       transform: isMobile ? 'translate3d(0,0,0) scale(1.15)' : 'translate3d(0,0,0)',
-      contain: 'content' as const,
       ...style
     }), [isPlaying, isActive, isMobile, style]);
 

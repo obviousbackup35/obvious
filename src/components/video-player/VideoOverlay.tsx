@@ -24,11 +24,7 @@ export const VideoOverlay = memo(({ isBackgroundLoaded, style }: VideoOverlayPro
         opacity: isBackgroundLoaded ? 1 : 0,
         willChange: isChanging ? 'opacity' : 'auto',
         transition: 'opacity 2s ease-in-out',
-        ...style,
-        // Prioritize hardware acceleration only when needed
-        transitionProperty: 'opacity',
-        transitionDuration: '2s',
-        transitionTimingFunction: 'ease-in-out'
+        ...style
       }}
       aria-hidden="true"
       role="presentation"
