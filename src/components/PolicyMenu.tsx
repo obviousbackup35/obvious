@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import type { ContentView, PolicyView } from '@/types/navigation';
 import { useAuth } from './AuthProvider';
@@ -36,6 +36,41 @@ export const PolicyMenu = ({
   const [currentGroupIndex, setCurrentGroupIndex] = useState(0);
   const { user } = useAuth();
   const isMobile = useIsMobile();
+  
+  // Swipe handling
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
+  const minSwipeDistance = 50; // Minimum swipe distance in pixels
+  
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchEndX.current = null;
+  };
+  
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+  
+  const handleTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    
+    const distance = touchEndX.current - touchStartX.current;
+    const isSwipe = Math.abs(distance) > minSwipeDistance;
+    
+    if (isSwipe) {
+      if (distance > 0) {
+        // Swipe right (go to previous group)
+        setCurrentGroupIndex(prev => (prev > 0 ? prev - 1 : policyGroups.length - 1));
+      } else {
+        // Swipe left (go to next group)
+        setCurrentGroupIndex(prev => (prev < policyGroups.length - 1 ? prev + 1 : 0));
+      }
+    }
+    
+    // Reset values
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
 
   const handlePolicyClick = (policy: PolicyView) => {
     onViewChange(policy);
@@ -111,7 +146,12 @@ export const PolicyMenu = ({
 
   return (
     <div className={`absolute inset-0 w-full h-full transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-      <div className="absolute bottom-64 left-1/2 transform -translate-x-1/2 translate-y-[11.34px] w-full max-w-xs mx-auto px-4">
+      <div 
+        className="absolute bottom-64 left-1/2 transform -translate-x-1/2 translate-y-[11.34px] w-full max-w-xs mx-auto px-4"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
         <div className="relative flex items-center justify-center">
           <div 
             key={currentGroup.title} 
