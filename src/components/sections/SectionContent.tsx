@@ -1,5 +1,5 @@
 
-import { CSSProperties, memo } from "react";
+import { CSSProperties, memo, useMemo } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface SectionContentProps {
@@ -16,17 +16,19 @@ export const SectionContent = memo(({
   gradient, 
   backgroundImage, 
   title, 
-  style, 
-  onBack 
+  style
 }: SectionContentProps) => {
   const isMobile = useIsMobile();
-  const backgroundStyle = backgroundImage 
-    ? {
-        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url(${backgroundImage})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center'
-      } 
-    : { backgroundImage: gradient };
+  
+  const backgroundStyle = useMemo(() => {
+    return backgroundImage 
+      ? {
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url(${backgroundImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        } 
+      : { backgroundImage: gradient };
+  }, [backgroundImage, gradient]);
 
   return (
     <div 
@@ -41,9 +43,7 @@ export const SectionContent = memo(({
       role={isVisible ? "region" : "presentation"}
       aria-hidden={!isVisible}
       aria-label={title}
-    >
-      {/* The back arrow button has been removed */}
-    </div>
+    />
   );
 });
 

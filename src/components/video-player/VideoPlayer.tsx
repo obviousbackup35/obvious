@@ -15,13 +15,13 @@ export const VideoPlayer = memo(forwardRef<HTMLVideoElement, VideoPlayerProps>(
     const videoLoaded = useRef(false);
     
     useEffect(() => {
-      if (ref && 'current' in ref && ref.current && !videoLoaded.current) {
-        videoLoaded.current = true;
-        
-        if (ref.current.src !== src) {
-          ref.current.src = src;
-          ref.current.load();
-        }
+      if (!('current' in ref) || !ref.current || videoLoaded.current) return;
+      
+      videoLoaded.current = true;
+      
+      if (ref.current.src !== src) {
+        ref.current.src = src;
+        ref.current.load();
       }
     }, [ref, src]);
 
@@ -34,7 +34,7 @@ export const VideoPlayer = memo(forwardRef<HTMLVideoElement, VideoPlayerProps>(
         preload="auto"
         className="absolute inset-0 w-full h-full object-cover"
         style={{
-          opacity: isPlaying ? (isActive ? 1 : 0) : 0,
+          opacity: isPlaying && isActive ? 1 : 0,
           transition: 'opacity 1s ease-in-out',
           willChange: isPlaying && isActive ? 'opacity' : 'auto',
           objectFit: isMobile ? 'contain' : 'cover',
