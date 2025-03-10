@@ -64,7 +64,7 @@ const ActionButtons = memo(({
             <Menu 
               className="w-7 h-7" 
               style={{ 
-                color: currentView === 'dunes' ? '#555555' : getTextColor(), 
+                color: getTextColor(), 
                 transition: 'color 0.7s ease-in-out' 
               }} 
               aria-hidden="true"

@@ -30,7 +30,7 @@ export const Navigation = memo(({
   const [language, setLanguage] = useState('pt');
 
   useEffect(() => {
-    const mainViews: ContentView[] = ['video', 'dunes', 'company', 'gallery', 'contact'];
+    const mainViews: ContentView[] = ['video', 'company', 'gallery', 'contact'];
     if (mainViews.includes(currentView)) {
       sessionStorage.setItem('lastMainView', currentView);
     }
@@ -70,9 +70,6 @@ export const Navigation = memo(({
   }, [language]);
 
   const getTextColor = () => {
-    if (currentView === 'dunes') {
-      return '#555555';
-    }
     return '#c8c5ad';
   };
 
