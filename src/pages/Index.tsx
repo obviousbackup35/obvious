@@ -34,13 +34,6 @@ const Index = () => {
     console.log(`Current view changed to: ${currentView}`);
   }, [currentView]);
 
-  // Store the last main view in sessionStorage when it changes
-  useEffect(() => {
-    if (['video', 'black', 'dunes'].includes(currentView)) {
-      sessionStorage.setItem('lastMainView', currentView);
-    }
-  }, [currentView]);
-
   const handleViewChange = useCallback((view: ContentView) => {
     console.log(`View change requested to: ${view}`);
     setCurrentView(view);

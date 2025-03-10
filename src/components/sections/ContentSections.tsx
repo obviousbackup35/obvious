@@ -10,28 +10,28 @@ interface ContentSectionsProps {
 }
 
 export const ContentSections = memo(({ currentView, onViewChange }: ContentSectionsProps) => {
-  const [lastMainView, setLastMainView] = useState<'video' | 'black' | 'dunes'>('video');
+  const [lastMainView, setLastMainView] = useState<'video'>('video');
 
-  // Depuração de renderização
+  // Debug rendering
   useEffect(() => {
     console.log(`ContentSections rendering with currentView: ${currentView}`);
   }, [currentView]);
 
-  // Rastrear mudanças na visualização principal
+  // Track main view changes
   useEffect(() => {
-    if (currentView === 'video' || currentView === 'black' || currentView === 'dunes') {
+    if (currentView === 'video') {
       setLastMainView(currentView);
       console.log(`Setting lastMainView to: ${currentView}`);
     }
   }, [currentView]);
 
   const handleBack = useCallback(() => {
-    if (currentView !== 'video' && currentView !== 'black' && currentView !== 'dunes') {
+    if (currentView !== 'video') {
       onViewChange(lastMainView);
     }
   }, [currentView, lastMainView, onViewChange]);
 
-  // Seções de política definidas como constante para evitar recriação em cada renderização
+  // Policy sections constant to avoid recreation on each render
   const policySections = [
     'privacy', 'terms', 'cookie', 'legal', 'intellectual-property',
     'accessibility', 'refund', 'shipping', 'terms-sale', 'ugc',
@@ -43,7 +43,7 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
 
   return (
     <div className="absolute inset-0 w-full h-full">
-      {/* Camada de vídeo - z-index mais baixo */}
+      {/* Video layer - lowest z-index */}
       <div 
         className="absolute inset-0 w-full h-full"
         style={{ 
@@ -53,40 +53,7 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
         aria-hidden="true"
       />
       
-      {/* Camada de fundo preto - z-index médio */}
-      <div 
-        className="absolute inset-0 w-full h-full"
-        style={{ 
-          backgroundColor: 'black',
-          opacity: currentView === 'black' ? 1 : 0,
-          transition: 'opacity 1s ease-in-out',
-          pointerEvents: currentView === 'black' ? 'auto' : 'none',
-          zIndex: 20,
-        }}
-        aria-hidden={currentView !== 'black'}
-      />
-      
-      {/* Camada de dunas - z-index mais alto para os principais níveis */}
-      <div 
-        className="absolute inset-0 w-full h-full bg-cover"
-        style={{ 
-          backgroundImage: 'url("/dunes.webp")',
-          backgroundPosition: 'center 15%',
-          opacity: currentView === 'dunes' ? 1 : 0,
-          transition: 'opacity 1s ease-in-out',
-          pointerEvents: currentView === 'dunes' ? 'auto' : 'none',
-          zIndex: 30,
-        }}
-        aria-hidden={currentView !== 'dunes'}
-      >
-        {/* Sempre renderiza PolicyMenu mas controla visibilidade */}
-        <PolicyMenu 
-          onViewChange={onViewChange} 
-          isVisible={currentView === 'dunes'} 
-        />
-      </div>
-      
-      {/* Conteúdo de outras seções com z-index mais alto */}
+      {/* Content for other sections with higher z-index */}
       <div className="z-40">
         <SectionContent
           isVisible={currentView === 'company'}
@@ -116,7 +83,7 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
           onBack={handleBack}
         />
 
-        {/* Seções de política */}
+        {/* Policy sections */}
         {policySections.map((policy) => (
           <SectionContent
             key={policy}

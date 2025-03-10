@@ -24,23 +24,9 @@ const RefreshButton = memo(({ isPlaying, currentView, onViewChange }: RefreshBut
     e.preventDefault();
     e.stopPropagation();
     
-    // For content pages, we need to store and retrieve the previous main view
-    if (['company', 'projects', 'gallery', 'contact', 'profile', 'auth'].includes(currentView)) {
-      // Get the last main view from sessionStorage, defaulting to 'dunes' if not found
-      const lastView = sessionStorage.getItem('lastMainView') as ContentView || 'dunes';
-      onViewChange(lastView);
-    }
-    // Main navigation views
-    else if (currentView === 'dunes') {
-      onViewChange('black');
-    } else if (currentView === 'black') {
+    // For content pages, go back to video
+    if (currentView !== 'video') {
       onViewChange('video');
-    } 
-    // Policy pages
-    else if (currentView !== 'video') {
-      // For policy pages, also use the stored last main view
-      const lastView = sessionStorage.getItem('lastMainView') as ContentView || 'dunes';
-      onViewChange(lastView);
     }
   }, [currentView, onViewChange]);
 
@@ -48,18 +34,13 @@ const RefreshButton = memo(({ isPlaying, currentView, onViewChange }: RefreshBut
     e.preventDefault();
     e.stopPropagation();
     
-    // Main navigation views
+    // From video, go to the first content page
     if (currentView === 'video') {
-      onViewChange('black');
-    } else if (currentView === 'black') {
-      onViewChange('dunes');
+      onViewChange('company');
     }
   }, [currentView, onViewChange]);
 
   const getTextColor = () => {
-    if (currentView === 'dunes') {
-      return '#555555';
-    }
     return '#c8c5ad';
   };
 

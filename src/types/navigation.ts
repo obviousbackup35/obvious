@@ -1,8 +1,6 @@
 
 export type ContentView = 
   | 'video' 
-  | 'black' 
-  | 'dunes' 
   | 'company' 
   | 'projects' 
   | 'gallery'

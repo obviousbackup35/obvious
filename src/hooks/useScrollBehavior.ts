@@ -8,41 +8,40 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
   const { hasInitialInteraction } = useAudio();
   const debounceTimeout = useRef<number | null>(null);
   
-  // Manipulador de rolagem simplificado para desktop
+  // Simplified scroll handler
   const handleWheel = useCallback((e: WheelEvent) => {
-    // Verificar se houve interação inicial
+    // Check for initial interaction
     if (!hasInitialInteraction) {
       console.log("No initial interaction yet, ignoring scroll");
       e.preventDefault();
       return;
     }
     
-    e.preventDefault(); // Impedir rolagem padrão
+    e.preventDefault(); // Prevent default scrolling
     
-    // Usar apenas um simples debounce para evitar eventos múltiplos,
-    // mas não bloquear completamente as transições
+    // Use a simple debounce to avoid multiple events
     if (debounceTimeout.current) {
       return;
     }
     
-    // Determinar direção da rolagem
+    // Determine scroll direction
     const direction = e.deltaY > 0 ? 'down' : 'up';
     
-    // Registrar evento para depuração
+    // Log event for debugging
     console.log(`Wheel event detected - direction: ${direction}, deltaY: ${e.deltaY}`);
     
-    // Acionar transição de visualização imediatamente
+    // Trigger view transition immediately
     handleViewTransition(direction);
     
-    // Definir debounce para evitar múltiplos eventos em sucessão rápida
+    // Set debounce to prevent rapid succession events
     debounceTimeout.current = window.setTimeout(() => {
       debounceTimeout.current = null;
       console.log('Scroll debounce complete, ready for next scroll event');
-    }, 500); // Tempo reduzido para melhorar responsividade
+    }, 500);
   }, [handleViewTransition, hasInitialInteraction]);
 
   useEffect(() => {
-    // Função de limpeza
+    // Cleanup function
     const cleanup = () => {
       if (debounceTimeout.current) {
         window.clearTimeout(debounceTimeout.current);
@@ -56,20 +55,20 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
       window.removeEventListener('touchmove', preventDefault);
     };
     
-    // Função simples para prevenir eventos padrão
+    // Simple function to prevent default events
     const preventDefault = (e: Event) => {
       e.preventDefault();
     };
     
     if (isMobile) {
-      // Configuração para dispositivos móveis
+      // Mobile setup
       document.documentElement.classList.add('no-bounce');
       document.body.classList.add('no-bounce');
       
       window.addEventListener('wheel', preventDefault, { passive: false });
       window.addEventListener('touchmove', preventDefault, { passive: false });
     } else {
-      // Configuração simplificada para desktop
+      // Desktop setup
       window.addEventListener('wheel', handleWheel, { passive: false });
       console.log('Desktop wheel handler registered');
     }

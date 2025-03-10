@@ -24,12 +24,12 @@ export const VideoManager = memo(({
 }: VideoManagerProps) => {
   const isMobile = useIsMobile();
   
-  // Log when video state changes to help debug (using useEffect with proper deps)
+  // Log when video state changes to help debug
   useEffect(() => {
     console.log(`VideoManager: isPlaying=${isPlaying}, currentView=${currentView}, activeVideo=${activeVideo}`);
   }, [isPlaying, currentView, activeVideo]);
   
-  // Ensure video sources are loaded properly with useCallback
+  // Ensure video sources are loaded properly
   const loadVideoSources = useCallback(() => {
     // When returning to video view, ensure videos are ready
     if (currentView === 'video' && video1Ref.current && video2Ref.current) {
