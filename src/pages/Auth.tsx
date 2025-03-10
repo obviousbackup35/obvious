@@ -26,6 +26,12 @@ export default function Auth() {
     if (type === "recovery") {
       console.log("Recovery parameter detected, switching to reset-password view");
       setView("reset-password");
+    } else if (type === "confirmation") {
+      console.log("Confirmation parameter detected, showing confirmation message");
+      toast({
+        title: "Email confirmado",
+        description: "Seu email foi confirmado com sucesso. Você pode fazer login agora.",
+      });
     }
   }, []);
 
