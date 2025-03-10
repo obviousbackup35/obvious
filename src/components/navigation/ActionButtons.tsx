@@ -56,7 +56,7 @@ const ActionButtons = memo(({
 
       <NavigationButton
         onClick={handleAudioToggle}
-        className="absolute right-[1.75rem] top-[calc(50%+80px)] transform -translate-y-1/2 p-2 transition-all duration-700"
+        className="absolute right-[2.15rem] top-[calc(50%+80px)] transform -translate-y-1/2 p-2 transition-all duration-700"
       >
         {!isPlaying ? 
           <VolumeX className="w-[30.87px] h-[30.87px]" style={{ color: getTextColor(), transition: 'color 0.7s ease-in-out' }} aria-hidden="true" /> : 
