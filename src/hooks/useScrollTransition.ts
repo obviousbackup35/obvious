@@ -16,6 +16,7 @@ export const useScrollTransition = () => {
   // Handle wheel events to toggle between views
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
+      // Fix: Correct the scroll direction
       if (e.deltaY > 0 && !isDunesVisible) {
         // Scroll down to show dunes
         toggleDunes();

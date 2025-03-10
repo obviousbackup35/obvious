@@ -116,25 +116,8 @@ const InteractionHandler = ({
     }
   }, [hasInitialInteraction, isPlaying, startPlayback]);
 
-  // Implement wheel event listener for vertical navigation
-  useEffect(() => {
-    if (!toggleDunes) return;
-    
-    const handleWheel = (e: WheelEvent) => {
-      if (e.deltaY > 0) {
-        toggleDunes();
-      } else if (e.deltaY < 0) {
-        toggleDunes();
-      }
-      e.preventDefault();
-    };
-    
-    window.addEventListener('wheel', handleWheel, { passive: false });
-    
-    return () => {
-      window.removeEventListener('wheel', handleWheel);
-    };
-  }, [toggleDunes]);
+  // We're removing the wheel event listener from here since it's
+  // now properly handled in the useScrollTransition hook
 
   return (
     <div className="relative w-full h-screen">
