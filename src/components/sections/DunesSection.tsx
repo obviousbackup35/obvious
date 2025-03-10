@@ -4,9 +4,10 @@ import { memo, CSSProperties } from 'react';
 interface DunesSectionProps {
   scrollProgress: number;
   style?: CSSProperties;
+  isVisible: boolean;
 }
 
-const DunesSection = memo(({ scrollProgress, style }: DunesSectionProps) => {
+const DunesSection = memo(({ scrollProgress, style, isVisible }: DunesSectionProps) => {
   return (
     <div 
       className="fixed inset-0 w-full h-full z-10"
@@ -14,9 +15,9 @@ const DunesSection = memo(({ scrollProgress, style }: DunesSectionProps) => {
         backgroundImage: 'url(/dunes.webp)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        opacity: scrollProgress,
-        transition: 'opacity 300ms ease-out',
-        pointerEvents: 'none',
+        opacity: isVisible ? 1 : 0,
+        transition: 'opacity 500ms ease-out',
+        pointerEvents: isVisible ? 'auto' : 'none',
         ...style
       }}
       role="region"

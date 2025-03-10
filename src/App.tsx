@@ -16,23 +16,23 @@ const App = () => {
   // Force portrait mode on mobile devices
   useForcePortrait();
   
-  // Configure scrolling behavior without visible scrollbars
+  // Configure scrolling behavior - no scrollbars, no scroll
   useEffect(() => {
     const styleElement = document.createElement('style');
     styleElement.textContent = `
       html, body {
         scrollbar-width: none;
         -ms-overflow-style: none;
-        overflow: auto;
+        overflow: hidden;
         height: 100%;
       }
       html::-webkit-scrollbar, body::-webkit-scrollbar {
         display: none;
       }
       #app-wrapper {
-        height: 200vh;
+        height: 100vh;
         position: relative;
-        overflow-x: hidden;
+        overflow: hidden;
       }
     `;
     document.head.appendChild(styleElement);

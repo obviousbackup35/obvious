@@ -11,6 +11,7 @@ interface VideoManagerProps {
   activeVideo: number;
   video1Ref: RefObject<HTMLVideoElement>;
   video2Ref: RefObject<HTMLVideoElement>;
+  isVisible?: boolean;
 }
 
 export const VideoManager = memo(({
@@ -19,7 +20,8 @@ export const VideoManager = memo(({
   currentView,
   activeVideo,
   video1Ref,
-  video2Ref
+  video2Ref,
+  isVisible = true
 }: VideoManagerProps) => {
   
   const loadVideoSources = useCallback(() => {
@@ -41,39 +43,45 @@ export const VideoManager = memo(({
   useEffect(() => {
     loadVideoSources();
   }, [loadVideoSources]);
+
+  const containerStyle = useMemo(() => ({
+    opacity: isVisible ? 1 : 0,
+    transition: 'opacity 500ms ease-in-out',
+    zIndex: isVisible ? 5 : 0,
+  }), [isVisible]);
   
   const sharedVideoProps = useMemo(() => ({
     transition: 'opacity 1s ease-in-out',
-    zIndex: 5, // Reduzindo para ficar abaixo das dunas
+    zIndex: 5,
   }), []);
   
   const overlayStyle = useMemo(() => ({ 
     opacity: !isPlaying && currentView === 'video' ? (isBackgroundLoaded ? 1 : 0) : 0,
     transition: 'opacity 2s ease-in-out',
-    zIndex: 4, // Reduzindo para ficar abaixo das dunas e dos vídeos
+    zIndex: 4,
   }), [isPlaying, currentView, isBackgroundLoaded]);
   
   const video1Style = useMemo(() => ({
     ...sharedVideoProps,
     opacity: currentView === 'video' && isPlaying ? (activeVideo === 1 ? 1 : 0) : 0,
-    pointerEvents: 'none' as const, // Corrigindo o tipo
+    pointerEvents: 'none' as const,
   }), [currentView, isPlaying, activeVideo, sharedVideoProps]);
   
   const video2Style = useMemo(() => ({
     ...sharedVideoProps,
     opacity: currentView === 'video' && isPlaying ? (activeVideo === 2 ? 1 : 0) : 0,
-    pointerEvents: 'none' as const, // Corrigindo o tipo
+    pointerEvents: 'none' as const,
   }), [currentView, isPlaying, activeVideo, sharedVideoProps]);
   
   const logoStyle = useMemo(() => ({
     opacity: currentView === 'video' ? (isBackgroundLoaded ? 1 : 0) : 0,
     transition: 'opacity 2s ease-in-out',
     transitionDelay: '2s',
-    zIndex: 7, // Aumentando para ficar acima das dunas
+    zIndex: 7,
   }), [currentView, isBackgroundLoaded]);
   
   return (
-    <>
+    <div style={containerStyle} className="absolute inset-0">
       <VideoOverlay 
         isBackgroundLoaded={isBackgroundLoaded} 
         style={overlayStyle}
@@ -99,7 +107,7 @@ export const VideoManager = memo(({
         isBackgroundLoaded={isBackgroundLoaded}
         style={logoStyle}
       />
-    </>
+    </div>
   );
 });
 

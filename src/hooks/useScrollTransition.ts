@@ -1,34 +1,37 @@
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 export const useScrollTransition = () => {
-  const [scrollY, setScrollY] = useState(0);
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const [isDunesVisible, setIsDunesVisible] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
-  const handleScroll = useCallback(() => {
-    const currentScrollY = window.scrollY;
-    setScrollY(currentScrollY);
-    
-    // Binary transition - either at video (0) or at dunes (1)
-    if (currentScrollY < 50) {
-      setScrollProgress(0);
-      setIsDarkMode(false);
-    } else {
-      setScrollProgress(1);
-      setIsDarkMode(true);
-    }
+  // Toggle between video and dunes
+  const toggleDunes = useCallback(() => {
+    setIsDunesVisible(prev => !prev);
+    setIsDarkMode(prev => !prev);
+    setScrollProgress(prev => prev === 0 ? 1 : 0);
   }, []);
 
+  // Handle wheel events to toggle between views
   useEffect(() => {
-    // Add scroll event listener
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
+    const handleWheel = (e: WheelEvent) => {
+      if (e.deltaY > 0 && !isDunesVisible) {
+        // Scroll down to show dunes
+        toggleDunes();
+      } else if (e.deltaY < 0 && isDunesVisible) {
+        // Scroll up to show video
+        toggleDunes();
+      }
+      e.preventDefault();
+    };
+    
+    window.addEventListener('wheel', handleWheel, { passive: false });
     
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('wheel', handleWheel);
     };
-  }, [handleScroll]);
+  }, [isDunesVisible, toggleDunes]);
 
   const getTextColor = useCallback(() => {
     // Transition from #c8c5ad (light) to #333333 (dark)
@@ -42,5 +45,11 @@ export const useScrollTransition = () => {
     return `rgb(${r}, ${g}, ${b})`;
   }, [scrollProgress]);
 
-  return { scrollY, scrollProgress, isDarkMode, getTextColor };
+  return { 
+    scrollProgress, 
+    isDarkMode, 
+    getTextColor,
+    isDunesVisible,
+    toggleDunes
+  };
 };

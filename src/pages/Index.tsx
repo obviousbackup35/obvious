@@ -19,31 +19,18 @@ const Index = () => {
   const { currentView, setCurrentView } = useViewTransition(isPlaying);
   const { activeVideo, video1Ref, video2Ref, handleTimeUpdate } = useVideoTransition();
   const { audioRef } = usePageAudio(isPlaying, currentView);
-  const { scrollProgress, getTextColor } = useScrollTransition();
+  const { 
+    scrollProgress, 
+    getTextColor, 
+    isDunesVisible, 
+    toggleDunes 
+  } = useScrollTransition();
   const { 
     isPlaying: isAudioPlaying, 
     toggleAudio, 
     currentTime,
     setCurrentTime
   } = useAudio();
-
-  // Configuramos um efeito para permitir apenas um único scroll completo
-  useEffect(() => {
-    const handleWheel = (e: WheelEvent) => {
-      if (e.deltaY > 0) {
-        window.scrollTo({ top: 100, behavior: 'smooth' });
-      } else if (e.deltaY < 0) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-      e.preventDefault();
-    };
-    
-    window.addEventListener('wheel', handleWheel, { passive: false });
-    
-    return () => {
-      window.removeEventListener('wheel', handleWheel);
-    };
-  }, []);
 
   const handleViewChange = useCallback((view: ContentView) => {
     setCurrentView(view);
@@ -72,6 +59,23 @@ const Index = () => {
     />
   ), [currentView, handleViewChange]);
 
+  // Handle keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowDown' && !isDunesVisible) {
+        toggleDunes();
+      } else if (e.key === 'ArrowUp' && isDunesVisible) {
+        toggleDunes();
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isDunesVisible, toggleDunes]);
+
   return (
     <InteractionHandler
       audioRef={audioRef}
@@ -80,6 +84,7 @@ const Index = () => {
       isPlaying={isPlaying}
       setIsPlaying={setIsPlaying}
       currentTime={currentTime}
+      toggleDunes={toggleDunes}
     >
       {navigationElement}
       
@@ -92,9 +97,13 @@ const Index = () => {
         video2Ref={video2Ref}
         handleTimeUpdate={handleTimeUpdate}
         setCurrentTime={setCurrentTime}
+        isVisible={!isDunesVisible}
       />
       
-      <DunesSection scrollProgress={scrollProgress} />
+      <DunesSection 
+        scrollProgress={scrollProgress} 
+        isVisible={isDunesVisible} 
+      />
       
       {contentSectionsElement}
     </InteractionHandler>

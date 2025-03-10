@@ -1,7 +1,6 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useAudio } from "@/contexts/AudioContext";
-import { useScrollTransition } from "@/hooks/useScrollTransition";
 
 interface InteractionHandlerProps {
   audioRef: React.RefObject<HTMLAudioElement>;
@@ -10,6 +9,7 @@ interface InteractionHandlerProps {
   isPlaying: boolean;
   setIsPlaying: (isPlaying: boolean) => void;
   currentTime: number;
+  toggleDunes?: () => void;
   children: React.ReactNode;
 }
 
@@ -22,30 +22,11 @@ const InteractionHandler = ({
   isPlaying,
   setIsPlaying,
   currentTime,
+  toggleDunes,
   children
 }: InteractionHandlerProps) => {
   const { hasInitialInteraction, setHasInitialInteraction } = useAudio();
   const fadeInterval = useRef<number | null>(null);
-  const { scrollProgress } = useScrollTransition();
-
-  // Setting up wheel handler for binary scrolling
-  useEffect(() => {
-    const handleWheel = (e: WheelEvent) => {
-      if (e.deltaY > 0) {
-        // Scroll down to dunes
-        window.scrollTo({ top: 100, behavior: 'smooth' });
-      } else if (e.deltaY < 0) {
-        // Scroll up to video
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    };
-    
-    window.addEventListener('wheel', handleWheel, { passive: true });
-    
-    return () => {
-      window.removeEventListener('wheel', handleWheel);
-    };
-  }, []);
 
   const fadeAudioIn = useCallback((audio: HTMLAudioElement) => {
     if (fadeInterval.current !== null) {
@@ -134,6 +115,26 @@ const InteractionHandler = ({
       startPlayback();
     }
   }, [hasInitialInteraction, isPlaying, startPlayback]);
+
+  // Implement wheel event listener for vertical navigation
+  useEffect(() => {
+    if (!toggleDunes) return;
+    
+    const handleWheel = (e: WheelEvent) => {
+      if (e.deltaY > 0) {
+        toggleDunes();
+      } else if (e.deltaY < 0) {
+        toggleDunes();
+      }
+      e.preventDefault();
+    };
+    
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+    };
+  }, [toggleDunes]);
 
   return (
     <div className="relative w-full h-screen">

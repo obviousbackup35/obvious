@@ -12,6 +12,7 @@ interface VideoSectionProps {
   video2Ref: React.RefObject<HTMLVideoElement>;
   handleTimeUpdate: () => void;
   setCurrentTime: (time: number) => void;
+  isVisible?: boolean;
 }
 
 const VideoSection = ({
@@ -22,7 +23,8 @@ const VideoSection = ({
   video1Ref,
   video2Ref,
   handleTimeUpdate,
-  setCurrentTime
+  setCurrentTime,
+  isVisible = true
 }: VideoSectionProps) => {
   const handleVideoTimeUpdate = useCallback(() => {
     handleTimeUpdate();
@@ -64,8 +66,9 @@ const VideoSection = ({
       activeVideo={activeVideo}
       video1Ref={video1Ref}
       video2Ref={video2Ref}
+      isVisible={isVisible}
     />
-  ), [isPlaying, isBackgroundLoaded, currentView, activeVideo, video1Ref, video2Ref]);
+  ), [isPlaying, isBackgroundLoaded, currentView, activeVideo, video1Ref, video2Ref, isVisible]);
 };
 
 export default VideoSection;
