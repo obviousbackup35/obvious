@@ -1,3 +1,4 @@
+
 import { useCallback, memo, useState } from "react";
 import type { ContentView } from "@/types/navigation";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -80,7 +81,7 @@ export const Navigation = memo(({
             isMobileMenuOpen={mobileMenuOpen}
           />
           
-          <HexagonButton />
+          <HexagonButton onViewChange={onViewChange} />
           
           {isMobile && (
             <MobileMenu 
