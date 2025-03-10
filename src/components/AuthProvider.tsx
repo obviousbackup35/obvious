@@ -32,7 +32,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Sign out helper function
   const signOut = async () => {
     try {
+      setLoading(true);
+      console.log("Iniciando processo de logout...");
+      
       const { error } = await supabase.auth.signOut();
+      
       if (error) {
         console.error("Erro ao desconectar:", error);
         setLastError(error);
@@ -41,9 +45,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           description: error.message,
           variant: "destructive",
         });
+      } else {
+        console.log("Logout bem-sucedido");
+        // The onAuthStateChange event will handle state updates
       }
     } catch (err) {
       console.error("Erro inesperado ao desconectar:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -52,6 +61,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const initSession = async () => {
       try {
         console.log("Iniciando sessão de autenticação...");
+        setLoading(true);
+        
         const { data, error } = await supabase.auth.getSession();
         
         if (error) {
@@ -59,11 +70,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setLastError(error);
           toast({
             title: "Erro de autenticação",
-            description: "Não foi possível recuperar a sessão",
+            description: "Não foi possível recuperar a sessão: " + error.message,
             variant: "destructive",
           });
         } else {
           console.log("Dados da sessão:", data.session ? "Sessão existe" : "Sem sessão ativa");
+          
           if (data.session) {
             console.log("Usuário autenticado:", data.session.user.email, "ID:", data.session.user.id);
             setUser(data.session.user);
@@ -100,6 +112,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       if (event === 'SIGNED_IN') {
         console.log("Usuário conectado:", newSession?.user.email);
+        setUser(newSession?.user ?? null);
+        setSession(newSession);
+        
         toast({
           title: "Login bem-sucedido",
           description: `Bem-vindo, ${newSession?.user.email}!`,
@@ -108,6 +123,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       if (event === 'SIGNED_OUT') {
         console.log("Usuário desconectado");
+        setUser(null);
+        setSession(null);
+        
         toast({
           title: "Desconectado",
           description: "Você saiu da sua conta",
@@ -116,6 +134,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (event === 'USER_UPDATED') {
         console.log("Usuário atualizado");
+        if (newSession) {
+          setUser(newSession.user);
+          setSession(newSession);
+        }
       }
       
       // Remove the USER_DELETED check as it's not part of the AuthChangeEvent type
@@ -123,10 +145,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (event === 'TOKEN_REFRESHED') {
         console.log("Token atualizado");
+        if (newSession) {
+          setUser(newSession.user);
+          setSession(newSession);
+        }
       }
       
-      setUser(newSession?.user ?? null);
-      setSession(newSession);
       setLoading(false);
       setSessionInitialized(true);
     });

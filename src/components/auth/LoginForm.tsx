@@ -7,12 +7,14 @@ import { Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/use-toast";
 import { AuthFormProps } from "./types";
+import { AuthError } from "@supabase/supabase-js";
 
 export const LoginForm = ({ onViewChange, loading, setLoading }: AuthFormProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: "", password: "" });
   const [submitAttempted, setSubmitAttempted] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   // Helper to check the current URL parameters for any errors
   useEffect(() => {
@@ -22,6 +24,7 @@ export const LoginForm = ({ onViewChange, loading, setLoading }: AuthFormProps) 
     
     if (errorCode) {
       console.error("Error in URL params:", errorCode, errorDescription);
+      setFormError(errorDescription || "Ocorreu um erro durante a autenticação");
       toast({
         title: "Erro de autenticação",
         description: errorDescription || "Ocorreu um erro durante a autenticação",
@@ -37,6 +40,9 @@ export const LoginForm = ({ onViewChange, loading, setLoading }: AuthFormProps) 
     if (!email) {
       newErrors.email = "Email é obrigatório";
       isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = "Email inválido";
+      isValid = false;
     }
     
     if (!password) {
@@ -49,8 +55,36 @@ export const LoginForm = ({ onViewChange, loading, setLoading }: AuthFormProps) 
     return isValid;
   };
 
+  const handleAuthError = (error: AuthError) => {
+    console.error("Erro detalhado de login:", error);
+    
+    // Reset previous form error
+    setFormError(null);
+    
+    // Handle specific error cases
+    if (error.message.includes("Invalid login credentials")) {
+      setFormError("Email ou senha incorretos");
+      return "Email ou senha incorretos";
+    } else if (error.message.includes("Email not confirmed")) {
+      setFormError("Por favor, confirme seu email antes de fazer login");
+      return "Por favor, confirme seu email antes de fazer login";
+    } else if (error.message.includes("Too many requests")) {
+      setFormError("Muitas tentativas de login. Tente novamente mais tarde");
+      return "Muitas tentativas de login. Tente novamente mais tarde";
+    } else if (error.message.includes("User not found")) {
+      setFormError("Usuário não encontrado");
+      return "Usuário não encontrado";
+    } else {
+      setFormError(error.message);
+      return error.message;
+    }
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Reset form error
+    setFormError(null);
     
     if (!validateForm()) {
       console.log("Validação do formulário falhou");
@@ -67,7 +101,6 @@ export const LoginForm = ({ onViewChange, loading, setLoading }: AuthFormProps) 
       });
 
       if (error) {
-        console.error("Erro de login:", error);
         throw error;
       }
       
@@ -85,19 +118,7 @@ export const LoginForm = ({ onViewChange, loading, setLoading }: AuthFormProps) 
       
       // O redirecionamento acontecerá automaticamente via o useEffect na página Auth
     } catch (error: any) {
-      console.error("Erro detalhado de login:", error);
-      
-      let errorMessage = "Falha ao fazer login";
-      
-      if (error.message) {
-        if (error.message.includes("Invalid login credentials")) {
-          errorMessage = "Email ou senha incorretos";
-        } else if (error.message.includes("Email not confirmed")) {
-          errorMessage = "Por favor, confirme seu email antes de fazer login";
-        } else {
-          errorMessage = error.message;
-        }
-      }
+      const errorMessage = handleAuthError(error);
       
       toast({
         title: "Erro de login",
@@ -112,6 +133,12 @@ export const LoginForm = ({ onViewChange, loading, setLoading }: AuthFormProps) 
   return (
     <>
       <h1 className="text-2xl font-bold text-center mb-6 text-white">Entrar</h1>
+      
+      {formError && (
+        <div className="bg-red-500/20 border border-red-500/50 text-white p-3 rounded-md mb-4">
+          {formError}
+        </div>
+      )}
       
       <form onSubmit={handleLogin}>
         <div className="space-y-4">
