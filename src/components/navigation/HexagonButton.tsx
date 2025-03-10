@@ -5,11 +5,10 @@ import type { ContentView } from '@/types/navigation';
 
 interface HexagonButtonProps {
   onViewChange: (view: ContentView) => void;
+  getTextColor: () => string;
 }
 
-const HexagonButton = memo(({ onViewChange }: HexagonButtonProps) => {
-  const getTextColor = () => '#c8c5ad';
-  
+const HexagonButton = memo(({ onViewChange, getTextColor }: HexagonButtonProps) => {
   const handleClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();

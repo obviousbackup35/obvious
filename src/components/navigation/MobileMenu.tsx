@@ -7,9 +7,10 @@ interface MobileMenuProps {
   isOpen: boolean;
   handleViewChange: (view: ContentView) => (e: React.MouseEvent) => void;
   closeMobileMenu: () => void;
+  getTextColor: () => string;
 }
 
-const MobileMenu = memo(({ isOpen, handleViewChange }: MobileMenuProps) => {
+const MobileMenu = memo(({ isOpen, handleViewChange, getTextColor }: MobileMenuProps) => {
   const menuRef = useRef<HTMLDivElement>(null);
   
   const menuStyles = useMemo(() => ({
@@ -28,6 +29,8 @@ const MobileMenu = memo(({ isOpen, handleViewChange }: MobileMenuProps) => {
   const handleGalleryClick = useCallback(handleViewChange('gallery'), [handleViewChange]);
   const handleContactClick = useCallback(handleViewChange('contact'), [handleViewChange]);
 
+  const textColor = getTextColor();
+
   return (
     <div 
       ref={menuRef}
@@ -45,7 +48,8 @@ const MobileMenu = memo(({ isOpen, handleViewChange }: MobileMenuProps) => {
             <li>
               <NavigationButton
                 onClick={handleCompanyClick}
-                className="cursor-pointer hover:opacity-70 transition-all duration-500 py-2 w-full text-xl text-[#c8c5ad]"
+                className="cursor-pointer hover:opacity-70 transition-all duration-500 py-2 w-full text-xl"
+                style={{ color: textColor }}
               >
                 C O M P A N Y
               </NavigationButton>
@@ -53,7 +57,8 @@ const MobileMenu = memo(({ isOpen, handleViewChange }: MobileMenuProps) => {
             <li>
               <NavigationButton
                 onClick={handleProductClick}
-                className="cursor-pointer hover:opacity-70 transition-all duration-500 py-2 w-full text-xl text-[#c8c5ad]"
+                className="cursor-pointer hover:opacity-70 transition-all duration-500 py-2 w-full text-xl"
+                style={{ color: textColor }}
               >
                 P R O D U C T
               </NavigationButton>
@@ -61,7 +66,8 @@ const MobileMenu = memo(({ isOpen, handleViewChange }: MobileMenuProps) => {
             <li>
               <NavigationButton
                 onClick={handleGalleryClick}
-                className="cursor-pointer hover:opacity-70 transition-all duration-500 py-2 w-full text-xl text-[#c8c5ad]"
+                className="cursor-pointer hover:opacity-70 transition-all duration-500 py-2 w-full text-xl"
+                style={{ color: textColor }}
               >
                 G A L L E R Y
               </NavigationButton>
@@ -69,7 +75,8 @@ const MobileMenu = memo(({ isOpen, handleViewChange }: MobileMenuProps) => {
             <li>
               <NavigationButton
                 onClick={handleContactClick}
-                className="cursor-pointer hover:opacity-70 transition-all duration-500 py-2 w-full text-xl text-[#c8c5ad]"
+                className="cursor-pointer hover:opacity-70 transition-all duration-500 py-2 w-full text-xl"
+                style={{ color: textColor }}
               >
                 C O N T A C T
               </NavigationButton>

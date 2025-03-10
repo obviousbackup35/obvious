@@ -1,6 +1,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useAudio } from "@/contexts/AudioContext";
+import { useScrollTransition } from "@/hooks/useScrollTransition";
 
 interface InteractionHandlerProps {
   audioRef: React.RefObject<HTMLAudioElement>;
@@ -25,6 +26,7 @@ const InteractionHandler = ({
 }: InteractionHandlerProps) => {
   const { hasInitialInteraction, setHasInitialInteraction } = useAudio();
   const fadeInterval = useRef<number | null>(null);
+  const { scrollProgress } = useScrollTransition();
 
   // Optimized fade function with better performance
   const fadeAudioIn = useCallback((audio: HTMLAudioElement) => {
@@ -117,15 +119,20 @@ const InteractionHandler = ({
     }
   }, [hasInitialInteraction, isPlaying, startPlayback]);
 
+  // Create a scrollable container while maintaining the interactive container
   return (
-    <div 
-      className="relative viewport-height w-full overflow-hidden cursor-pointer bg-black prevent-overscroll no-bounce"
-      onClick={handleInteraction}
-      onTouchStart={handleInteraction}
-      role="application"
-      aria-label="Interactive video experience"
-    >
-      {children}
+    <div className="relative w-full" style={{ height: '200vh' }}>
+      <div 
+        className="relative viewport-height w-full overflow-hidden cursor-pointer bg-black prevent-overscroll no-bounce sticky top-0"
+        onClick={handleInteraction}
+        onTouchStart={handleInteraction}
+        role="application"
+        aria-label="Interactive video experience"
+      >
+        {children}
+      </div>
+      {/* Empty div to create scrollable space */}
+      <div style={{ height: '100vh' }} />
     </div>
   );
 };

@@ -7,6 +7,7 @@ import MobileMenu from "./navigation/MobileMenu";
 import DesktopMenu from "./navigation/DesktopMenu";
 import ActionButtons from "./navigation/ActionButtons";
 import HexagonButton from "./navigation/HexagonButton";
+import { useScrollTransition } from "@/hooks/useScrollTransition";
 
 interface NavigationProps {
   audioRef: React.RefObject<HTMLAudioElement>;
@@ -27,6 +28,7 @@ export const Navigation = memo(({
 }: NavigationProps) => {
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { getTextColor } = useScrollTransition();
 
   const handleViewChange = useCallback((view: ContentView) => (e: React.MouseEvent) => {
     e.preventDefault();
@@ -53,11 +55,9 @@ export const Navigation = memo(({
     setMobileMenuOpen(prev => !prev);
   }, []);
 
-  const getTextColor = () => '#c8c5ad';
-
   return (
     <div 
-      className="absolute top-8 w-full z-50 transition-opacity duration-1000" 
+      className="fixed top-8 w-full z-50 transition-opacity duration-1000" 
       style={{
         opacity: isVisible ? 1 : 0,
         pointerEvents: isVisible ? 'auto' : 'none',
@@ -65,7 +65,7 @@ export const Navigation = memo(({
       role="navigation"
       aria-label="Main Navigation"
     >
-      <nav className="absolute top-0 w-full">
+      <nav className="w-full">
         <div 
           className="flex justify-center items-center font-montserrat text-[1.38rem] relative transition-colors duration-700" 
           style={{ color: getTextColor() }}
@@ -81,19 +81,21 @@ export const Navigation = memo(({
             isMobileMenuOpen={mobileMenuOpen}
           />
           
-          <HexagonButton onViewChange={onViewChange} />
+          <HexagonButton onViewChange={onViewChange} getTextColor={getTextColor} />
           
           {isMobile && (
             <MobileMenu 
               isOpen={mobileMenuOpen}
               handleViewChange={handleViewChange}
               closeMobileMenu={() => setMobileMenuOpen(false)}
+              getTextColor={getTextColor}
             />
           )}
           
           {!isMobile && (
             <DesktopMenu 
               handleViewChange={handleViewChange}
+              getTextColor={getTextColor}
             />
           )}
         </div>
