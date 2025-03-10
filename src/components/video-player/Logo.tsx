@@ -38,7 +38,7 @@ export const Logo = memo(({ isBackgroundLoaded, style }: LogoProps) => {
         }}
         loading="eager"
         decoding="async"
-        fetchpriority="high"
+        fetchPriority="high"
       />
     </div>
   );
