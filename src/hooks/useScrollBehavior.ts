@@ -35,12 +35,13 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
     lastScrollTime.current = now;
     scrollCount.current++;
 
-    console.log(`Wheel event - direction: ${direction}, count: ${scrollCount.current}, currentView: from Index.tsx`);
+    console.log(`Wheel event - direction: ${direction}, count: ${scrollCount.current}, deltaY: ${e.deltaY}`);
 
     // Trigger view transition after accumulating enough scroll events in the same direction
-    if (scrollCount.current >= 2 && !isScrolling.current) {
+    if (scrollCount.current >= 1 && !isScrolling.current) {
       isScrolling.current = true;
       
+      console.log(`Transitioning with direction: ${direction}`);
       handleViewTransition(direction);
       
       // Reset scroll state after shorter delay

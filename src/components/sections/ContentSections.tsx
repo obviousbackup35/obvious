@@ -20,6 +20,7 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
   useEffect(() => {
     if (currentView === 'video' || currentView === 'black' || currentView === 'dunes') {
       setLastMainView(currentView);
+      console.log(`Setting lastMainView to: ${currentView}`);
     }
   }, [currentView]);
 
