@@ -1,7 +1,6 @@
-
 import { useState, useEffect, useCallback } from 'react';
 
-export const useScrollTransition = (threshold = 200, maxScroll = 300) => {
+export const useScrollTransition = (threshold = 100, maxScroll = 200) => {
   const [scrollY, setScrollY] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -10,33 +9,18 @@ export const useScrollTransition = (threshold = 200, maxScroll = 300) => {
     const currentScrollY = window.scrollY;
     setScrollY(currentScrollY);
     
-    // Simplificando a transição para ser mais abrupta
-    if (currentScrollY <= threshold) {
-      // Quando está no topo, mostra o vídeo (0% das dunas)
+    // Transição abrupta: ou mostra o vídeo ou mostra as dunas
+    if (currentScrollY < threshold) {
       setScrollProgress(0);
       setIsDarkMode(false);
-    } else if (currentScrollY >= maxScroll) {
-      // Quando rola para baixo além do limite, mostra as dunas (100%)
+    } else {
       setScrollProgress(1);
       setIsDarkMode(true);
-    } else {
-      // Durante a transição, tornando-a mais rápida
-      const progress = Math.pow((currentScrollY - threshold) / (maxScroll - threshold), 2);
-      setScrollProgress(progress);
-      setIsDarkMode(progress > 0.5);
     }
-  }, [threshold, maxScroll]);
+  }, [threshold]);
 
   useEffect(() => {
-    // Explicitamente habilitar scrolling
-    document.body.style.overflow = 'visible';
-    document.body.style.position = 'static';
-    document.body.style.height = 'auto';
-    document.body.style.touchAction = 'auto';
-    
     window.addEventListener('scroll', handleScroll, { passive: true });
-    
-    // Chamar handleScroll imediatamente para definir valores iniciais
     handleScroll();
     
     return () => {

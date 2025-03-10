@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useAudio } from "@/contexts/AudioContext";
 import { useScrollTransition } from "@/hooks/useScrollTransition";
@@ -13,8 +12,6 @@ interface InteractionHandlerProps {
   children: React.ReactNode;
 }
 
-const FADE_DURATION = 1500; // 1.5 seconds for smooth fade
-
 const InteractionHandler = ({
   audioRef,
   video1Ref,
@@ -28,7 +25,6 @@ const InteractionHandler = ({
   const fadeInterval = useRef<number | null>(null);
   const { scrollProgress } = useScrollTransition();
 
-  // Optimized fade function with better performance
   const fadeAudioIn = useCallback((audio: HTMLAudioElement) => {
     if (fadeInterval.current !== null) {
       window.clearInterval(fadeInterval.current);
@@ -54,7 +50,6 @@ const InteractionHandler = ({
     }, stepTime);
   }, []);
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       if (fadeInterval.current !== null) {
@@ -63,7 +58,6 @@ const InteractionHandler = ({
     };
   }, []);
 
-  // Optimized playback function with Promise.allSettled for better error handling
   const startPlayback = useCallback(async () => {
     if (isPlaying) return;
 
@@ -119,11 +113,10 @@ const InteractionHandler = ({
     }
   }, [hasInitialInteraction, isPlaying, startPlayback]);
 
-  // Ajustado para um height de 180vh para permitir apenas um scroll para transição completa
   return (
-    <div className="relative w-full" style={{ height: '180vh' }}>
+    <div className="relative w-full" style={{ height: '200vh' }}>
       <div 
-        className="relative viewport-height w-full overflow-hidden cursor-pointer bg-black prevent-overscroll no-bounce sticky top-0"
+        className="fixed top-0 left-0 w-full h-screen overflow-hidden cursor-pointer bg-black"
         onClick={handleInteraction}
         onTouchStart={handleInteraction}
         role="application"
@@ -131,8 +124,6 @@ const InteractionHandler = ({
       >
         {children}
       </div>
-      {/* Espaço vazio ajustado para um scroll único */}
-      <div style={{ height: '80vh' }} />
     </div>
   );
 };

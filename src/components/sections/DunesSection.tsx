@@ -15,7 +15,7 @@ const DunesSection = memo(({ scrollProgress, style }: DunesSectionProps) => {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         opacity: scrollProgress,
-        transition: 'opacity 500ms ease-out', // Transição mais rápida
+        transition: 'opacity 300ms ease-in-out',
         pointerEvents: 'none',
         ...style
       }}
