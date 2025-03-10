@@ -7,9 +7,8 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
   const isMobile = useIsMobile();
   const { hasInitialInteraction } = useAudio();
   const debounceTimeout = useRef<number | null>(null);
-  const isTransitioning = useRef<boolean>(false);
   
-  // Manipulador de rolagem para desktop
+  // Manipulador de rolagem simplificado para desktop
   const handleWheel = useCallback((e: WheelEvent) => {
     // Verificar se houve interação inicial
     if (!hasInitialInteraction) {
@@ -20,13 +19,11 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
     
     e.preventDefault(); // Impedir rolagem padrão
     
-    // Evitar múltiplas chamadas durante uma transição
-    if (isTransitioning.current || debounceTimeout.current) {
+    // Usar apenas um simples debounce para evitar eventos múltiplos,
+    // mas não bloquear completamente as transições
+    if (debounceTimeout.current) {
       return;
     }
-    
-    // Marcar que estamos em transição
-    isTransitioning.current = true;
     
     // Determinar direção da rolagem
     const direction = e.deltaY > 0 ? 'down' : 'up';
@@ -34,15 +31,14 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
     // Registrar evento para depuração
     console.log(`Wheel event detected - direction: ${direction}, deltaY: ${e.deltaY}`);
     
-    // Acionar transição de visualização
+    // Acionar transição de visualização imediatamente
     handleViewTransition(direction);
     
     // Definir debounce para evitar múltiplos eventos em sucessão rápida
     debounceTimeout.current = window.setTimeout(() => {
       debounceTimeout.current = null;
-      isTransitioning.current = false;
       console.log('Scroll debounce complete, ready for next scroll event');
-    }, 1000); // Tempo suficiente para permitir a transição completa
+    }, 500); // Tempo reduzido para melhorar responsividade
   }, [handleViewTransition, hasInitialInteraction]);
 
   useEffect(() => {
@@ -73,7 +69,7 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
       window.addEventListener('wheel', preventDefault, { passive: false });
       window.addEventListener('touchmove', preventDefault, { passive: false });
     } else {
-      // Configuração para desktop
+      // Configuração simplificada para desktop
       window.addEventListener('wheel', handleWheel, { passive: false });
       console.log('Desktop wheel handler registered');
     }
