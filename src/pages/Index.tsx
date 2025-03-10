@@ -1,4 +1,3 @@
-
 import { useState, useCallback, useMemo, useEffect } from "react";
 import { useVideoTransition } from "@/hooks/useVideoTransition";
 import { usePageAudio } from "@/hooks/usePageAudio";
@@ -9,7 +8,6 @@ import { ContentSections } from "@/components/sections/ContentSections";
 import type { ContentView } from "@/types/navigation";
 import InteractionHandler from "@/components/interaction/InteractionHandler";
 import VideoSection from "@/components/video-player/VideoSection";
-import RefreshButton from "@/components/navigation/RefreshButton";
 import { useBackgroundLoader } from "@/hooks/useBackgroundLoader";
 import { useScrollBehavior } from "@/hooks/useScrollBehavior";
 
@@ -26,10 +24,8 @@ const Index = () => {
     setCurrentTime
   } = useAudio();
   
-  // Pass handleViewTransition to useScrollBehavior
   useScrollBehavior(handleViewTransition);
 
-  // Log current view for debugging
   useEffect(() => {
     console.log(`Current view changed to: ${currentView}`);
   }, [currentView]);
@@ -39,7 +35,6 @@ const Index = () => {
     setCurrentView(view);
   }, [setCurrentView]);
 
-  // Prepare overlay for video background
   const overlayElement = useMemo(() => (
     <div 
       className="absolute inset-0 w-full h-full z-10"
@@ -53,7 +48,6 @@ const Index = () => {
     />
   ), [isPlaying]);
 
-  // Memoize the navigation to prevent unnecessary re-renders
   const navigationElement = useMemo(() => (
     <Navigation 
       audioRef={audioRef} 
@@ -65,7 +59,6 @@ const Index = () => {
     />
   ), [audioRef, isAudioPlaying, toggleAudio, isPlaying, handleViewChange, currentView]);
 
-  // Memoize content sections to prevent unnecessary re-renders
   const contentSectionsElement = useMemo(() => (
     <ContentSections 
       currentView={currentView} 
@@ -97,12 +90,6 @@ const Index = () => {
       />
       
       {contentSectionsElement}
-      
-      <RefreshButton
-        isPlaying={isPlaying}
-        currentView={currentView}
-        onViewChange={handleViewChange}
-      />
     </InteractionHandler>
   );
 };
