@@ -12,6 +12,11 @@ interface ContentSectionsProps {
 export const ContentSections = memo(({ currentView, onViewChange }: ContentSectionsProps) => {
   const [lastMainView, setLastMainView] = useState<'video' | 'black' | 'dunes'>('video');
 
+  // Debug render
+  useEffect(() => {
+    console.log(`ContentSections rendering with currentView: ${currentView}`);
+  }, [currentView]);
+
   useEffect(() => {
     if (currentView === 'video' || currentView === 'black' || currentView === 'dunes') {
       setLastMainView(currentView);

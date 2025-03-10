@@ -29,6 +29,11 @@ const Index = () => {
   // Pass handleViewTransition to useScrollBehavior
   useScrollBehavior(handleViewTransition);
 
+  // Log current view for debugging
+  useEffect(() => {
+    console.log(`Current view changed to: ${currentView}`);
+  }, [currentView]);
+
   // Store the last main view in sessionStorage when it changes
   useEffect(() => {
     if (['video', 'black', 'dunes'].includes(currentView)) {
@@ -37,6 +42,7 @@ const Index = () => {
   }, [currentView]);
 
   const handleViewChange = useCallback((view: ContentView) => {
+    console.log(`View change requested to: ${view}`);
     setCurrentView(view);
   }, [setCurrentView]);
 

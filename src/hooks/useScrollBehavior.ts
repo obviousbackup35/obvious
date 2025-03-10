@@ -1,3 +1,4 @@
+
 import { useEffect, useRef, useCallback } from "react";
 import { useIsMobile } from "./use-mobile";
 
@@ -11,11 +12,13 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
 
   // Optimized wheel handler with immediate response
   const throttledWheelHandler = useCallback((e: WheelEvent) => {
+    e.preventDefault(); // Prevent default scrolling
+    
     const now = Date.now();
     const direction = e.deltaY > 0 ? 'down' : 'up';
     
     // Reset scroll count if direction changed or too much time passed
-    if (direction !== lastDirection.current || now - lastScrollTime.current > 150) {
+    if (direction !== lastDirection.current || now - lastScrollTime.current > 100) {
       scrollCount.current = 0;
     }
     
@@ -24,8 +27,10 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
     lastScrollTime.current = now;
     scrollCount.current++;
 
-    // Trigger view transition after 2 scroll events in same direction
-    if (scrollCount.current >= 2 && !isScrolling.current) {
+    console.log(`Wheel event - direction: ${direction}, count: ${scrollCount.current}, currentView: from Index.tsx`);
+
+    // Trigger view transition after fewer scroll events in same direction
+    if (scrollCount.current >= 1 && !isScrolling.current) {
       isScrolling.current = true;
       
       handleViewTransition(direction);
@@ -39,7 +44,7 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
         isScrolling.current = false;
         scrollCount.current = 0;
         scrollTimeout.current = null;
-      }, 100);
+      }, 800); // Longer cooldown to prevent accidental double transitions
     }
   }, [handleViewTransition]);
 
@@ -71,8 +76,8 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
       window.addEventListener('wheel', preventDefault, { passive: false });
       window.addEventListener('touchmove', preventDefault, { passive: false });
     } else {
-      // Desktop-specific setup
-      window.addEventListener('wheel', throttledWheelHandler, { passive: true });
+      // Desktop-specific setup - Using passive: false to allow preventDefault
+      window.addEventListener('wheel', throttledWheelHandler, { passive: false });
     }
     
     // Return cleanup function
