@@ -1,3 +1,4 @@
+
 import { SectionContent } from "./SectionContent";
 import type { ContentView } from "@/types/navigation";
 import { PolicyMenu } from "../PolicyMenu";
@@ -11,12 +12,12 @@ interface ContentSectionsProps {
 export const ContentSections = memo(({ currentView, onViewChange }: ContentSectionsProps) => {
   const [lastMainView, setLastMainView] = useState<'video' | 'black' | 'dunes'>('video');
 
-  // Debug render
+  // Depuração de renderização
   useEffect(() => {
     console.log(`ContentSections rendering with currentView: ${currentView}`);
   }, [currentView]);
 
-  // Track main view changes
+  // Rastrear mudanças na visualização principal
   useEffect(() => {
     if (currentView === 'video' || currentView === 'black' || currentView === 'dunes') {
       setLastMainView(currentView);
@@ -30,7 +31,7 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
     }
   }, [currentView, lastMainView, onViewChange]);
 
-  // Policy sections defined as a constant to avoid recreating on each render
+  // Seções de política definidas como constante para evitar recriação em cada renderização
   const policySections = [
     'privacy', 'terms', 'cookie', 'legal', 'intellectual-property',
     'accessibility', 'refund', 'shipping', 'terms-sale', 'ugc',
@@ -42,7 +43,7 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
 
   return (
     <div className="absolute inset-0 w-full h-full">
-      {/* Video layer - lowest z-index */}
+      {/* Camada de vídeo - z-index mais baixo */}
       <div 
         className="absolute inset-0 w-full h-full"
         style={{ 
@@ -52,7 +53,7 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
         aria-hidden="true"
       />
       
-      {/* Black background layer - middle z-index */}
+      {/* Camada de fundo preto - z-index médio */}
       <div 
         className="absolute inset-0 w-full h-full"
         style={{ 
@@ -65,7 +66,7 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
         aria-hidden={currentView !== 'black'}
       />
       
-      {/* Dunes layer - highest z-index */}
+      {/* Camada de dunas - z-index mais alto para os principais níveis */}
       <div 
         className="absolute inset-0 w-full h-full bg-cover"
         style={{ 
@@ -75,10 +76,11 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
           transition: 'opacity 1s ease-in-out',
           pointerEvents: currentView === 'dunes' ? 'auto' : 'none',
           zIndex: 30,
+          visibility: currentView === 'dunes' ? 'visible' : 'hidden', // Garantir visibilidade
         }}
         aria-hidden={currentView !== 'dunes'}
       >
-        {/* Only render PolicyMenu when dunes view is active */}
+        {/* Renderiza PolicyMenu apenas quando a visualização de dunas está ativa */}
         {currentView === 'dunes' && (
           <PolicyMenu 
             onViewChange={onViewChange} 
@@ -87,7 +89,7 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
         )}
       </div>
       
-      {/* Other section content with highest z-index */}
+      {/* Conteúdo de outras seções com z-index mais alto */}
       <div className="z-40">
         <SectionContent
           isVisible={currentView === 'company'}
@@ -117,7 +119,7 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
           onBack={handleBack}
         />
 
-        {/* Policy Sections */}
+        {/* Seções de política */}
         {policySections.map((policy) => (
           <SectionContent
             key={policy}

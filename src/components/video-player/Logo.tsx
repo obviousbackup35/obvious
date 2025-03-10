@@ -11,15 +11,15 @@ export const Logo = memo(({ isBackgroundLoaded, style }: LogoProps) => {
   const isMobile = useIsMobile();
   const logoRef = useRef<HTMLImageElement>(null);
   
-  // Optimize logo size based on device
+  // Otimizar tamanho do logo com base no dispositivo
   const logoWidth = isMobile ? 320 : 660; 
   
   return (
     <div 
       className="absolute inset-0 flex items-center justify-center z-30"
       style={{ 
-        opacity: 0, // Always start invisible
-        willChange: isBackgroundLoaded ? 'opacity' : 'auto', // Only enable GPU when needed
+        opacity: 0, // Sempre começa invisível
+        willChange: isBackgroundLoaded ? 'opacity' : 'auto', // Habilitar GPU apenas quando necessário
         ...style,
         transition: style?.transition || 'opacity 2s ease-in-out',
         transitionDelay: style?.transition ? '0ms' : '2500ms',

@@ -1,3 +1,4 @@
+
 import { useEffect, useRef, useCallback } from "react";
 import { useIsMobile } from "./use-mobile";
 import { useAudio } from "@/contexts/AudioContext";
@@ -9,79 +10,65 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
   const lastScrollTime = useRef(0);
   const scrollTimeout = useRef<number | null>(null);
   const lastDirection = useRef<'up' | 'down' | null>(null);
-  const scrollCount = useRef(0);
-  const scrollDebounce = useRef<NodeJS.Timeout | null>(null);
-
-  // Wheel event handler with improved detection
+  
+  // Manipulador de evento de roda com detecção aprimorada
   const throttledWheelHandler = useCallback((e: WheelEvent) => {
-    // Don't handle scroll events if user hasn't interacted with the site yet
+    // Não tratar eventos de rolagem se o usuário ainda não interagiu com o site
     if (!hasInitialInteraction) {
       console.log("No initial interaction yet, ignoring scroll");
       e.preventDefault();
       return;
     }
     
-    e.preventDefault(); // Prevent default scrolling
+    e.preventDefault(); // Impedir a rolagem padrão
     
-    // Enhanced scroll event processing
+    // Se já estiver rolando, ignore
+    if (isScrolling.current) {
+      return;
+    }
+    
+    // Processamento aprimorado de eventos de rolagem
     const now = Date.now();
     const direction = e.deltaY > 0 ? 'down' : 'up';
-    const significantScroll = Math.abs(e.deltaY) > 1; // Lower threshold to detect scrolls
+    const significantScroll = Math.abs(e.deltaY) > 5; // Threshold para detectar rolagens
     
     if (!significantScroll) return;
     
-    // Reset scroll count if direction changed or too much time passed
-    if (direction !== lastDirection.current || now - lastScrollTime.current > 300) {
-      scrollCount.current = 0;
+    // Tempo suficiente passou desde o último evento de rolagem?
+    if (now - lastScrollTime.current < 100) {
+      return;
     }
     
-    // Update tracking variables
+    console.log(`Wheel event - direction: ${direction}, deltaY: ${e.deltaY}`);
+    
+    // Atualizar variáveis de rastreamento
     lastDirection.current = direction;
     lastScrollTime.current = now;
-    scrollCount.current++;
-
-    console.log(`Wheel event - direction: ${direction}, count: ${scrollCount.current}, deltaY: ${e.deltaY}`);
-
-    // Clear any existing debounce timeout
-    if (scrollDebounce.current) {
-      clearTimeout(scrollDebounce.current);
+    isScrolling.current = true;
+    
+    // Acionar transição de visualização imediatamente para responsividade melhor
+    console.log(`Initiating transition with direction: ${direction}`);
+    handleViewTransition(direction);
+    
+    // Redefinir estado de rolagem após atraso
+    if (scrollTimeout.current) {
+      window.clearTimeout(scrollTimeout.current);
     }
-
-    // Use debounce to ensure more reliable scroll detection
-    scrollDebounce.current = setTimeout(() => {
-      // Trigger view transition after minimal scroll events for better responsiveness
-      if (scrollCount.current >= 1 && !isScrolling.current) {
-        isScrolling.current = true;
-        
-        console.log(`Initiating transition with direction: ${direction}`);
-        handleViewTransition(direction);
-        
-        // Reset scroll state after delay
-        if (scrollTimeout.current) {
-          window.clearTimeout(scrollTimeout.current);
-        }
-        
-        // Increased timeout to match the view transition duration
-        scrollTimeout.current = window.setTimeout(() => {
-          isScrolling.current = false;
-          scrollCount.current = 0;
-          lastDirection.current = null;
-          scrollTimeout.current = null;
-          console.log('Scroll cooldown complete, ready for next scroll event');
-        }, 1500);
-      }
-    }, 10); // Lower debounce time for better responsiveness
+    
+    // Aumentar o tempo limite para corresponder à duração da transição de visualização
+    scrollTimeout.current = window.setTimeout(() => {
+      isScrolling.current = false;
+      lastDirection.current = null;
+      scrollTimeout.current = null;
+      console.log('Scroll cooldown complete, ready for next scroll event');
+    }, 1000); // Reduza para experiência mais responsiva
   }, [handleViewTransition, hasInitialInteraction]);
 
   useEffect(() => {
-    // Clean up function to be called on unmount
+    // Função de limpeza a ser chamada na desmontagem
     const cleanup = () => {
       if (scrollTimeout.current) {
         window.clearTimeout(scrollTimeout.current);
-      }
-      
-      if (scrollDebounce.current) {
-        clearTimeout(scrollDebounce.current);
       }
       
       document.documentElement.classList.remove('no-bounce');
@@ -91,25 +78,25 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
       window.removeEventListener('touchmove', preventDefault);
     };
     
-    // Reusable preventDefault function
+    // Função reutilizável preventDefault
     const preventDefault = (e: Event) => {
       e.preventDefault();
     };
     
     if (isMobile) {
-      // Mobile-specific setup
+      // Configuração específica para dispositivos móveis
       document.documentElement.classList.add('no-bounce');
       document.body.classList.add('no-bounce');
       
-      // Prevent default wheel and touch events
+      // Impedir eventos padrão de roda e toque
       window.addEventListener('wheel', preventDefault, { passive: false });
       window.addEventListener('touchmove', preventDefault, { passive: false });
     } else {
-      // Desktop-specific setup - Using passive: false to allow preventDefault
+      // Configuração específica para desktop - Usando passive: false para permitir preventDefault
       window.addEventListener('wheel', throttledWheelHandler, { passive: false });
     }
     
-    // Return cleanup function
+    // Retorna função de limpeza
     return cleanup;
   }, [isMobile, throttledWheelHandler]);
 };

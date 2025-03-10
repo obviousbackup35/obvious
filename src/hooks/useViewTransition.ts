@@ -1,5 +1,5 @@
 
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import type { ContentView } from '@/types/navigation';
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -7,16 +7,16 @@ export const useViewTransition = (isPlaying: boolean) => {
   const [currentView, setCurrentView] = useState<ContentView>('video');
   const isMobile = useIsMobile();
   
-  // Enhanced debugging
+  // Depuração aprimorada
   useEffect(() => {
     console.log(`View transition - Current view changed to: ${currentView}`);
   }, [currentView]);
 
-  // Simplified transition handler - removed complex state tracking
+  // Manipulador de transição simplificado
   const handleViewTransition = useCallback((direction: 'up' | 'down') => {
     console.log(`View transition - Direction: ${direction}, Current view: ${currentView}`);
     
-    // Simple state machine for view transitions
+    // Máquina de estado simples para transições de visualização
     if (direction === 'down') {
       if (currentView === 'video') {
         console.log('Transitioning: video -> black');
