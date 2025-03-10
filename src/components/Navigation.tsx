@@ -37,7 +37,7 @@ export const Navigation = memo(({
 
   // Effect to store last main view for back navigation
   useEffect(() => {
-    const mainViews: ContentView[] = ['video', 'dunes', 'about', 'policy', 'vision'];
+    const mainViews: ContentView[] = ['video', 'dunes', 'company', 'gallery', 'contact'];
     if (mainViews.includes(currentView)) {
       sessionStorage.setItem('lastMainView', currentView);
     }
