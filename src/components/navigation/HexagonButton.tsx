@@ -11,15 +11,22 @@ const HexagonButton = memo(() => {
       y-1/2 p-2 transition-all duration-700"
       aria-label="Hexagon Button"
     >
-      <Hexagon
-        className="w-7 h-7"
-        style={{
-          color: getTextColor(),
-          transition: 'color 0.7s ease-in-out'
-        }}
-        fill={getTextColor()}
-        aria-hidden="true"
-      />
+      <div className="relative">
+        <Hexagon
+          className="w-7 h-7"
+          style={{
+            color: getTextColor(),
+            transition: 'color 0.7s ease-in-out'
+          }}
+          fill={getTextColor()}
+          aria-hidden="true"
+        />
+        {/* Round hole in the center */}
+        <div 
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full bg-background w-2 h-2"
+          aria-hidden="true"
+        ></div>
+      </div>
     </button>
   );
 });
