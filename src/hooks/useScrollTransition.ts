@@ -32,12 +32,11 @@ export const useScrollTransition = (threshold = 200, maxScroll = 400) => {
     
     window.addEventListener('scroll', handleScroll, { passive: true });
     
+    // Call handleScroll immediately to set initial values
+    handleScroll();
+    
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      // Reset body style when component unmounts
-      document.body.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-      document.body.style.touchAction = 'none';
     };
   }, [handleScroll]);
 

@@ -1,5 +1,5 @@
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import { useVideoTransition } from "@/hooks/useVideoTransition";
 import { usePageAudio } from "@/hooks/usePageAudio";
 import { useViewTransition } from "@/hooks/useViewTransition";
@@ -19,7 +19,7 @@ const Index = () => {
   const { currentView, setCurrentView } = useViewTransition(isPlaying);
   const { activeVideo, video1Ref, video2Ref, handleTimeUpdate } = useVideoTransition();
   const { audioRef } = usePageAudio(isPlaying, currentView);
-  const { scrollProgress } = useScrollTransition();
+  const { scrollProgress, getTextColor } = useScrollTransition(200, 400);
   const { 
     isPlaying: isAudioPlaying, 
     toggleAudio, 
@@ -32,16 +32,21 @@ const Index = () => {
   }, [setCurrentView]);
 
   const textColor = useMemo(() => {
-    // Interpolate between light and dark color based on scroll progress
-    const startColor = { r: 200, g: 197, b: 173 }; // #c8c5ad
-    const endColor = { r: 51, g: 51, b: 51 }; // #333333
+    return getTextColor();
+  }, [getTextColor]);
+
+  // Enable scrolling when component mounts
+  useEffect(() => {
+    document.body.style.overflow = 'auto';
+    document.body.style.position = 'static';
+    document.body.style.touchAction = 'auto';
     
-    const r = Math.round(startColor.r + (endColor.r - startColor.r) * scrollProgress);
-    const g = Math.round(startColor.g + (endColor.g - startColor.g) * scrollProgress);
-    const b = Math.round(startColor.b + (endColor.b - startColor.b) * scrollProgress);
-    
-    return `rgb(${r}, ${g}, ${b})`;
-  }, [scrollProgress]);
+    return () => {
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.touchAction = 'none';
+    };
+  }, []);
 
   const navigationElement = useMemo(() => (
     <Navigation 

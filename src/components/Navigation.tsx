@@ -16,7 +16,7 @@ interface NavigationProps {
   isVisible?: boolean;
   onViewChange: (view: ContentView) => void;
   currentView: ContentView;
-  textColor: string; // Added this prop
+  textColor: string;
 }
 
 export const Navigation = memo(({
