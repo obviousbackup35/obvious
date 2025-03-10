@@ -5,40 +5,18 @@ import { useIsMobile } from "@/hooks/use-mobile";
 
 export const useViewTransition = (isPlaying: boolean) => {
   const [currentView, setCurrentView] = useState<ContentView>('video');
-  const isTransitioning = useRef(false);
-  const transitionTimeout = useRef<NodeJS.Timeout | null>(null);
   const isMobile = useIsMobile();
   
-  // Debug current view changes
+  // Enhanced debugging
   useEffect(() => {
-    console.log(`View transition - Current view is now: ${currentView}`);
+    console.log(`View transition - Current view changed to: ${currentView}`);
   }, [currentView]);
 
-  // Clear any existing transition timeouts
-  useEffect(() => {
-    return () => {
-      if (transitionTimeout.current) {
-        clearTimeout(transitionTimeout.current);
-      }
-    };
-  }, []);
-
+  // Simplified transition handler - removed complex state tracking
   const handleViewTransition = useCallback((direction: 'up' | 'down') => {
-    // Check if already transitioning to prevent issues
-    if (isTransitioning.current) {
-      console.log('Transition already in progress, ignoring scroll');
-      return;
-    }
-    
-    isTransitioning.current = true;
     console.log(`View transition - Direction: ${direction}, Current view: ${currentView}`);
     
-    // Clear any existing transition timeout
-    if (transitionTimeout.current) {
-      clearTimeout(transitionTimeout.current);
-    }
-    
-    // Process the transition based on current view and direction
+    // Simple state machine for view transitions
     if (direction === 'down') {
       if (currentView === 'video') {
         console.log('Transitioning: video -> black');
@@ -56,12 +34,6 @@ export const useViewTransition = (isPlaying: boolean) => {
         setCurrentView('video');
       }
     }
-    
-    // Reset transition state after animation completes
-    transitionTimeout.current = setTimeout(() => {
-      isTransitioning.current = false;
-      console.log(`Transition complete, ready for next scroll. Current view is: ${currentView}`);
-    }, 1500); // Increased timeout to ensure transitions complete
   }, [currentView]);
 
   return { 

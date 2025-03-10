@@ -38,7 +38,7 @@ export const Logo = memo(({ isBackgroundLoaded, style }: LogoProps) => {
         }}
         loading="eager"
         decoding="async"
-        fetchPriority="high" // Changed to lowercase to fix React warning
+        fetchpriority="high"
       />
     </div>
   );

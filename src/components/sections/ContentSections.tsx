@@ -16,6 +16,7 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
     console.log(`ContentSections rendering with currentView: ${currentView}`);
   }, [currentView]);
 
+  // Track main view changes
   useEffect(() => {
     if (currentView === 'video' || currentView === 'black' || currentView === 'dunes') {
       setLastMainView(currentView);
@@ -39,10 +40,19 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
     'sitemap'
   ];
 
-  // Improved rendering with proper z-index management
   return (
-    <div className="absolute inset-0 w-full h-full z-30">
-      {/* Black background layer */}
+    <div className="absolute inset-0 w-full h-full">
+      {/* Video layer - lowest z-index */}
+      <div 
+        className="absolute inset-0 w-full h-full"
+        style={{ 
+          backgroundColor: 'transparent',
+          zIndex: 10
+        }}
+        aria-hidden="true"
+      />
+      
+      {/* Black background layer - middle z-index */}
       <div 
         className="absolute inset-0 w-full h-full"
         style={{ 
@@ -50,13 +60,12 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
           opacity: currentView === 'black' ? 1 : 0,
           transition: 'opacity 1s ease-in-out',
           pointerEvents: currentView === 'black' ? 'auto' : 'none',
-          willChange: 'opacity',
-          zIndex: 10,
+          zIndex: 20,
         }}
         aria-hidden={currentView !== 'black'}
       />
       
-      {/* Dunes layer with higher z-index */}
+      {/* Dunes layer - highest z-index */}
       <div 
         className="absolute inset-0 w-full h-full bg-cover"
         style={{ 
@@ -65,8 +74,7 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
           opacity: currentView === 'dunes' ? 1 : 0,
           transition: 'opacity 1s ease-in-out',
           pointerEvents: currentView === 'dunes' ? 'auto' : 'none',
-          willChange: 'opacity',
-          zIndex: 20,
+          zIndex: 30,
         }}
         aria-hidden={currentView !== 'dunes'}
       >
@@ -79,45 +87,47 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
         )}
       </div>
       
-      {/* Other section content */}
-      <SectionContent
-        isVisible={currentView === 'company'}
-        backgroundImage="/visualelectric-1741372805454.webp"
-        title="Company"
-        onBack={handleBack}
-      />
-      
-      <SectionContent
-        isVisible={currentView === 'projects'}
-        backgroundImage="/visualelectric-1741372813250.webp"
-        title="Product"
-        onBack={handleBack}
-      />
-      
-      <SectionContent
-        isVisible={currentView === 'gallery'}
-        backgroundImage="/visualelectric-1741372954881.webp"
-        title="Gallery"
-        onBack={handleBack}
-      />
-      
-      <SectionContent
-        isVisible={currentView === 'contact'}
-        backgroundImage="/visualelectric-1741373174467.webp"
-        title="Contact"
-        onBack={handleBack}
-      />
-
-      {/* Policy Sections */}
-      {policySections.map((policy) => (
+      {/* Other section content with highest z-index */}
+      <div className="z-40">
         <SectionContent
-          key={policy}
-          isVisible={currentView === policy}
-          gradient="linear-gradient(to right, #2c3e50 0%, #3498db 100%)"
-          title={policy.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+          isVisible={currentView === 'company'}
+          backgroundImage="/visualelectric-1741372805454.webp"
+          title="Company"
           onBack={handleBack}
         />
-      ))}
+        
+        <SectionContent
+          isVisible={currentView === 'projects'}
+          backgroundImage="/visualelectric-1741372813250.webp"
+          title="Product"
+          onBack={handleBack}
+        />
+        
+        <SectionContent
+          isVisible={currentView === 'gallery'}
+          backgroundImage="/visualelectric-1741372954881.webp"
+          title="Gallery"
+          onBack={handleBack}
+        />
+        
+        <SectionContent
+          isVisible={currentView === 'contact'}
+          backgroundImage="/visualelectric-1741373174467.webp"
+          title="Contact"
+          onBack={handleBack}
+        />
+
+        {/* Policy Sections */}
+        {policySections.map((policy) => (
+          <SectionContent
+            key={policy}
+            isVisible={currentView === policy}
+            gradient="linear-gradient(to right, #2c3e50 0%, #3498db 100%)"
+            title={policy.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+            onBack={handleBack}
+          />
+        ))}
+      </div>
     </div>
   );
 });
