@@ -16,7 +16,6 @@ const HexagonButton = memo(() => {
           color: getTextColor(),
           transition: 'color 0.7s ease-in-out'
         }}
-        fill={getTextColor()}
         aria-hidden="true"
       />
     </button>
@@ -26,3 +25,4 @@ const HexagonButton = memo(() => {
 HexagonButton.displayName = 'HexagonButton';
 
 export default HexagonButton;
+
