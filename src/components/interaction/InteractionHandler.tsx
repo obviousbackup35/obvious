@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useAudio } from "@/contexts/AudioContext";
 import { useScrollTransition } from "@/hooks/useScrollTransition";
@@ -11,6 +12,8 @@ interface InteractionHandlerProps {
   currentTime: number;
   children: React.ReactNode;
 }
+
+const FADE_DURATION = 1500; // 1.5 seconds for smooth fade
 
 const InteractionHandler = ({
   audioRef,
@@ -114,7 +117,7 @@ const InteractionHandler = ({
   }, [hasInitialInteraction, isPlaying, startPlayback]);
 
   return (
-    <div className="relative w-full" style={{ height: '200vh' }}>
+    <div className="relative w-full" style={{ height: '100vh' }}>
       <div 
         className="fixed top-0 left-0 w-full h-screen overflow-hidden cursor-pointer bg-black"
         onClick={handleInteraction}

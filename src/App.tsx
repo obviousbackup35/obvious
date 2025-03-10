@@ -16,14 +16,17 @@ const App = () => {
   // Force portrait mode on mobile devices
   useForcePortrait();
   
-  // Ensure that scrolling is enabled globally
+  // Configure scrolling for the entire page
   useEffect(() => {
     document.documentElement.style.overflow = 'auto';
-    document.documentElement.style.height = 'auto';
-    document.body.style.overflow = 'visible';
-    document.body.style.height = 'auto';
+    document.documentElement.style.height = '100vh';
+    document.body.style.overflow = 'auto';
+    document.body.style.height = '100vh';
     document.body.style.position = 'static';
-    document.body.style.minHeight = "200vh";
+    
+    // Set up scroll snap points
+    document.documentElement.style.scrollSnapType = 'y mandatory';
+    document.body.style.scrollSnapType = 'y mandatory';
   }, []);
   
   return (

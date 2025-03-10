@@ -1,6 +1,7 @@
+
 import { useState, useEffect, useCallback } from 'react';
 
-export const useScrollTransition = (threshold = 100, maxScroll = 200) => {
+export const useScrollTransition = (threshold = 100) => {
   const [scrollY, setScrollY] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -9,7 +10,7 @@ export const useScrollTransition = (threshold = 100, maxScroll = 200) => {
     const currentScrollY = window.scrollY;
     setScrollY(currentScrollY);
     
-    // Transição abrupta: ou mostra o vídeo ou mostra as dunas
+    // Transição com um único scroll: um scroll para baixo mostra as dunas, um para cima volta ao vídeo
     if (currentScrollY < threshold) {
       setScrollProgress(0);
       setIsDarkMode(false);
