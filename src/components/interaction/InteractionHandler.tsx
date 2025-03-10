@@ -119,7 +119,7 @@ const InteractionHandler = ({
 
   return (
     <div 
-      className="relative viewport-height w-full overflow-hidden cursor-pointer bg-white prevent-overscroll no-bounce"
+      className="relative viewport-height w-full overflow-hidden cursor-pointer bg-black prevent-overscroll no-bounce"
       onClick={handleInteraction}
       onTouchStart={handleInteraction}
       role="application"

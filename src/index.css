@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -167,15 +168,17 @@
   html {
     height: -webkit-fill-available;
     overflow: hidden;
+    background-color: #000000;
   }
 
   body {
-    @apply bg-background text-foreground prevent-overscroll improved-touch;
+    @apply bg-black text-foreground prevent-overscroll improved-touch;
     min-height: -webkit-fill-available;
     overflow: hidden;
     position: fixed;
     width: 100%;
     touch-action: none;
+    background-color: #000000;
   }
   
   @media (max-width: 768px) {

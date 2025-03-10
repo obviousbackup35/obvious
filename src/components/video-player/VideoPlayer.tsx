@@ -31,6 +31,7 @@ export const VideoPlayer = memo(forwardRef<HTMLVideoElement, VideoPlayerProps>(
       willChange: isPlaying && isActive ? 'opacity' : 'auto',
       objectFit: isMobile ? 'contain' as const : 'cover' as const,
       transform: isMobile ? 'translate3d(0,0,0) scale(1.15)' : 'translate3d(0,0,0)',
+      backgroundColor: '#000000',
       ...style
     }), [isPlaying, isActive, isMobile, style]);
 
@@ -41,7 +42,7 @@ export const VideoPlayer = memo(forwardRef<HTMLVideoElement, VideoPlayerProps>(
         loop={false}
         playsInline
         preload="auto"
-        className="absolute inset-0 w-full h-full object-cover"
+        className="absolute inset-0 w-full h-full object-cover bg-black"
         style={videoStyle}
       />
     );
