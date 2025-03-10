@@ -1,3 +1,4 @@
+
 import { useState, useCallback, useMemo, useEffect } from "react";
 import { useVideoTransition } from "@/hooks/useVideoTransition";
 import { usePageAudio } from "@/hooks/usePageAudio";
@@ -9,7 +10,6 @@ import type { ContentView } from "@/types/navigation";
 import InteractionHandler from "@/components/interaction/InteractionHandler";
 import VideoSection from "@/components/video-player/VideoSection";
 import { useBackgroundLoader } from "@/hooks/useBackgroundLoader";
-import { useScrollBehavior } from "@/hooks/useScrollBehavior";
 
 const Index = () => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -24,8 +24,6 @@ const Index = () => {
     setCurrentTime
   } = useAudio();
   
-  useScrollBehavior(handleViewTransition);
-
   useEffect(() => {
     console.log(`Current view changed to: ${currentView}`);
   }, [currentView]);
