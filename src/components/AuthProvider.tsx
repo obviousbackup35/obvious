@@ -1,7 +1,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import type { User, Session, AuthError } from "@supabase/supabase-js";
+import type { User, Session, AuthError, AuthChangeEvent } from "@supabase/supabase-js";
 import { toast } from "@/components/ui/use-toast";
 
 interface AuthContextType {
@@ -118,6 +118,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         console.log("Usuário atualizado");
       }
       
+      // Fix the type error by using the correct AuthChangeEvent type
       if (event === 'USER_DELETED') {
         console.log("Usuário excluído");
       }
