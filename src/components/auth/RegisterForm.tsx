@@ -47,18 +47,19 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
     e.preventDefault();
     
     if (!validateForm()) {
+      console.log("Form validation failed");
       return;
     }
     
     try {
       setLoading(true);
-      console.log("Tentativa de registro com:", email);
+      console.log("Iniciando tentativa de registro com:", email);
       
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          emailRedirectTo: window.location.origin + '/auth',
+          emailRedirectTo: `${window.location.origin}/auth?type=confirmation`,
         }
       });
 
@@ -67,22 +68,33 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
         throw error;
       }
       
-      console.log("Registro bem-sucedido:", data);
+      console.log("Resposta do registro:", data);
       
-      toast({
-        title: "Registro bem-sucedido",
-        description: "Por favor, verifique seu email para confirmar seu registro.",
-      });
-      
-      // Clear form
-      setEmail("");
-      setPassword("");
-      setConfirmPassword("");
-      
-      // Redirect to login page
-      onViewChange("login");
+      if (data?.user) {
+        console.log("Registro bem-sucedido para usuário:", data.user.id);
+        
+        toast({
+          title: "Conta criada com sucesso",
+          description: "Por favor, verifique seu email para confirmar seu registro.",
+        });
+        
+        // Clear form
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
+        
+        // Redirect to login page
+        onViewChange("login");
+      } else {
+        console.warn("Resposta de registro sem dados de usuário:", data);
+        toast({
+          title: "Algo deu errado",
+          description: "Não foi possível criar sua conta. Tente novamente.",
+          variant: "destructive",
+        });
+      }
     } catch (error: any) {
-      console.error("Erro de registro detalhado:", error);
+      console.error("Erro detalhado de registro:", error);
       
       let errorMessage = "Falha ao criar conta";
       

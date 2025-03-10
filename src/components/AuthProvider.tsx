@@ -42,9 +42,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           console.log("Dados da sessão:", data.session ? "Sessão existe" : "Sem sessão ativa");
           if (data.session) {
             console.log("Usuário autenticado:", data.session.user.email);
+            setUser(data.session.user);
+            setSession(data.session);
+          } else {
+            console.log("Nenhuma sessão ativa encontrada");
+            setUser(null);
+            setSession(null);
           }
-          setUser(data.session?.user ?? null);
-          setSession(data.session);
         }
       } catch (err) {
         console.error("Erro inesperado ao recuperar sessão:", err);
@@ -84,6 +88,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           title: "Desconectado",
           description: "Você saiu da sua conta",
         });
+      }
+
+      if (event === 'USER_UPDATED') {
+        console.log("Usuário atualizado");
       }
       
       setUser(newSession?.user ?? null);
