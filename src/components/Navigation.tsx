@@ -62,18 +62,35 @@ export const Navigation = memo(({
     setMobileMenuOpen(prev => !prev);
   }, []);
 
-  // Updated to use onViewChange instead of navigate
+  // Modified to handle closing the auth view if it's already open
   const handleAuthClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    onViewChange('auth');
-  }, [onViewChange]);
+    
+    // If auth view is already open, close it by returning to the last main view
+    if (currentView === 'auth') {
+      // Get the last main view from sessionStorage
+      const lastMainView = sessionStorage.getItem('lastMainView') || 'video';
+      onViewChange(lastMainView as ContentView);
+    } else {
+      onViewChange('auth');
+    }
+  }, [onViewChange, currentView]);
 
+  // Modified to handle closing the profile view if it's already open
   const handleProfileClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    onViewChange('profile');
-  }, [onViewChange]);
+    
+    // If profile view is already open, close it by returning to the last main view
+    if (currentView === 'profile') {
+      // Get the last main view from sessionStorage
+      const lastMainView = sessionStorage.getItem('lastMainView') || 'video';
+      onViewChange(lastMainView as ContentView);
+    } else {
+      onViewChange('profile');
+    }
+  }, [onViewChange, currentView]);
 
   // Add language toggle handler
   const handleLanguageToggle = useCallback((e: React.MouseEvent) => {
