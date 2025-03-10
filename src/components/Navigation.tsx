@@ -1,4 +1,3 @@
-
 import { useCallback, memo, useState } from "react";
 import type { ContentView } from "@/types/navigation";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -6,6 +5,7 @@ import NavigationButton from "./navigation/NavigationButton";
 import MobileMenu from "./navigation/MobileMenu";
 import DesktopMenu from "./navigation/DesktopMenu";
 import ActionButtons from "./navigation/ActionButtons";
+import HexagonButton from "./navigation/HexagonButton";
 
 interface NavigationProps {
   audioRef: React.RefObject<HTMLAudioElement>;
@@ -79,6 +79,8 @@ export const Navigation = memo(({
             currentView={currentView}
             isMobileMenuOpen={mobileMenuOpen}
           />
+          
+          <HexagonButton />
           
           {isMobile && (
             <MobileMenu 
