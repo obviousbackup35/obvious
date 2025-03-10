@@ -17,11 +17,24 @@ export default function Auth() {
   const navigate = useNavigate();
   const { user, sessionInitialized } = useAuth();
 
-  // Check for password reset parameters in URL
+  // Check for URL parameters
   useEffect(() => {
     console.log("Auth page mounted, checking URL params");
     const searchParams = new URLSearchParams(window.location.search);
     const type = searchParams.get("type");
+    const errorCode = searchParams.get("error");
+    const errorDescription = searchParams.get("error_description");
+    
+    console.log("URL params:", { type, errorCode, errorDescription });
+    
+    if (errorCode) {
+      console.error("Error in URL:", errorCode, errorDescription);
+      toast({
+        title: "Erro de autenticação",
+        description: errorDescription || "Ocorreu um erro durante a autenticação",
+        variant: "destructive",
+      });
+    }
     
     if (type === "recovery") {
       console.log("Recovery parameter detected, switching to reset-password view");
@@ -37,10 +50,13 @@ export default function Auth() {
 
   // Redirect to home if already authenticated
   useEffect(() => {
-    console.log("Auth check: sessionInitialized =", sessionInitialized, ", user =", user ? "exists" : "null");
+    console.log("Auth check: sessionInitialized =", sessionInitialized, ", user =", user ? `exists (${user.email})` : "null");
     
     if (sessionInitialized && user) {
       console.log("Usuário autenticado, redirecionando para a página inicial");
+      console.log("User ID:", user.id);
+      console.log("Email verificado:", user.email_confirmed_at ? "Sim" : "Não");
+      
       toast({
         title: "Autenticado",
         description: "Você está conectado como " + user.email,

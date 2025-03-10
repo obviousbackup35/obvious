@@ -13,6 +13,7 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({ email: "", password: "", confirm: "" });
+  const [submitAttempted, setSubmitAttempted] = useState(false);
 
   const validateForm = () => {
     let isValid = true;
@@ -40,6 +41,7 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
     }
     
     setErrors(newErrors);
+    setSubmitAttempted(true);
     return isValid;
   };
 
@@ -47,7 +49,7 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
     e.preventDefault();
     
     if (!validateForm()) {
-      console.log("Form validation failed");
+      console.log("Validação do formulário falhou");
       return;
     }
     
@@ -55,11 +57,16 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
       setLoading(true);
       console.log("Iniciando tentativa de registro com:", email);
       
+      // Get the current URL for redirect
+      const origin = window.location.origin;
+      const redirectTo = `${origin}/auth?type=confirmation`;
+      console.log("URL de redirecionamento para confirmação:", redirectTo);
+      
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth?type=confirmation`,
+          emailRedirectTo: redirectTo,
         }
       });
 
@@ -69,14 +76,27 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
       }
       
       console.log("Resposta do registro:", data);
+      console.log("Usuário criado:", data?.user?.id);
+      console.log("Status de confirmação:", data?.user?.identities);
       
       if (data?.user) {
-        console.log("Registro bem-sucedido para usuário:", data.user.id);
+        // Check if email confirmation is required
+        const identities = data.user.identities;
+        const needsConfirmation = !identities || identities.length === 0 || !data.session;
         
-        toast({
-          title: "Conta criada com sucesso",
-          description: "Por favor, verifique seu email para confirmar seu registro.",
-        });
+        if (needsConfirmation) {
+          console.log("Email de confirmação enviado, aguardando confirmação do usuário");
+          toast({
+            title: "Verifique seu email",
+            description: "Foi enviado um link de confirmação para o seu email. Por favor, clique nele para confirmar seu cadastro.",
+          });
+        } else {
+          console.log("Registro concluído sem necessidade de confirmação de email");
+          toast({
+            title: "Conta criada com sucesso",
+            description: "Seu cadastro foi concluído com sucesso.",
+          });
+        }
         
         // Clear form
         setEmail("");
@@ -101,6 +121,8 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
       if (error.message) {
         if (error.message.includes("already registered")) {
           errorMessage = "Este email já está registrado";
+        } else if (error.message.includes("weak")) {
+          errorMessage = "Senha fraca. Use uma senha mais forte.";
         } else {
           errorMessage = error.message;
         }
@@ -129,8 +151,13 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
               type="email"
               placeholder="seu@email.com"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="bg-white/20 border-white/30 text-white placeholder:text-white/50"
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (submitAttempted) validateForm();
+              }}
+              className={`bg-white/20 border-white/30 text-white placeholder:text-white/50 ${
+                errors.email ? "border-red-400" : ""
+              }`}
               autoComplete="email"
             />
             {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email}</p>}
@@ -142,8 +169,13 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
               id="password"
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="bg-white/20 border-white/30 text-white"
+              onChange={(e) => {
+                setPassword(e.target.value);
+                if (submitAttempted) validateForm();
+              }}
+              className={`bg-white/20 border-white/30 text-white ${
+                errors.password ? "border-red-400" : ""
+              }`}
               autoComplete="new-password"
             />
             {errors.password && <p className="text-red-400 text-sm mt-1">{errors.password}</p>}
@@ -155,8 +187,13 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
               id="confirmPassword"
               type="password"
               value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="bg-white/20 border-white/30 text-white"
+              onChange={(e) => {
+                setConfirmPassword(e.target.value);
+                if (submitAttempted) validateForm();
+              }}
+              className={`bg-white/20 border-white/30 text-white ${
+                errors.confirm ? "border-red-400" : ""
+              }`}
               autoComplete="new-password"
             />
             {errors.confirm && <p className="text-red-400 text-sm mt-1">{errors.confirm}</p>}
