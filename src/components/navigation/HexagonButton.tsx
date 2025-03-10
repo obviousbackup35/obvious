@@ -21,9 +21,10 @@ const HexagonButton = memo(() => {
           fill={getTextColor()}
           aria-hidden="true"
         />
-        {/* Round hole in the center */}
+        {/* Transparent round hole in the center */}
         <div 
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full bg-background w-2 h-2"
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full w-3 h-3"
+          style={{ backgroundColor: 'transparent', border: '2px solid transparent' }}
           aria-hidden="true"
         ></div>
       </div>
