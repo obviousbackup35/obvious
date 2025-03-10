@@ -28,45 +28,68 @@ const ActionButtons = memo(({
   
   return (
     <>
+      {/* Mobile menu button - completely separate from audio button */}
       {isMobile && (
+        <div className="mobile-menu-container">
+          <NavigationButton
+            onClick={toggleMobileMenu}
+            className="mobile-menu-toggle absolute left-1/2 -translate-x-1/2 transform top-[13.5cm] p-2 transition-all duration-700 z-50"
+            aria-label="Menu"
+          >
+            {isMobileMenuOpen ? (
+              <X 
+                className="w-7 h-7" 
+                style={{ 
+                  color: '#ffffff',
+                  transition: 'color 0.7s ease-in-out' 
+                }} 
+                aria-hidden="true"
+              />
+            ) : (
+              <Menu 
+                className="w-7 h-7" 
+                style={{ 
+                  color: getTextColor(), 
+                  transition: 'color 0.7s ease-in-out' 
+                }} 
+                aria-hidden="true"
+              />
+            )}
+            <span className="sr-only">{isMobileMenuOpen ? 'Close Menu' : 'Menu'}</span>
+          </NavigationButton>
+        </div>
+      )}
+
+      {/* Audio button - completely separate component */}
+      <div className="audio-control-container">
         <NavigationButton
-          onClick={toggleMobileMenu}
-          className="mobile-menu-toggle absolute left-1/2 -translate-x-1/2 transform top-[13.5cm] p-2 transition-all duration-700 z-50"
-          aria-label="Menu"
+          onClick={handleAudioToggle}
+          className="audio-control-button absolute right-[2.15rem] top-[calc(50%+80px)] transform -translate-y-1/2 p-2 transition-all duration-700"
+          aria-label={!isPlaying ? 'Play Audio' : 'Pause Audio'}
         >
-          {isMobileMenuOpen ? (
-            <X 
-              className="w-7 h-7" 
-              style={{ 
-                color: '#ffffff',
-                transition: 'color 0.7s ease-in-out' 
-              }} 
-              aria-hidden="true"
-            />
-          ) : (
-            <Menu 
-              className="w-7 h-7" 
+          {!isPlaying ? 
+            <VolumeX 
+              width={audioIconSize} 
+              height={audioIconSize} 
               style={{ 
                 color: getTextColor(), 
                 transition: 'color 0.7s ease-in-out' 
               }} 
-              aria-hidden="true"
+              aria-hidden="true" 
+            /> : 
+            <Volume2 
+              width={audioIconSize} 
+              height={audioIconSize} 
+              style={{ 
+                color: getTextColor(), 
+                transition: 'color 0.7s ease-in-out' 
+              }} 
+              aria-hidden="true" 
             />
-          )}
-          <span className="sr-only">{isMobileMenuOpen ? 'Close Menu' : 'Menu'}</span>
+          }
+          <span className="sr-only">{!isPlaying ? 'Play' : 'Pause'}</span>
         </NavigationButton>
-      )}
-
-      <NavigationButton
-        onClick={handleAudioToggle}
-        className="absolute right-[2.15rem] top-[calc(50%+80px)] transform -translate-y-1/2 p-2 transition-all duration-700"
-      >
-        {!isPlaying ? 
-          <VolumeX className={`w-[${audioIconSize}] h-[${audioIconSize}]`} style={{ color: getTextColor(), transition: 'color 0.7s ease-in-out' }} aria-hidden="true" /> : 
-          <Volume2 className={`w-[${audioIconSize}] h-[${audioIconSize}]`} style={{ color: getTextColor(), transition: 'color 0.7s ease-in-out' }} aria-hidden="true" />
-        }
-        <span className="sr-only">{!isPlaying ? 'Play' : 'Pause'}</span>
-      </NavigationButton>
+      </div>
     </>
   );
 });
