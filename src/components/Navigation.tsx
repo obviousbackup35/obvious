@@ -95,15 +95,14 @@ export const Navigation = memo(({
           className="flex justify-center items-center font-montserrat text-[1.38rem] relative transition-colors duration-700" 
           style={{ color: getTextColor() }}
         >
-          <div className="absolute right-8 top-1/2 -translate-y-1/2">
-            <NavigationButton
-              onClick={user ? handleProfileClick : handleAuthClick}
-              className="cursor-pointer hover:opacity-70 transition-colors duration-300 rounded-full p-2"
-              style={{ color: getTextColor() }}
-            >
-              <UserRound size={30} /> {/* Reduced size from 32 to 30 (approx 5% smaller) */}
-            </NavigationButton>
-          </div>
+          {/* Moved this div to align with bottom buttons */}
+          <NavigationButton
+            onClick={user ? handleProfileClick : handleAuthClick}
+            className="cursor-pointer hover:opacity-70 transition-colors duration-300 rounded-full p-2 absolute right-[1.75rem] top-0"
+            style={{ color: getTextColor() }}
+          >
+            <UserRound size={30} /> {/* Reduced size from 32 to 30 (approx 5% smaller) */}
+          </NavigationButton>
 
           <ActionButtons 
             handleHomeClick={handleHomeClick}
