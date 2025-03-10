@@ -1,7 +1,6 @@
 
 import { SectionContent } from "./SectionContent";
 import type { ContentView } from "@/types/navigation";
-import { PolicyMenu } from "../PolicyMenu";
 import { useState, useEffect, useCallback, memo } from "react";
 
 interface ContentSectionsProps {
@@ -10,18 +9,11 @@ interface ContentSectionsProps {
 }
 
 export const ContentSections = memo(({ currentView, onViewChange }: ContentSectionsProps) => {
-  const [lastMainView, setLastMainView] = useState<'video'>('video');
+  const [lastMainView, setLastMainView] = useState<ContentView>('video');
 
-  // Debug rendering
-  useEffect(() => {
-    console.log(`ContentSections rendering with currentView: ${currentView}`);
-  }, [currentView]);
-
-  // Track main view changes
   useEffect(() => {
     if (currentView === 'video') {
       setLastMainView(currentView);
-      console.log(`Setting lastMainView to: ${currentView}`);
     }
   }, [currentView]);
 
@@ -31,7 +23,6 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
     }
   }, [currentView, lastMainView, onViewChange]);
 
-  // Policy sections constant to avoid recreation on each render
   const policySections = [
     'privacy', 'terms', 'cookie', 'legal', 'intellectual-property',
     'accessibility', 'refund', 'shipping', 'terms-sale', 'ugc',
@@ -43,7 +34,6 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
 
   return (
     <div className="absolute inset-0 w-full h-full">
-      {/* Video layer - lowest z-index */}
       <div 
         className="absolute inset-0 w-full h-full"
         style={{ 
@@ -53,7 +43,6 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
         aria-hidden="true"
       />
       
-      {/* Content for other sections with higher z-index */}
       <div className="z-40">
         <SectionContent
           isVisible={currentView === 'company'}
@@ -83,7 +72,6 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
           onBack={handleBack}
         />
 
-        {/* Policy sections */}
         {policySections.map((policy) => (
           <SectionContent
             key={policy}

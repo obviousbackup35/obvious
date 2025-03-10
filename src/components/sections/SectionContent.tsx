@@ -37,7 +37,6 @@ export const SectionContent = memo(({
         opacity: isVisible ? 1 : 0,
         transition: 'opacity 2s ease-in-out',
         pointerEvents: isVisible ? 'auto' : 'none',
-        willChange: isVisible ? 'opacity' : 'auto',
         ...style
       }}
       role={isVisible ? "region" : "presentation"}

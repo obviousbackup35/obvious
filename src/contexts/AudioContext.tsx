@@ -13,7 +13,7 @@ interface AudioContextType {
 
 const AudioContext = createContext<AudioContextType | undefined>(undefined);
 
-const FADE_DURATION = 1500; // Aumentado para 1.5 segundos para um fade mais suave
+const FADE_DURATION = 1500;
 
 export const AudioProvider = ({ children }: { children: ReactNode }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -22,21 +22,18 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
   const [currentTime, setCurrentTime] = useState(0);
   const fadeInterval = useRef<number | null>(null);
 
-  // Fade audio in or out
   const fadeAudio = useCallback((fadeIn: boolean) => {
     if (!audioRef.current) return;
     
-    // Clear any existing fade interval
     if (fadeInterval.current !== null) {
       window.clearInterval(fadeInterval.current);
       fadeInterval.current = null;
     }
     
     const audio = audioRef.current;
-    const steps = 30; // Aumentado o número de steps para uma transição mais suave
+    const steps = 30;
     const stepTime = FADE_DURATION / steps;
     
-    // Set initial volume based on whether we're fading in or out
     if (fadeIn) {
       audio.volume = 0;
     }
@@ -47,26 +44,23 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
       currentStep++;
       
       if (fadeIn) {
-        // Fade in: gradually increase volume
         audio.volume = Math.min(currentStep / steps, 1);
         if (audio.volume >= 1) {
           window.clearInterval(fadeInterval.current!);
           fadeInterval.current = null;
         }
       } else {
-        // Fade out: gradually decrease volume
         audio.volume = Math.max(1 - (currentStep / steps), 0);
         
         if (audio.volume <= 0) {
           window.clearInterval(fadeInterval.current!);
           fadeInterval.current = null;
-          audio.pause(); // Actually pause the audio after fade out is complete
+          audio.pause();
         }
       }
     }, stepTime);
   }, []);
 
-  // Clean up any fade interval on unmount
   useEffect(() => {
     return () => {
       if (fadeInterval.current !== null) {
@@ -80,12 +74,9 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
     
     if (audioRef.current) {
       if (isPlaying) {
-        // Start fade out
         fadeAudio(false);
-        // Atualizamos o estado somente depois de iniciar o fade para melhorar a UX
         setIsPlaying(false);
       } else {
-        // Start playback and fade in
         const audio = audioRef.current;
         const playPromise = audio.play();
         

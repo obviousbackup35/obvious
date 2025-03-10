@@ -1,5 +1,5 @@
 
-import { useCallback, memo, useState, useEffect } from "react";
+import { useCallback, memo, useState } from "react";
 import type { ContentView } from "@/types/navigation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import NavigationButton from "./navigation/NavigationButton";
@@ -27,18 +27,10 @@ export const Navigation = memo(({
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  useEffect(() => {
-    const mainViews: ContentView[] = ['video', 'company', 'gallery', 'contact'];
-    if (mainViews.includes(currentView)) {
-      sessionStorage.setItem('lastMainView', currentView);
-    }
-  }, [currentView]);
-
   const handleViewChange = useCallback((view: ContentView) => (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     onViewChange(view);
-    
     setMobileMenuOpen(false);
   }, [onViewChange]);
 
@@ -60,9 +52,7 @@ export const Navigation = memo(({
     setMobileMenuOpen(prev => !prev);
   }, []);
 
-  const getTextColor = () => {
-    return '#c8c5ad';
-  };
+  const getTextColor = () => '#c8c5ad';
 
   return (
     <div 
@@ -70,7 +60,6 @@ export const Navigation = memo(({
       style={{
         opacity: isVisible ? 1 : 0,
         pointerEvents: isVisible ? 'auto' : 'none',
-        willChange: 'opacity'
       }}
       role="navigation"
       aria-label="Main Navigation"

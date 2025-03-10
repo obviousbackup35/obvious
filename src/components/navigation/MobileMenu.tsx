@@ -9,26 +9,20 @@ interface MobileMenuProps {
   closeMobileMenu: () => void;
 }
 
-const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMenuProps) => {
+const MobileMenu = memo(({ isOpen, handleViewChange }: MobileMenuProps) => {
   const menuRef = useRef<HTMLDivElement>(null);
   
-  // Memoize styles to prevent recalculations on re-renders
   const menuStyles = useMemo(() => ({
     opacity: isOpen ? 1 : 0,
     visibility: isOpen ? 'visible' as const : 'hidden' as const,
     transition: 'opacity 600ms ease-in-out, visibility 600ms ease-in-out',
-    willChange: isOpen ? 'opacity, visibility' : 'auto',
-    contain: 'content' as const,
   }), [isOpen]);
   
   const containerStyles = useMemo(() => ({
     transform: isOpen ? 'translate3d(0,0,0)' : 'translate3d(0,-20px,0)',
     transition: 'transform 700ms cubic-bezier(0.22, 1, 0.36, 1)',
-    willChange: isOpen ? 'transform' : 'auto',
-    contain: 'layout style' as const,
   }), [isOpen]);
   
-  // Use optimized callbacks for event handlers
   const handleCompanyClick = useCallback(handleViewChange('company'), [handleViewChange]);
   const handleProductClick = useCallback(handleViewChange('projects'), [handleViewChange]);
   const handleGalleryClick = useCallback(handleViewChange('gallery'), [handleViewChange]);
@@ -46,7 +40,7 @@ const MobileMenu = memo(({ isOpen, handleViewChange, closeMobileMenu }: MobileMe
         className="flex items-center justify-center h-full"
         style={containerStyles}
       >
-        <div className="menu-items content-visibility-auto">
+        <div className="menu-items">
           <ul className="space-y-6 p-8 text-center">
             <li>
               <NavigationButton

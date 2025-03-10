@@ -24,7 +24,6 @@ const VideoSection = ({
   handleTimeUpdate,
   setCurrentTime
 }: VideoSectionProps) => {
-  // Memoize the time update handler to prevent recreating on every render
   const handleVideoTimeUpdate = useCallback(() => {
     handleTimeUpdate();
     if (video1Ref.current) {
@@ -32,14 +31,12 @@ const VideoSection = ({
     }
   }, [handleTimeUpdate, video1Ref, setCurrentTime]);
 
-  // Optimized event listener setup with fewer re-renders
   useEffect(() => {
     if (!isPlaying) return;
 
     const video1 = video1Ref.current;
     const video2 = video2Ref.current;
 
-    // Only add listeners if videos exist
     if (video1) {
       video1.addEventListener('timeupdate', handleVideoTimeUpdate);
     }
@@ -49,7 +46,6 @@ const VideoSection = ({
     }
 
     return () => {
-      // Clean up listeners properly
       if (video1) {
         video1.removeEventListener('timeupdate', handleVideoTimeUpdate);
       }
@@ -60,7 +56,6 @@ const VideoSection = ({
     };
   }, [isPlaying, handleVideoTimeUpdate, video1Ref, video2Ref]);
 
-  // Prevent unnecessary re-renders of VideoManager
   return useMemo(() => (
     <VideoManager
       isPlaying={isPlaying}

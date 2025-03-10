@@ -16,21 +16,13 @@ interface ActionButtonsProps {
 }
 
 const ActionButtons = memo(({
-  handleHomeClick,
   handleAudioToggle,
   isPlaying,
   isMobile,
   toggleMobileMenu,
   getTextColor,
-  currentView,
   isMobileMenuOpen
 }: ActionButtonsProps) => {
-  const handleRefresh = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    window.location.reload();
-  };
-
   return (
     <>
       {isMobile && (

@@ -14,7 +14,7 @@ import { useBackgroundLoader } from "@/hooks/useBackgroundLoader";
 const Index = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const { isBackgroundLoaded } = useBackgroundLoader();
-  const { currentView, setCurrentView, handleViewTransition } = useViewTransition(isPlaying);
+  const { currentView, setCurrentView } = useViewTransition(isPlaying);
   const { activeVideo, video1Ref, video2Ref, handleTimeUpdate } = useVideoTransition();
   const { audioRef } = usePageAudio(isPlaying, currentView);
   const { 
@@ -23,28 +23,10 @@ const Index = () => {
     currentTime,
     setCurrentTime
   } = useAudio();
-  
-  useEffect(() => {
-    console.log(`Current view changed to: ${currentView}`);
-  }, [currentView]);
 
   const handleViewChange = useCallback((view: ContentView) => {
-    console.log(`View change requested to: ${view}`);
     setCurrentView(view);
   }, [setCurrentView]);
-
-  const overlayElement = useMemo(() => (
-    <div 
-      className="absolute inset-0 w-full h-full z-10"
-      style={{ 
-        backgroundColor: 'black',
-        opacity: isPlaying ? 1 : 0,
-        transition: 'opacity 0.5s ease-in-out',
-        willChange: 'opacity',
-      }}
-      aria-hidden="true"
-    />
-  ), [isPlaying]);
 
   const navigationElement = useMemo(() => (
     <Navigation 
@@ -74,7 +56,6 @@ const Index = () => {
       currentTime={currentTime}
     >
       {navigationElement}
-      {overlayElement}
       
       <VideoSection
         isPlaying={isPlaying}

@@ -1,5 +1,5 @@
 
-import { CSSProperties, memo, useEffect, useRef } from "react";
+import { CSSProperties, memo } from "react";
 
 interface VideoOverlayProps {
   isBackgroundLoaded: boolean;
@@ -7,22 +7,12 @@ interface VideoOverlayProps {
 }
 
 export const VideoOverlay = memo(({ isBackgroundLoaded, style }: VideoOverlayProps) => {
-  const prevLoadedState = useRef(false);
-  
-  // Optimize transitions by only applying willChange when the state is changing
-  useEffect(() => {
-    prevLoadedState.current = isBackgroundLoaded;
-  }, [isBackgroundLoaded]);
-  
-  const isChanging = prevLoadedState.current !== isBackgroundLoaded;
-  
   return (
     <div 
       className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat z-0"
       style={{ 
         backgroundImage: 'url("/fundo.webp")',
         opacity: isBackgroundLoaded ? 1 : 0,
-        willChange: isChanging ? 'opacity' : 'auto',
         transition: 'opacity 2s ease-in-out',
         ...style
       }}
