@@ -7,25 +7,33 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
   const isScrolling = useRef(false);
   const lastScrollTime = useRef(0);
   const scrollTimeout = useRef<number | null>(null);
+  const scrollDirection = useRef<'up' | 'down' | null>(null);
 
-  // Optimized wheel handler with proper throttling
+  // Optimized wheel handler with proper throttling and direction tracking
   const throttledWheelHandler = useCallback((e: WheelEvent) => {
     const now = Date.now();
-    // Prevent scroll events that are too close together (250ms throttle)
-    if (isScrolling.current || now - lastScrollTime.current < 250) return;
+    const deltaY = Math.abs(e.deltaY);
+    
+    // Ignore small scroll movements
+    if (deltaY < 10) return;
+    
+    // Prevent scroll events that are too close together (200ms throttle)
+    if (isScrolling.current || now - lastScrollTime.current < 200) return;
     
     isScrolling.current = true;
     lastScrollTime.current = now;
     
+    // Track scroll direction
+    const direction = e.deltaY > 0 ? 'down' : 'up';
+    
+    // Only update direction if it's different from the last one
+    if (direction !== scrollDirection.current) {
+      scrollDirection.current = direction;
+    }
+    
     // Use requestAnimationFrame for smoother performance
     requestAnimationFrame(() => {
-      if (e.deltaY > 0) {
-        // Scrolling down
-        handleViewTransition('down');
-      } else if (e.deltaY < 0) {
-        // Scrolling up
-        handleViewTransition('up');
-      }
+      handleViewTransition(direction);
       
       // Reset scrolling state after delay
       if (scrollTimeout.current) {
@@ -35,7 +43,7 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
       scrollTimeout.current = window.setTimeout(() => {
         isScrolling.current = false;
         scrollTimeout.current = null;
-      }, 300);
+      }, 250); // Reduced timeout for more responsive feel
     });
   }, [handleViewTransition]);
 
