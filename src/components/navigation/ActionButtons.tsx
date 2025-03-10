@@ -59,8 +59,8 @@ const ActionButtons = memo(({
         className="absolute right-[2.15rem] top-[calc(50%+80px)] transform -translate-y-1/2 p-2 transition-all duration-700"
       >
         {!isPlaying ? 
-          <VolumeX className="w-[42.75px] h-[42.75px]" style={{ color: getTextColor(), transition: 'color 0.7s ease-in-out' }} aria-hidden="true" /> : 
-          <Volume2 className="w-[42.75px] h-[42.75px]" style={{ color: getTextColor(), transition: 'color 0.7s ease-in-out' }} aria-hidden="true" />
+          <VolumeX className="w-[40.61px] h-[40.61px]" style={{ color: getTextColor(), transition: 'color 0.7s ease-in-out' }} aria-hidden="true" /> : 
+          <Volume2 className="w-[40.61px] h-[40.61px]" style={{ color: getTextColor(), transition: 'color 0.7s ease-in-out' }} aria-hidden="true" />
         }
         <span className="sr-only">{!isPlaying ? 'Play' : 'Pause'}</span>
       </NavigationButton>
