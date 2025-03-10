@@ -8,8 +8,9 @@ import { ForgotPasswordForm } from "@/components/auth/ForgotPasswordForm";
 import { ResetPasswordForm } from "@/components/auth/ResetPasswordForm";
 import { AuthView } from "@/components/auth/types";
 import { ArrowLeft } from "lucide-react";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { AuthContainer } from "@/components/auth/AuthContainer";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function Auth() {
   const [loading, setLoading] = useState(false);
@@ -39,6 +40,38 @@ export default function Auth() {
     if (type === "recovery") {
       console.log("Recovery parameter detected, switching to reset-password view");
       setView("reset-password");
+      
+      // Check if there's a hash in the URL (for password reset)
+      const hash = window.location.hash;
+      if (hash) {
+        console.log("Hash detected in URL, likely a password reset token");
+        // Parse the hash to get the access token if available
+        const accessToken = new URLSearchParams(hash.substring(1)).get("access_token");
+        if (accessToken) {
+          console.log("Access token found in URL hash");
+          
+          // Set the session with the access token
+          supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: "",
+          }).then(({ data, error }) => {
+            if (error) {
+              console.error("Error setting session from access token:", error);
+              toast({
+                title: "Erro de autenticação",
+                description: "Token de acesso inválido ou expirado",
+                variant: "destructive",
+              });
+            } else {
+              console.log("Session set from access token:", data);
+              toast({
+                title: "Autenticado",
+                description: "Você pode redefinir sua senha agora",
+              });
+            }
+          });
+        }
+      }
     } else if (type === "confirmation") {
       console.log("Confirmation parameter detected, showing confirmation message");
       toast({

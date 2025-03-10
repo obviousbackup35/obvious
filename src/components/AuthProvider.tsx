@@ -2,7 +2,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { User, Session, AuthError } from "@supabase/supabase-js";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 
 interface AuthContextType {
   user: User | null;
@@ -140,9 +140,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
       }
       
-      // Remove the USER_DELETED check as it's not part of the AuthChangeEvent type
-      // Instead, handle only the valid event types
-
       if (event === 'TOKEN_REFRESHED') {
         console.log("Token atualizado");
         if (newSession) {
