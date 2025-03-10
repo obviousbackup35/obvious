@@ -1,6 +1,6 @@
 
 import { memo } from "react";
-import { Volume2, VolumeX, Hexagon, Menu, X } from "lucide-react";
+import { Volume2, VolumeX, Menu, X } from "lucide-react";
 import NavigationButton from "./NavigationButton";
 import type { ContentView } from "@/types/navigation";
 
@@ -33,18 +33,6 @@ const ActionButtons = memo(({
 
   return (
     <>
-      <NavigationButton
-        onClick={handleHomeClick}
-        className="absolute left-[1.75rem] top-[13.5cm] p-2 transition-all duration-700"
-      >
-        <Hexagon 
-          className="w-7 h-7" 
-          style={{ color: getTextColor(), transition: 'color 0.7s ease-in-out' }} 
-          aria-hidden="true"
-        />
-        <span className="sr-only">Home</span>
-      </NavigationButton>
-
       {isMobile && (
         <NavigationButton
           onClick={toggleMobileMenu}

@@ -6,7 +6,6 @@ import NavigationButton from "./navigation/NavigationButton";
 import MobileMenu from "./navigation/MobileMenu";
 import DesktopMenu from "./navigation/DesktopMenu";
 import ActionButtons from "./navigation/ActionButtons";
-import { Globe } from "lucide-react";
 
 interface NavigationProps {
   audioRef: React.RefObject<HTMLAudioElement>;
@@ -27,7 +26,6 @@ export const Navigation = memo(({
 }: NavigationProps) => {
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [language, setLanguage] = useState('pt');
 
   useEffect(() => {
     const mainViews: ContentView[] = ['video', 'company', 'gallery', 'contact'];
@@ -62,13 +60,6 @@ export const Navigation = memo(({
     setMobileMenuOpen(prev => !prev);
   }, []);
 
-  const handleLanguageToggle = useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setLanguage(prev => prev === 'pt' ? 'en' : 'pt');
-    console.log('Language switched to:', language === 'pt' ? 'en' : 'pt');
-  }, [language]);
-
   const getTextColor = () => {
     return '#c8c5ad';
   };
@@ -89,15 +80,6 @@ export const Navigation = memo(({
           className="flex justify-center items-center font-montserrat text-[1.38rem] relative transition-colors duration-700" 
           style={{ color: getTextColor() }}
         >
-          <NavigationButton
-            onClick={handleLanguageToggle}
-            className="cursor-pointer hover:opacity-70 transition-colors duration-300 rounded-full p-2 absolute left-[1.75rem] top-0"
-            style={{ color: getTextColor() }}
-          >
-            <Globe size={30} />
-            <span className="sr-only">Toggle Language</span>
-          </NavigationButton>
-
           <ActionButtons 
             handleHomeClick={handleHomeClick}
             handleAudioToggle={handleAudioToggle}
