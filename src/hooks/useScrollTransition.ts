@@ -1,5 +1,5 @@
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 
 export const useScrollTransition = () => {
   const [isDunesVisible, setIsDunesVisible] = useState(false);
@@ -12,27 +12,6 @@ export const useScrollTransition = () => {
     setIsDarkMode(prev => !prev);
     setScrollProgress(prev => prev === 0 ? 1 : 0);
   }, []);
-
-  // Handle wheel events to toggle between views
-  useEffect(() => {
-    const handleWheel = (e: WheelEvent) => {
-      // Fix: Correct the scroll direction
-      if (e.deltaY > 0 && !isDunesVisible) {
-        // Scroll down to show dunes
-        toggleDunes();
-      } else if (e.deltaY < 0 && isDunesVisible) {
-        // Scroll up to show video
-        toggleDunes();
-      }
-      e.preventDefault();
-    };
-    
-    window.addEventListener('wheel', handleWheel, { passive: false });
-    
-    return () => {
-      window.removeEventListener('wheel', handleWheel);
-    };
-  }, [isDunesVisible, toggleDunes]);
 
   const getTextColor = useCallback(() => {
     // Transition from #c8c5ad (light) to #333333 (dark)
