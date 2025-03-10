@@ -40,6 +40,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           });
         } else {
           console.log("Dados da sessão:", data.session ? "Sessão existe" : "Sem sessão ativa");
+          if (data.session) {
+            console.log("Usuário autenticado:", data.session.user.email);
+          }
           setUser(data.session?.user ?? null);
           setSession(data.session);
         }
@@ -59,8 +62,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } = supabase.auth.onAuthStateChange((event, newSession) => {
       console.log("Estado de autenticação alterado:", event, newSession ? "Sessão existe" : "Sem sessão");
       
+      if (newSession) {
+        console.log("Usuário na nova sessão:", newSession.user.email);
+      }
+      
       if (event === 'PASSWORD_RECOVERY') {
         console.log("Recuperação de senha detectada");
+      }
+      
+      if (event === 'SIGNED_IN') {
+        console.log("Usuário conectado:", newSession?.user.email);
+        toast({
+          title: "Login bem-sucedido",
+          description: `Bem-vindo, ${newSession?.user.email}!`,
+        });
+      }
+      
+      if (event === 'SIGNED_OUT') {
+        console.log("Usuário desconectado");
+        toast({
+          title: "Desconectado",
+          description: "Você saiu da sua conta",
+        });
       }
       
       setUser(newSession?.user ?? null);

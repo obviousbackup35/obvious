@@ -12,34 +12,41 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [errors, setErrors] = useState({ email: "", password: "", confirm: "" });
+
+  const validateForm = () => {
+    let isValid = true;
+    const newErrors = { email: "", password: "", confirm: "" };
+    
+    if (!email) {
+      newErrors.email = "Email é obrigatório";
+      isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = "Email inválido";
+      isValid = false;
+    }
+    
+    if (!password) {
+      newErrors.password = "Senha é obrigatória";
+      isValid = false;
+    } else if (password.length < 6) {
+      newErrors.password = "A senha deve ter pelo menos 6 caracteres";
+      isValid = false;
+    }
+    
+    if (password !== confirmPassword) {
+      newErrors.confirm = "As senhas não coincidem";
+      isValid = false;
+    }
+    
+    setErrors(newErrors);
+    return isValid;
+  };
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!email || !password || !confirmPassword) {
-      toast({
-        title: "Campos obrigatórios",
-        description: "Por favor, preencha todos os campos para continuar",
-        variant: "destructive",
-      });
-      return;
-    }
-    
-    if (password.length < 6) {
-      toast({
-        title: "Senha muito curta",
-        description: "A senha deve ter pelo menos 6 caracteres",
-        variant: "destructive",
-      });
-      return;
-    }
-    
-    if (password !== confirmPassword) {
-      toast({
-        title: "Senhas não coincidem",
-        description: "Por favor, certifique-se de que suas senhas coincidem",
-        variant: "destructive",
-      });
+    if (!validateForm()) {
       return;
     }
     
@@ -50,9 +57,15 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          emailRedirectTo: window.location.origin + '/auth',
+        }
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Erro de registro:", error);
+        throw error;
+      }
       
       console.log("Registro bem-sucedido:", data);
       
@@ -60,12 +73,30 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
         title: "Registro bem-sucedido",
         description: "Por favor, verifique seu email para confirmar seu registro.",
       });
+      
+      // Clear form
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+      
+      // Redirect to login page
       onViewChange("login");
     } catch (error: any) {
-      console.error("Erro de registro:", error.message);
+      console.error("Erro de registro detalhado:", error);
+      
+      let errorMessage = "Falha ao criar conta";
+      
+      if (error.message) {
+        if (error.message.includes("already registered")) {
+          errorMessage = "Este email já está registrado";
+        } else {
+          errorMessage = error.message;
+        }
+      }
+      
       toast({
         title: "Erro de registro",
-        description: error.message || "Falha ao criar conta",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -87,10 +118,10 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
               placeholder="seu@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              required
               className="bg-white/20 border-white/30 text-white placeholder:text-white/50"
               autoComplete="email"
             />
+            {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email}</p>}
           </div>
 
           <div className="space-y-2">
@@ -100,10 +131,10 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              required
               className="bg-white/20 border-white/30 text-white"
               autoComplete="new-password"
             />
+            {errors.password && <p className="text-red-400 text-sm mt-1">{errors.password}</p>}
           </div>
           
           <div className="space-y-2">
@@ -113,10 +144,10 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              required
               className="bg-white/20 border-white/30 text-white"
               autoComplete="new-password"
             />
+            {errors.confirm && <p className="text-red-400 text-sm mt-1">{errors.confirm}</p>}
           </div>
 
           <Button 

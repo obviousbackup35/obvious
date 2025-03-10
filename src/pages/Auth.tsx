@@ -9,6 +9,7 @@ import { ResetPasswordForm } from "@/components/auth/ResetPasswordForm";
 import { AuthView } from "@/components/auth/types";
 import { ArrowLeft } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
+import { AuthContainer } from "@/components/auth/AuthContainer";
 
 export default function Auth() {
   const [loading, setLoading] = useState(false);
@@ -54,7 +55,7 @@ export default function Auth() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800">
-      <div className="bg-white/10 backdrop-blur-md p-8 rounded-lg shadow-xl w-full max-w-md relative">
+      <AuthContainer>
         <button
           onClick={handleBack}
           className="absolute left-4 top-4 text-white hover:text-white/70 transition-colors"
@@ -98,7 +99,7 @@ export default function Auth() {
             setLoading={setLoading} 
           />
         )}
-      </div>
+      </AuthContainer>
     </div>
   );
 }
