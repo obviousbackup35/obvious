@@ -26,20 +26,25 @@ export const LoginForm = ({ onBack, onViewChange, loading, setLoading }: AuthFor
     
     try {
       setLoading(true);
-      const { error } = await supabase.auth.signInWithPassword({
+      console.log("Attempting login with:", email);
+      
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (error) throw error;
       
+      console.log("Login successful:", data.user?.id);
+      
       toast({
         title: "Login successful",
         description: "Welcome back!",
       });
       
-      onBack();
+      // The redirect will happen automatically via the useEffect in the Auth page
     } catch (error: any) {
+      console.error("Login error:", error.message);
       toast({
         title: "Login error",
         description: error.message || "Failed to login",
@@ -52,8 +57,6 @@ export const LoginForm = ({ onBack, onViewChange, loading, setLoading }: AuthFor
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-center mb-6">Sign In</h1>
-      
       <form onSubmit={handleLogin}>
         <div className="space-y-4">
           <div className="space-y-2">

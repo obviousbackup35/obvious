@@ -1,4 +1,3 @@
-
 import { useCallback, memo, useState, useEffect } from "react";
 import type { ContentView } from "@/types/navigation";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -32,10 +31,8 @@ export const Navigation = memo(({
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  // Add state for language
-  const [language, setLanguage] = useState('pt'); // Default language is Portuguese
+  const [language, setLanguage] = useState('pt');
 
-  // Effect to store last main view for back navigation
   useEffect(() => {
     const mainViews: ContentView[] = ['video', 'dunes', 'company', 'gallery', 'contact'];
     if (mainViews.includes(currentView)) {
@@ -48,7 +45,6 @@ export const Navigation = memo(({
     e.stopPropagation();
     onViewChange(view);
     
-    // Close the menu after view change
     setMobileMenuOpen(false);
   }, [onViewChange]);
 
@@ -70,18 +66,14 @@ export const Navigation = memo(({
     setMobileMenuOpen(prev => !prev);
   }, []);
 
-  // Modified to handle closing the auth view if it's already open
   const handleAuthClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
-    // If auth view is already open, close it by returning to the last main view
     if (currentView === 'auth') {
-      // Get the last main view from sessionStorage
       const lastMainView = sessionStorage.getItem('lastMainView') || 'video';
       onViewChange(lastMainView as ContentView);
     } else {
-      // Store current view before navigating to auth
       if (currentView !== 'profile') {
         sessionStorage.setItem('lastMainView', currentView);
       }
@@ -89,18 +81,14 @@ export const Navigation = memo(({
     }
   }, [onViewChange, currentView]);
 
-  // Modified to handle closing the profile view if it's already open
   const handleProfileClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
-    // If profile view is already open, close it by returning to the last main view
     if (currentView === 'profile') {
-      // Get the last main view from sessionStorage
       const lastMainView = sessionStorage.getItem('lastMainView') || 'video';
       onViewChange(lastMainView as ContentView);
     } else {
-      // Store current view before navigating to profile
       if (currentView !== 'auth') {
         sessionStorage.setItem('lastMainView', currentView);
       }
@@ -108,16 +96,13 @@ export const Navigation = memo(({
     }
   }, [onViewChange, currentView]);
 
-  // Add language toggle handler
   const handleLanguageToggle = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setLanguage(prev => prev === 'pt' ? 'en' : 'pt');
-    // Here you would implement actual language switching logic
     console.log('Language switched to:', language === 'pt' ? 'en' : 'pt');
   }, [language]);
 
-  // Reimplementing adaptive text color based on the current view
   const getTextColor = () => {
     if (currentView === 'dunes') {
       return '#555555';
@@ -141,7 +126,6 @@ export const Navigation = memo(({
           className="flex justify-center items-center font-montserrat text-[1.38rem] relative transition-colors duration-700" 
           style={{ color: getTextColor() }}
         >
-          {/* Language toggle button at top left */}
           <NavigationButton
             onClick={handleLanguageToggle}
             className="cursor-pointer hover:opacity-70 transition-colors duration-300 rounded-full p-2 absolute left-[1.75rem] top-0"
@@ -151,12 +135,11 @@ export const Navigation = memo(({
             <span className="sr-only">Toggle Language</span>
           </NavigationButton>
           
-          {/* Login/profile button at top right */}
           <NavigationButton
             onClick={user ? handleProfileClick : handleAuthClick}
             className="cursor-pointer hover:opacity-70 transition-colors duration-300 rounded-full p-2 absolute right-[1.75rem] top-0"
             style={{ color: getTextColor() }}
-            aria-label={user ? "Perfil" : "Login"}
+            aria-label={user ? "Profile" : "Login"}
           >
             <UserRound size={30} />
           </NavigationButton>

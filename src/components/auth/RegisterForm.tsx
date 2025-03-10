@@ -11,14 +11,15 @@ import { AuthFormProps } from "./types";
 export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!email || !password) {
+    if (!email || !password || !confirmPassword) {
       toast({
         title: "Required fields",
-        description: "Please enter email and password to continue",
+        description: "Please fill in all fields to continue",
         variant: "destructive",
       });
       return;
@@ -33,14 +34,27 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
       return;
     }
     
+    if (password !== confirmPassword) {
+      toast({
+        title: "Passwords don't match",
+        description: "Please make sure your passwords match",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     try {
       setLoading(true);
-      const { error } = await supabase.auth.signUp({
+      console.log("Attempting registration with:", email);
+      
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
       });
 
       if (error) throw error;
+      
+      console.log("Registration successful:", data);
       
       toast({
         title: "Registration successful",
@@ -48,6 +62,7 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
       });
       onViewChange("login");
     } catch (error: any) {
+      console.error("Registration error:", error.message);
       toast({
         title: "Registration error",
         description: error.message || "Failed to create account",
@@ -60,8 +75,6 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-center mb-6">Create Account</h1>
-      
       <form onSubmit={handleRegister}>
         <div className="space-y-4">
           <div className="space-y-2">
@@ -85,6 +98,19 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
+              className="bg-white/20 border-white/30 text-white"
+              autoComplete="new-password"
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="confirmPassword" className="text-white">Confirm Password</Label>
+            <Input
+              id="confirmPassword"
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               required
               className="bg-white/20 border-white/30 text-white"
               autoComplete="new-password"

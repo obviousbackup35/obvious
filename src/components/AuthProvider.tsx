@@ -3,7 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { User } from "@supabase/supabase-js";
 import { toast } from "@/components/ui/use-toast";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface AuthContextType {
   user: User | null;
@@ -22,9 +22,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [sessionInitialized, setSessionInitialized] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
+  // Handle password reset redirects
   useEffect(() => {
-    // Handle password reset redirects
     const handlePasswordReset = async () => {
       const searchParams = new URLSearchParams(location.search);
       const type = searchParams.get("type");
@@ -44,14 +45,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             
             // Notify user to set new password
             toast({
-              title: "Redefinição de senha",
-              description: "Por favor, defina sua nova senha agora.",
+              title: "Password reset",
+              description: "Please set your new password now.",
             });
+            
+            // Navigate to reset password form
+            navigate("/auth?type=recovery", { replace: true });
           } catch (err: any) {
-            console.error("Erro ao processar redefinição de senha:", err);
+            console.error("Error processing password reset:", err);
             toast({
-              title: "Erro na redefinição",
-              description: err.message || "Link de redefinição inválido ou expirado",
+              title: "Reset error",
+              description: err.message || "Invalid or expired reset link",
               variant: "destructive",
             });
           }
@@ -59,23 +63,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     };
 
-    handlePasswordReset();
-  }, [location]);
+    if (location.search) {
+      handlePasswordReset();
+    }
+  }, [location, navigate]);
 
   useEffect(() => {
     // Check if there's an active session
     const initSession = async () => {
       try {
+        console.log("Fetching auth session...");
         const { data, error } = await supabase.auth.getSession();
         
         if (error) {
           console.error("Error fetching session:", error);
           toast({
-            title: "Erro de autenticação",
-            description: "Falha ao recuperar sessão",
+            title: "Authentication error",
+            description: "Failed to retrieve session",
             variant: "destructive",
           });
         } else {
+          console.log("Session data:", data.session ? "Session exists" : "No active session");
           setUser(data.session?.user ?? null);
         }
       } catch (err) {
@@ -91,7 +99,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Listen for auth changes
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log("Auth state changed:", event, session ? "Session exists" : "No session");
       setUser(session?.user ?? null);
       setLoading(false);
       setSessionInitialized(true);
