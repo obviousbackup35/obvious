@@ -50,9 +50,7 @@ export const PolicyMenu = ({
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 px-4">
             {policyGroups.map(group => (
               <div key={group.title} className="text-center">
-                <h3 className="text-sm font-black mb-3 tracking-wider uppercase" style={{
-                  color: '#d4d1b9'
-                }}>
+                <h3 className="text-sm font-black mb-3 tracking-wider uppercase text-white/80">
                   {group.title}
                 </h3>
                 <ul className="space-y-2">
@@ -119,9 +117,7 @@ export const PolicyMenu = ({
             key={currentGroup.title} 
             className="text-center w-full animate-fade-in"
           >
-            <h3 className="text-sm font-black mb-3 tracking-wider uppercase" style={{
-              color: '#d4d1b9'
-            }}>
+            <h3 className="text-sm font-black mb-3 tracking-wider uppercase text-white/80">
               {currentGroup.title}
             </h3>
             <ul className="space-y-2">
