@@ -1,5 +1,5 @@
 
-import { forwardRef, CSSProperties, useEffect, memo, useRef } from "react";
+import { forwardRef, CSSProperties, useEffect, memo, useRef, useMemo } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface VideoPlayerProps {
@@ -25,15 +25,14 @@ export const VideoPlayer = memo(forwardRef<HTMLVideoElement, VideoPlayerProps>(
       }
     }, [ref, src]);
 
-    // Optimize style calculation
-    const videoStyle = {
+    const videoStyle = useMemo(() => ({
       opacity: isPlaying && isActive ? 1 : 0,
       transition: 'opacity 1s ease-in-out',
       willChange: isPlaying && isActive ? 'opacity' : 'auto',
       objectFit: isMobile ? 'contain' : 'cover',
       transform: isMobile ? 'translate3d(0,0,0) scale(1.15)' : 'translate3d(0,0,0)',
       ...style
-    } as CSSProperties;
+    }), [isPlaying, isActive, isMobile, style]);
 
     return (
       <video

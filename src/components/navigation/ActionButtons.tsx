@@ -1,5 +1,5 @@
 
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import { Volume2, VolumeX, Menu, X } from "lucide-react";
 import NavigationButton from "./NavigationButton";
 import type { ContentView } from "@/types/navigation";
@@ -23,12 +23,21 @@ const ActionButtons = memo(({
   getTextColor,
   isMobileMenuOpen
 }: ActionButtonsProps) => {
-  // Audio icon size decreased by 5% from 42.012px
   const audioIconSize = "39.91px";
+  
+  // Memoize styles to prevent recalculation on every render
+  const menuIconStyle = useMemo(() => ({ 
+    color: isMobileMenuOpen ? '#ffffff' : getTextColor(),
+    transition: 'color 0.7s ease-in-out' 
+  }), [isMobileMenuOpen, getTextColor]);
+
+  const audioIconStyle = useMemo(() => ({ 
+    color: getTextColor(), 
+    transition: 'color 0.7s ease-in-out' 
+  }), [getTextColor]);
   
   return (
     <>
-      {/* Mobile menu button - completely separate from audio button */}
       {isMobile && (
         <div className="mobile-menu-container">
           <NavigationButton
@@ -39,19 +48,13 @@ const ActionButtons = memo(({
             {isMobileMenuOpen ? (
               <X 
                 className="w-7 h-7" 
-                style={{ 
-                  color: '#ffffff',
-                  transition: 'color 0.7s ease-in-out' 
-                }} 
+                style={menuIconStyle} 
                 aria-hidden="true"
               />
             ) : (
               <Menu 
                 className="w-7 h-7" 
-                style={{ 
-                  color: getTextColor(), 
-                  transition: 'color 0.7s ease-in-out' 
-                }} 
+                style={menuIconStyle} 
                 aria-hidden="true"
               />
             )}
@@ -60,7 +63,6 @@ const ActionButtons = memo(({
         </div>
       )}
 
-      {/* Audio button - completely separate component */}
       <div className="audio-control-container">
         <NavigationButton
           onClick={handleAudioToggle}
@@ -71,19 +73,13 @@ const ActionButtons = memo(({
             <VolumeX 
               width={audioIconSize} 
               height={audioIconSize} 
-              style={{ 
-                color: getTextColor(), 
-                transition: 'color 0.7s ease-in-out' 
-              }} 
+              style={audioIconStyle}
               aria-hidden="true" 
             /> : 
             <Volume2 
               width={audioIconSize} 
               height={audioIconSize} 
-              style={{ 
-                color: getTextColor(), 
-                transition: 'color 0.7s ease-in-out' 
-              }} 
+              style={audioIconStyle}
               aria-hidden="true" 
             />
           }
