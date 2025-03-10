@@ -6,7 +6,7 @@ import NavigationButton from "./navigation/NavigationButton";
 import MobileMenu from "./navigation/MobileMenu";
 import DesktopMenu from "./navigation/DesktopMenu";
 import ActionButtons from "./navigation/ActionButtons";
-import { UserRound, Globe } from "lucide-react"; // Added Globe icon import
+import { UserRound, Globe } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthProvider";
 
@@ -34,6 +34,14 @@ export const Navigation = memo(({
 
   // Add state for language
   const [language, setLanguage] = useState('pt'); // Default language is Portuguese
+
+  // Effect to store last main view for back navigation
+  useEffect(() => {
+    const mainViews: ContentView[] = ['video', 'dunes', 'about', 'policy', 'vision'];
+    if (mainViews.includes(currentView)) {
+      sessionStorage.setItem('lastMainView', currentView);
+    }
+  }, [currentView]);
 
   const handleViewChange = useCallback((view: ContentView) => (e: React.MouseEvent) => {
     e.preventDefault();
@@ -73,6 +81,10 @@ export const Navigation = memo(({
       const lastMainView = sessionStorage.getItem('lastMainView') || 'video';
       onViewChange(lastMainView as ContentView);
     } else {
+      // Store current view before navigating to auth
+      if (currentView !== 'profile') {
+        sessionStorage.setItem('lastMainView', currentView);
+      }
       onViewChange('auth');
     }
   }, [onViewChange, currentView]);
@@ -88,6 +100,10 @@ export const Navigation = memo(({
       const lastMainView = sessionStorage.getItem('lastMainView') || 'video';
       onViewChange(lastMainView as ContentView);
     } else {
+      // Store current view before navigating to profile
+      if (currentView !== 'auth') {
+        sessionStorage.setItem('lastMainView', currentView);
+      }
       onViewChange('profile');
     }
   }, [onViewChange, currentView]);
@@ -140,8 +156,9 @@ export const Navigation = memo(({
             onClick={user ? handleProfileClick : handleAuthClick}
             className="cursor-pointer hover:opacity-70 transition-colors duration-300 rounded-full p-2 absolute right-[1.75rem] top-0"
             style={{ color: getTextColor() }}
+            aria-label={user ? "Perfil" : "Login"}
           >
-            <UserRound size={30} /> {/* Reduced size from 32 to 30 (approx 5% smaller) */}
+            <UserRound size={30} />
           </NavigationButton>
 
           <ActionButtons 

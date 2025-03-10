@@ -1,11 +1,12 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type AuthView = "login" | "register" | "forgot-password";
 
@@ -18,9 +19,26 @@ export const AuthContent = ({ onBack }: AuthContentProps) => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [authView, setAuthView] = useState<AuthView>("login");
+  const isMobile = useIsMobile();
+
+  // Clear form fields when changing views
+  useEffect(() => {
+    setEmail("");
+    setPassword("");
+  }, [authView]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!email || !password) {
+      toast({
+        title: "Missing Information",
+        description: "Please enter both email and password",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     try {
       setLoading(true);
       const { error } = await supabase.auth.signInWithPassword({
@@ -29,11 +47,17 @@ export const AuthContent = ({ onBack }: AuthContentProps) => {
       });
 
       if (error) throw error;
+      
+      toast({
+        title: "Login Successful",
+        description: "Welcome back!",
+      });
+      
       onBack();
     } catch (error: any) {
       toast({
         title: "Login Error",
-        description: error.message,
+        description: error.message || "Failed to login",
         variant: "destructive",
       });
     } finally {
@@ -43,6 +67,25 @@ export const AuthContent = ({ onBack }: AuthContentProps) => {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!email || !password) {
+      toast({
+        title: "Missing Information",
+        description: "Please enter both email and password",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (password.length < 6) {
+      toast({
+        title: "Password Too Short",
+        description: "Password must be at least 6 characters",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     try {
       setLoading(true);
       const { error } = await supabase.auth.signUp({
@@ -51,6 +94,7 @@ export const AuthContent = ({ onBack }: AuthContentProps) => {
       });
 
       if (error) throw error;
+      
       toast({
         title: "Registration Successful",
         description: "Please check your email to confirm your registration.",
@@ -59,7 +103,7 @@ export const AuthContent = ({ onBack }: AuthContentProps) => {
     } catch (error: any) {
       toast({
         title: "Registration Error",
-        description: error.message,
+        description: error.message || "Failed to register",
         variant: "destructive",
       });
     } finally {
@@ -69,6 +113,16 @@ export const AuthContent = ({ onBack }: AuthContentProps) => {
 
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!email) {
+      toast({
+        title: "Missing Email",
+        description: "Please enter your email address",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     try {
       setLoading(true);
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
@@ -76,6 +130,7 @@ export const AuthContent = ({ onBack }: AuthContentProps) => {
       });
 
       if (error) throw error;
+      
       toast({
         title: "Email Sent",
         description: "Check your email to reset your password.",
@@ -84,7 +139,7 @@ export const AuthContent = ({ onBack }: AuthContentProps) => {
     } catch (error: any) {
       toast({
         title: "Email Error",
-        description: error.message,
+        description: error.message || "Failed to send reset email",
         variant: "destructive",
       });
     } finally {
@@ -93,19 +148,20 @@ export const AuthContent = ({ onBack }: AuthContentProps) => {
   };
 
   return (
-    <div className="flex items-center justify-center h-full">
-      <div className="bg-white/10 backdrop-blur-md p-8 rounded-lg shadow-xl w-full max-w-md text-white relative">
+    <div className="flex items-center justify-center h-full w-full">
+      <div className="bg-white/10 backdrop-blur-md p-6 sm:p-8 rounded-lg shadow-xl w-full max-w-md mx-4 text-white relative">
         <button
           onClick={onBack}
           className="absolute left-4 top-4 text-white/60 hover:text-white transition-colors"
+          aria-label="Voltar"
         >
           <ArrowLeft size={24} />
         </button>
 
         <h1 className="text-2xl font-bold text-center mb-6">
-          {authView === "login" && "Sign In"}
-          {authView === "register" && "Create Account"}
-          {authView === "forgot-password" && "Reset Password"}
+          {authView === "login" && "Entrar"}
+          {authView === "register" && "Criar Conta"}
+          {authView === "forgot-password" && "Recuperar Senha"}
         </h1>
 
         <form onSubmit={
@@ -121,17 +177,18 @@ export const AuthContent = ({ onBack }: AuthContentProps) => {
               <Input
                 id="email"
                 type="email"
-                placeholder="your@email.com"
+                placeholder="seu@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="bg-white/20 border-white/30 text-white placeholder:text-white/50"
+                autoComplete="email"
               />
             </div>
 
             {authView !== "forgot-password" && (
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-white">Password</Label>
+                <Label htmlFor="password" className="text-white">Senha</Label>
                 <Input
                   id="password"
                   type="password"
@@ -139,6 +196,7 @@ export const AuthContent = ({ onBack }: AuthContentProps) => {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   className="bg-white/20 border-white/30 text-white"
+                  autoComplete={authView === "login" ? "current-password" : "new-password"}
                 />
               </div>
             )}
@@ -148,12 +206,17 @@ export const AuthContent = ({ onBack }: AuthContentProps) => {
               className="w-full bg-white/20 hover:bg-white/30 backdrop-blur-sm" 
               disabled={loading}
             >
-              {loading ? "Loading..." : (
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <span>Processando...</span>
+                </>
+              ) : (
                 authView === "login" 
-                  ? "Sign In" 
+                  ? "Entrar" 
                   : authView === "register" 
-                    ? "Sign Up" 
-                    : "Send Email"
+                    ? "Cadastrar" 
+                    : "Enviar Email"
               )}
             </Button>
           </div>
@@ -166,13 +229,13 @@ export const AuthContent = ({ onBack }: AuthContentProps) => {
                 onClick={() => setAuthView("forgot-password")}
                 className="text-sm text-white/80 hover:text-white block w-full"
               >
-                Forgot your password?
+                Esqueceu sua senha?
               </button>
               <button
                 onClick={() => setAuthView("register")}
                 className="text-sm text-white/80 hover:text-white block w-full"
               >
-                Don't have an account? Sign Up
+                Não tem uma conta? Cadastre-se
               </button>
             </>
           )}
@@ -181,7 +244,7 @@ export const AuthContent = ({ onBack }: AuthContentProps) => {
               onClick={() => setAuthView("login")}
               className="text-sm text-white/80 hover:text-white block w-full"
             >
-              Already have an account? Sign In
+              Já tem uma conta? Entrar
             </button>
           )}
         </div>
