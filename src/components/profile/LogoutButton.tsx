@@ -15,19 +15,24 @@ export const LogoutButton = ({ onLogoutSuccess }: LogoutButtonProps) => {
   const handleLogout = async () => {
     try {
       setLoading(true);
+      console.log("Iniciando processo de logout");
+      
       const { error } = await supabase.auth.signOut();
       
       if (error) throw error;
       
+      console.log("Logout realizado com sucesso");
+      
       toast({
-        title: "Logout successful",
-        description: "You've been signed out",
+        title: "Logout bem-sucedido",
+        description: "Você saiu da sua conta",
       });
       onLogoutSuccess();
     } catch (error: any) {
+      console.error("Erro ao fazer logout:", error.message);
       toast({
-        title: "Error signing out",
-        description: error.message || "Failed to logout",
+        title: "Erro ao sair",
+        description: error.message || "Falha ao fazer logout",
         variant: "destructive",
       });
     } finally {
@@ -45,10 +50,10 @@ export const LogoutButton = ({ onLogoutSuccess }: LogoutButtonProps) => {
       {loading ? (
         <>
           <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-          <span>Signing out...</span>
+          <span>Saindo...</span>
         </>
       ) : (
-        "Sign out"
+        "Sair"
       )}
     </Button>
   );

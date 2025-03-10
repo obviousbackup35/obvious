@@ -38,7 +38,7 @@ export const ProfileSection = ({ isVisible, onBack }: ProfileSectionProps) => {
         <div className="bg-white/10 backdrop-blur-md p-6 sm:p-8 rounded-lg max-w-md w-full">
           <h2 className="text-2xl font-bold text-white mb-6 text-center">Perfil</h2>
           
-          {user && (
+          {user ? (
             <>
               {!showPasswordChange ? (
                 <UserInfo 
@@ -50,10 +50,20 @@ export const ProfileSection = ({ isVisible, onBack }: ProfileSectionProps) => {
                   onCancel={() => setShowPasswordChange(false)} 
                 />
               )}
+              
+              <LogoutButton onLogoutSuccess={onBack} />
             </>
+          ) : (
+            <div className="text-white text-center">
+              <p className="mb-4">Você não está conectado.</p>
+              <button 
+                onClick={onBack}
+                className="text-white/80 hover:text-white underline"
+              >
+                Voltar para a página inicial
+              </button>
+            </div>
           )}
-          
-          <LogoutButton onLogoutSuccess={onBack} />
         </div>
       </div>
     </div>

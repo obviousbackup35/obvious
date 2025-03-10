@@ -1,15 +1,14 @@
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/AuthProvider";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { RegisterForm } from "@/components/auth/RegisterForm";
 import { ForgotPasswordForm } from "@/components/auth/ForgotPasswordForm";
 import { ResetPasswordForm } from "@/components/auth/ResetPasswordForm";
-import { toast } from "@/components/ui/use-toast";
 import { AuthView } from "@/components/auth/types";
 import { ArrowLeft } from "lucide-react";
+import { toast } from "@/components/ui/use-toast";
 
 export default function Auth() {
   const [loading, setLoading] = useState(false);
@@ -19,26 +18,37 @@ export default function Auth() {
 
   // Check for password reset parameters in URL
   useEffect(() => {
+    console.log("Auth page mounted, checking URL params");
     const searchParams = new URLSearchParams(window.location.search);
     const type = searchParams.get("type");
     
     if (type === "recovery") {
+      console.log("Recovery parameter detected, switching to reset-password view");
       setView("reset-password");
     }
   }, []);
 
   // Redirect to home if already authenticated
   useEffect(() => {
+    console.log("Auth check: sessionInitialized =", sessionInitialized, ", user =", user ? "exists" : "null");
+    
     if (sessionInitialized && user) {
+      console.log("Usuário autenticado, redirecionando para a página inicial");
+      toast({
+        title: "Autenticado",
+        description: "Você está conectado como " + user.email,
+      });
       navigate("/");
     }
   }, [user, sessionInitialized, navigate]);
 
   const handleBack = () => {
+    console.log("Voltando para a página inicial");
     navigate("/");
   };
 
   const handleViewChange = (newView: AuthView) => {
+    console.log("Mudando visualização para:", newView);
     setView(newView);
   };
 
@@ -48,17 +58,10 @@ export default function Auth() {
         <button
           onClick={handleBack}
           className="absolute left-4 top-4 text-white hover:text-white/70 transition-colors"
-          aria-label="Back"
+          aria-label="Voltar"
         >
           <ArrowLeft size={24} />
         </button>
-
-        <h1 className="text-2xl font-bold text-center mb-6 text-white">
-          {view === "login" && "Sign In"}
-          {view === "register" && "Create Account"}
-          {view === "forgot-password" && "Reset Password"}
-          {view === "reset-password" && "Create New Password"}
-        </h1>
 
         {view === "login" && (
           <LoginForm 

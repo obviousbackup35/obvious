@@ -8,7 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/use-toast";
 import { AuthFormProps } from "./types";
 
-export const LoginForm = ({ onBack, onViewChange, loading, setLoading }: AuthFormProps) => {
+export const LoginForm = ({ onViewChange, loading, setLoading }: AuthFormProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -17,8 +17,8 @@ export const LoginForm = ({ onBack, onViewChange, loading, setLoading }: AuthFor
     
     if (!email || !password) {
       toast({
-        title: "Required fields",
-        description: "Please enter email and password to continue",
+        title: "Campos obrigatórios",
+        description: "Por favor, insira email e senha para continuar",
         variant: "destructive",
       });
       return;
@@ -26,7 +26,7 @@ export const LoginForm = ({ onBack, onViewChange, loading, setLoading }: AuthFor
     
     try {
       setLoading(true);
-      console.log("Attempting login with:", email);
+      console.log("Tentativa de login com:", email);
       
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -35,19 +35,19 @@ export const LoginForm = ({ onBack, onViewChange, loading, setLoading }: AuthFor
 
       if (error) throw error;
       
-      console.log("Login successful:", data.user?.id);
+      console.log("Login bem-sucedido:", data.user?.id);
       
       toast({
-        title: "Login successful",
-        description: "Welcome back!",
+        title: "Login bem-sucedido",
+        description: "Bem-vindo(a) de volta!",
       });
       
-      // The redirect will happen automatically via the useEffect in the Auth page
+      // O redirecionamento acontecerá automaticamente via o useEffect na página Auth
     } catch (error: any) {
-      console.error("Login error:", error.message);
+      console.error("Erro de login:", error.message);
       toast({
-        title: "Login error",
-        description: error.message || "Failed to login",
+        title: "Erro de login",
+        description: error.message || "Falha ao fazer login",
         variant: "destructive",
       });
     } finally {
@@ -57,6 +57,8 @@ export const LoginForm = ({ onBack, onViewChange, loading, setLoading }: AuthFor
 
   return (
     <>
+      <h1 className="text-2xl font-bold text-center mb-6 text-white">Entrar</h1>
+      
       <form onSubmit={handleLogin}>
         <div className="space-y-4">
           <div className="space-y-2">
@@ -64,7 +66,7 @@ export const LoginForm = ({ onBack, onViewChange, loading, setLoading }: AuthFor
             <Input
               id="email"
               type="email"
-              placeholder="your@email.com"
+              placeholder="seu@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -74,7 +76,7 @@ export const LoginForm = ({ onBack, onViewChange, loading, setLoading }: AuthFor
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-white">Password</Label>
+            <Label htmlFor="password" className="text-white">Senha</Label>
             <Input
               id="password"
               type="password"
@@ -94,9 +96,9 @@ export const LoginForm = ({ onBack, onViewChange, loading, setLoading }: AuthFor
             {loading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                <span>Processing...</span>
+                <span>Processando...</span>
               </>
-            ) : "Sign In"}
+            ) : "Entrar"}
           </Button>
         </div>
       </form>
@@ -106,13 +108,13 @@ export const LoginForm = ({ onBack, onViewChange, loading, setLoading }: AuthFor
           onClick={() => onViewChange("forgot-password")}
           className="text-sm text-white/80 hover:text-white block w-full"
         >
-          Forgot your password?
+          Esqueceu sua senha?
         </button>
         <button
           onClick={() => onViewChange("register")}
           className="text-sm text-white/80 hover:text-white block w-full"
         >
-          Don't have an account? Sign up
+          Não tem uma conta? Cadastre-se
         </button>
       </div>
     </>

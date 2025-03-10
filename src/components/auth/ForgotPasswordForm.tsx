@@ -16,8 +16,8 @@ export const ForgotPasswordForm = ({ onViewChange, loading, setLoading }: AuthFo
     
     if (!email) {
       toast({
-        title: "Email required",
-        description: "Enter your email to reset your password",
+        title: "Email obrigatório",
+        description: "Digite seu email para redefinir sua senha",
         variant: "destructive",
       });
       return;
@@ -25,21 +25,26 @@ export const ForgotPasswordForm = ({ onViewChange, loading, setLoading }: AuthFo
     
     try {
       setLoading(true);
+      console.log("Enviando solicitação de redefinição de senha para:", email);
+      
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}?view=reset-password`,
+        redirectTo: `${window.location.origin}/auth?type=recovery`,
       });
 
       if (error) throw error;
       
+      console.log("Email de redefinição enviado com sucesso");
+      
       toast({
-        title: "Email sent",
-        description: "Check your email to reset your password.",
+        title: "Email enviado",
+        description: "Verifique seu email para redefinir sua senha.",
       });
       onViewChange("login");
     } catch (error: any) {
+      console.error("Erro ao enviar email:", error.message);
       toast({
-        title: "Error sending email",
-        description: error.message || "Failed to send recovery email",
+        title: "Erro ao enviar email",
+        description: error.message || "Falha ao enviar email de recuperação",
         variant: "destructive",
       });
     } finally {
@@ -49,7 +54,7 @@ export const ForgotPasswordForm = ({ onViewChange, loading, setLoading }: AuthFo
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-center mb-6">Password Recovery</h1>
+      <h1 className="text-2xl font-bold text-center mb-6 text-white">Recuperação de Senha</h1>
       
       <form onSubmit={handleForgotPassword}>
         <div className="space-y-4">
@@ -58,7 +63,7 @@ export const ForgotPasswordForm = ({ onViewChange, loading, setLoading }: AuthFo
             <Input
               id="email"
               type="email"
-              placeholder="your@email.com"
+              placeholder="seu@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -75,9 +80,9 @@ export const ForgotPasswordForm = ({ onViewChange, loading, setLoading }: AuthFo
             {loading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                <span>Processing...</span>
+                <span>Processando...</span>
               </>
-            ) : "Send Email"}
+            ) : "Enviar Email"}
           </Button>
         </div>
       </form>
@@ -87,7 +92,7 @@ export const ForgotPasswordForm = ({ onViewChange, loading, setLoading }: AuthFo
           onClick={() => onViewChange("login")}
           className="text-sm text-white/80 hover:text-white block w-full"
         >
-          Already have an account? Sign in
+          Já tem uma conta? Entre
         </button>
       </div>
     </>

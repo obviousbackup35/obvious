@@ -21,8 +21,8 @@ export const PasswordChangeForm = ({ onCancel }: PasswordChangeFormProps) => {
     
     if (!password || !confirmPassword) {
       toast({
-        title: "Required fields",
-        description: "Please fill in both password fields",
+        title: "Campos obrigatórios",
+        description: "Por favor, preencha ambos os campos de senha",
         variant: "destructive",
       });
       return;
@@ -30,8 +30,8 @@ export const PasswordChangeForm = ({ onCancel }: PasswordChangeFormProps) => {
     
     if (password.length < 6) {
       toast({
-        title: "Password too short",
-        description: "Password must be at least 6 characters",
+        title: "Senha muito curta",
+        description: "A senha deve ter pelo menos 6 caracteres",
         variant: "destructive",
       });
       return;
@@ -39,8 +39,8 @@ export const PasswordChangeForm = ({ onCancel }: PasswordChangeFormProps) => {
     
     if (password !== confirmPassword) {
       toast({
-        title: "Passwords don't match",
-        description: "The passwords you entered are different",
+        title: "Senhas não coincidem",
+        description: "As senhas que você digitou são diferentes",
         variant: "destructive",
       });
       return;
@@ -48,24 +48,29 @@ export const PasswordChangeForm = ({ onCancel }: PasswordChangeFormProps) => {
     
     try {
       setPasswordLoading(true);
+      console.log("Atualizando senha do usuário");
+      
       const { error } = await supabase.auth.updateUser({
         password,
       });
 
       if (error) throw error;
       
+      console.log("Senha alterada com sucesso");
+      
       toast({
-        title: "Password updated",
-        description: "Your password has been changed successfully.",
+        title: "Senha atualizada",
+        description: "Sua senha foi alterada com sucesso.",
       });
       
       setPassword("");
       setConfirmPassword("");
       onCancel();
     } catch (error: any) {
+      console.error("Erro ao atualizar senha:", error.message);
       toast({
-        title: "Error updating password",
-        description: error.message || "Failed to change password",
+        title: "Erro ao atualizar senha",
+        description: error.message || "Falha ao alterar senha",
         variant: "destructive",
       });
     } finally {
@@ -76,7 +81,7 @@ export const PasswordChangeForm = ({ onCancel }: PasswordChangeFormProps) => {
   return (
     <form onSubmit={handlePasswordChange} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="password" className="text-white">New password</Label>
+        <Label htmlFor="password" className="text-white">Nova senha</Label>
         <Input
           id="password"
           type="password"
@@ -89,7 +94,7 @@ export const PasswordChangeForm = ({ onCancel }: PasswordChangeFormProps) => {
       </div>
       
       <div className="space-y-2">
-        <Label htmlFor="confirmPassword" className="text-white">Confirm password</Label>
+        <Label htmlFor="confirmPassword" className="text-white">Confirmar senha</Label>
         <Input
           id="confirmPassword"
           type="password"
@@ -108,7 +113,7 @@ export const PasswordChangeForm = ({ onCancel }: PasswordChangeFormProps) => {
           onClick={onCancel}
           className="flex-1 bg-white/10 text-white hover:bg-white/20 border-white/30"
         >
-          Cancel
+          Cancelar
         </Button>
         
         <Button 
@@ -119,10 +124,10 @@ export const PasswordChangeForm = ({ onCancel }: PasswordChangeFormProps) => {
           {passwordLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              <span>Saving...</span>
+              <span>Salvando...</span>
             </>
           ) : (
-            "Save"
+            "Salvar"
           )}
         </Button>
       </div>

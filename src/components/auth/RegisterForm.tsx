@@ -18,8 +18,8 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
     
     if (!email || !password || !confirmPassword) {
       toast({
-        title: "Required fields",
-        description: "Please fill in all fields to continue",
+        title: "Campos obrigatórios",
+        description: "Por favor, preencha todos os campos para continuar",
         variant: "destructive",
       });
       return;
@@ -27,8 +27,8 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
     
     if (password.length < 6) {
       toast({
-        title: "Password too short",
-        description: "Password must be at least 6 characters",
+        title: "Senha muito curta",
+        description: "A senha deve ter pelo menos 6 caracteres",
         variant: "destructive",
       });
       return;
@@ -36,8 +36,8 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
     
     if (password !== confirmPassword) {
       toast({
-        title: "Passwords don't match",
-        description: "Please make sure your passwords match",
+        title: "Senhas não coincidem",
+        description: "Por favor, certifique-se de que suas senhas coincidem",
         variant: "destructive",
       });
       return;
@@ -45,7 +45,7 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
     
     try {
       setLoading(true);
-      console.log("Attempting registration with:", email);
+      console.log("Tentativa de registro com:", email);
       
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -54,18 +54,18 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
 
       if (error) throw error;
       
-      console.log("Registration successful:", data);
+      console.log("Registro bem-sucedido:", data);
       
       toast({
-        title: "Registration successful",
-        description: "Please check your email to confirm your registration.",
+        title: "Registro bem-sucedido",
+        description: "Por favor, verifique seu email para confirmar seu registro.",
       });
       onViewChange("login");
     } catch (error: any) {
-      console.error("Registration error:", error.message);
+      console.error("Erro de registro:", error.message);
       toast({
-        title: "Registration error",
-        description: error.message || "Failed to create account",
+        title: "Erro de registro",
+        description: error.message || "Falha ao criar conta",
         variant: "destructive",
       });
     } finally {
@@ -75,6 +75,8 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
 
   return (
     <>
+      <h1 className="text-2xl font-bold text-center mb-6 text-white">Criar Conta</h1>
+      
       <form onSubmit={handleRegister}>
         <div className="space-y-4">
           <div className="space-y-2">
@@ -82,7 +84,7 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
             <Input
               id="email"
               type="email"
-              placeholder="your@email.com"
+              placeholder="seu@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -92,7 +94,7 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-white">Password</Label>
+            <Label htmlFor="password" className="text-white">Senha</Label>
             <Input
               id="password"
               type="password"
@@ -105,7 +107,7 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="confirmPassword" className="text-white">Confirm Password</Label>
+            <Label htmlFor="confirmPassword" className="text-white">Confirmar Senha</Label>
             <Input
               id="confirmPassword"
               type="password"
@@ -125,9 +127,9 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
             {loading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                <span>Processing...</span>
+                <span>Processando...</span>
               </>
-            ) : "Sign Up"}
+            ) : "Cadastrar"}
           </Button>
         </div>
       </form>
@@ -137,7 +139,7 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
           onClick={() => onViewChange("login")}
           className="text-sm text-white/80 hover:text-white block w-full"
         >
-          Already have an account? Sign in
+          Já tem uma conta? Entre
         </button>
       </div>
     </>
