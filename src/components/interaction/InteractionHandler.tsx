@@ -117,7 +117,7 @@ const InteractionHandler = ({
   }, [hasInitialInteraction, isPlaying, startPlayback]);
 
   return (
-    <div className="relative w-full" style={{ height: '100vh' }}>
+    <div className="relative w-full h-screen">
       <div 
         className="fixed top-0 left-0 w-full h-screen overflow-hidden cursor-pointer bg-black"
         onClick={handleInteraction}

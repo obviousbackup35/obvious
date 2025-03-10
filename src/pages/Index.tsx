@@ -19,7 +19,7 @@ const Index = () => {
   const { currentView, setCurrentView } = useViewTransition(isPlaying);
   const { activeVideo, video1Ref, video2Ref, handleTimeUpdate } = useVideoTransition();
   const { audioRef } = usePageAudio(isPlaying, currentView);
-  const { scrollProgress, getTextColor } = useScrollTransition(200, 300);
+  const { scrollProgress, getTextColor } = useScrollTransition();
   const { 
     isPlaying: isAudioPlaying, 
     toggleAudio, 
@@ -27,17 +27,21 @@ const Index = () => {
     setCurrentTime
   } = useAudio();
 
-  // Forçar um layout mínimo para permitir scroll
+  // Configuramos um efeito para permitir apenas um único scroll completo
   useEffect(() => {
-    const setMinHeight = () => {
-      document.body.style.minHeight = "200vh";
+    const handleWheel = (e: WheelEvent) => {
+      if (e.deltaY > 0) {
+        window.scrollTo({ top: 100, behavior: 'smooth' });
+      } else if (e.deltaY < 0) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      e.preventDefault();
     };
     
-    setMinHeight();
-    window.addEventListener('resize', setMinHeight);
+    window.addEventListener('wheel', handleWheel, { passive: false });
     
     return () => {
-      window.removeEventListener('resize', setMinHeight);
+      window.removeEventListener('wheel', handleWheel);
     };
   }, []);
 
