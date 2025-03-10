@@ -1,6 +1,5 @@
 
 import { CSSProperties, memo } from "react";
-import { ChevronLeft } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface SectionContentProps {
@@ -43,15 +42,7 @@ export const SectionContent = memo(({
       aria-hidden={!isVisible}
       aria-label={title}
     >
-      {onBack && !isMobile && (
-        <button 
-          onClick={onBack}
-          className="absolute left-0 top-36 text-white hover:opacity-70 transition-opacity p-3"
-          aria-label="Back to video"
-        >
-          <ChevronLeft size={40} />
-        </button>
-      )}
+      {/* The back arrow button has been removed */}
     </div>
   );
 });
