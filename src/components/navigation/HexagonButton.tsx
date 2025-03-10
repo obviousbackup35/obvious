@@ -18,7 +18,7 @@ const HexagonButton = memo(({ onViewChange }: HexagonButtonProps) => {
 
   return (
     <button
-      className="absolute left-[calc(25%-280px+18.9px)] top-[calc(50%+80px)] transform -translate-y-1/2 p-2 transition-all duration-700 hover:opacity-70"
+      className="absolute left-[calc(25%-280px+15.1px)] top-[calc(50%+80px)] transform -translate-y-1/2 p-2 transition-all duration-700 hover:opacity-70"
       aria-label="Return to Video"
       onClick={handleClick}
     >
