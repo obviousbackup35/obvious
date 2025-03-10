@@ -11,6 +11,7 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
   const scrollTimeout = useRef<number | null>(null);
   const lastDirection = useRef<'up' | 'down' | null>(null);
   const scrollCount = useRef(0);
+  const scrollDebounce = useRef<NodeJS.Timeout | null>(null);
 
   // Optimized wheel handler with immediate response
   const throttledWheelHandler = useCallback((e: WheelEvent) => {
@@ -24,9 +25,12 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
     
     const now = Date.now();
     const direction = e.deltaY > 0 ? 'down' : 'up';
+    const significantScroll = Math.abs(e.deltaY) > 10; // Filter out tiny scroll movements
+    
+    if (!significantScroll) return;
     
     // Reset scroll count if direction changed or too much time passed
-    if (direction !== lastDirection.current || now - lastScrollTime.current > 100) {
+    if (direction !== lastDirection.current || now - lastScrollTime.current > 300) {
       scrollCount.current = 0;
     }
     
@@ -37,24 +41,33 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
 
     console.log(`Wheel event - direction: ${direction}, count: ${scrollCount.current}, deltaY: ${e.deltaY}`);
 
-    // Trigger view transition after accumulating enough scroll events in the same direction
-    if (scrollCount.current >= 1 && !isScrolling.current) {
-      isScrolling.current = true;
-      
-      console.log(`Transitioning with direction: ${direction}`);
-      handleViewTransition(direction);
-      
-      // Reset scroll state after shorter delay
-      if (scrollTimeout.current) {
-        window.clearTimeout(scrollTimeout.current);
-      }
-      
-      scrollTimeout.current = window.setTimeout(() => {
-        isScrolling.current = false;
-        scrollCount.current = 0;
-        scrollTimeout.current = null;
-      }, 800); // Longer cooldown to prevent accidental double transitions
+    // Clear any existing debounce timeout
+    if (scrollDebounce.current) {
+      clearTimeout(scrollDebounce.current);
     }
+
+    // Use debounce to ensure we're not triggering on accidental scrolls
+    scrollDebounce.current = setTimeout(() => {
+      // Trigger view transition after accumulating enough scroll events in the same direction
+      if (scrollCount.current >= 1 && !isScrolling.current) {
+        isScrolling.current = true;
+        
+        console.log(`Transitioning with direction: ${direction}`);
+        handleViewTransition(direction);
+        
+        // Reset scroll state after delay
+        if (scrollTimeout.current) {
+          window.clearTimeout(scrollTimeout.current);
+        }
+        
+        scrollTimeout.current = window.setTimeout(() => {
+          isScrolling.current = false;
+          scrollCount.current = 0;
+          scrollTimeout.current = null;
+          console.log('Scroll cooldown complete, ready for next scroll event');
+        }, 1000); // Cooldown to prevent accidental double transitions
+      }
+    }, 50); // Short debounce time to feel responsive but filter accidental scrolls
   }, [handleViewTransition, hasInitialInteraction, isPlaying]);
 
   useEffect(() => {
@@ -62,6 +75,10 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
     const cleanup = () => {
       if (scrollTimeout.current) {
         window.clearTimeout(scrollTimeout.current);
+      }
+      
+      if (scrollDebounce.current) {
+        clearTimeout(scrollDebounce.current);
       }
       
       document.documentElement.classList.remove('no-bounce');

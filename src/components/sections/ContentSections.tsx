@@ -63,6 +63,7 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
           transition: 'opacity 1s ease-in-out',
           pointerEvents: currentView === 'dunes' ? 'auto' : 'none',
           willChange: currentView === 'dunes' || (lastMainView === 'dunes' && currentView === 'video') ? 'opacity' : 'auto',
+          zIndex: 20, // Ensure dunes is above black background
         }}
         aria-hidden={currentView !== 'dunes'}
       >

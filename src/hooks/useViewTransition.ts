@@ -6,6 +6,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 export const useViewTransition = (isPlaying: boolean) => {
   const [currentView, setCurrentView] = useState<ContentView>('video');
   const isTransitioning = useRef(false);
+  const transitionTimeout = useRef<NodeJS.Timeout | null>(null);
   const isMobile = useIsMobile();
   
   // Debug current view changes
@@ -13,17 +14,30 @@ export const useViewTransition = (isPlaying: boolean) => {
     console.log(`View transition - Current view is now: ${currentView}`);
   }, [currentView]);
 
+  // Clear any existing transition timeouts
+  useEffect(() => {
+    return () => {
+      if (transitionTimeout.current) {
+        clearTimeout(transitionTimeout.current);
+      }
+    };
+  }, []);
+
   const handleViewTransition = useCallback((direction: 'up' | 'down') => {
-    if (isTransitioning.current) return;
+    if (isTransitioning.current) {
+      console.log('Transition already in progress, ignoring scroll');
+      return;
+    }
     
     isTransitioning.current = true;
     console.log(`View transition - Direction: ${direction}, Current view: ${currentView}`);
     
-    // Set timeout to prevent rapid multiple transitions
-    setTimeout(() => {
-      isTransitioning.current = false;
-    }, 1000);
+    // Clear any existing transition timeout
+    if (transitionTimeout.current) {
+      clearTimeout(transitionTimeout.current);
+    }
     
+    // Process the transition based on current view and direction
     if (direction === 'down') {
       if (currentView === 'video') {
         console.log('Transitioning: video -> black');
@@ -41,6 +55,12 @@ export const useViewTransition = (isPlaying: boolean) => {
         setCurrentView('video');
       }
     }
+    
+    // Reset transition state after animation completes
+    transitionTimeout.current = setTimeout(() => {
+      isTransitioning.current = false;
+      console.log('Transition complete, ready for next scroll');
+    }, 1000); // Match this with the CSS transition duration
   }, [currentView]);
 
   return { 
