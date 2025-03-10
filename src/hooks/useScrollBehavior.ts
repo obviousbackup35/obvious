@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useCallback } from "react";
 import { useIsMobile } from "./use-mobile";
 
@@ -7,44 +6,41 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
   const isScrolling = useRef(false);
   const lastScrollTime = useRef(0);
   const scrollTimeout = useRef<number | null>(null);
-  const scrollDirection = useRef<'up' | 'down' | null>(null);
+  const lastDirection = useRef<'up' | 'down' | null>(null);
+  const scrollCount = useRef(0);
 
-  // Optimized wheel handler with proper throttling and direction tracking
+  // Optimized wheel handler with immediate response
   const throttledWheelHandler = useCallback((e: WheelEvent) => {
     const now = Date.now();
-    const deltaY = Math.abs(e.deltaY);
-    
-    // Ignore small scroll movements
-    if (deltaY < 10) return;
-    
-    // Prevent scroll events that are too close together (200ms throttle)
-    if (isScrolling.current || now - lastScrollTime.current < 200) return;
-    
-    isScrolling.current = true;
-    lastScrollTime.current = now;
-    
-    // Track scroll direction
     const direction = e.deltaY > 0 ? 'down' : 'up';
     
-    // Only update direction if it's different from the last one
-    if (direction !== scrollDirection.current) {
-      scrollDirection.current = direction;
+    // Reset scroll count if direction changed or too much time passed
+    if (direction !== lastDirection.current || now - lastScrollTime.current > 150) {
+      scrollCount.current = 0;
     }
     
-    // Use requestAnimationFrame for smoother performance
-    requestAnimationFrame(() => {
+    // Update tracking variables
+    lastDirection.current = direction;
+    lastScrollTime.current = now;
+    scrollCount.current++;
+
+    // Trigger view transition after 2 scroll events in same direction
+    if (scrollCount.current >= 2 && !isScrolling.current) {
+      isScrolling.current = true;
+      
       handleViewTransition(direction);
       
-      // Reset scrolling state after delay
+      // Reset scroll state after shorter delay
       if (scrollTimeout.current) {
         window.clearTimeout(scrollTimeout.current);
       }
       
       scrollTimeout.current = window.setTimeout(() => {
         isScrolling.current = false;
+        scrollCount.current = 0;
         scrollTimeout.current = null;
-      }, 250); // Reduced timeout for more responsive feel
-    });
+      }, 100);
+    }
   }, [handleViewTransition]);
 
   useEffect(() => {
