@@ -23,7 +23,8 @@ const ActionButtons = memo(({
   getTextColor,
   isMobileMenuOpen
 }: ActionButtonsProps) => {
-  const audioIconSize = "39.91px";
+  // Reducing the audio icon size by exactly 7% from 39.91px to 37.12px
+  const audioIconSize = "37.12px";
   
   // Memoize styles to prevent recalculation on every render
   const menuIconStyle = useMemo(() => ({ 
