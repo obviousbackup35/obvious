@@ -6,7 +6,7 @@ import NavigationButton from "./navigation/NavigationButton";
 import MobileMenu from "./navigation/MobileMenu";
 import DesktopMenu from "./navigation/DesktopMenu";
 import ActionButtons from "./navigation/ActionButtons";
-import { CircleUser } from "lucide-react"; // Changed from UserCircle to CircleUser
+import { UserRound } from "lucide-react"; // Changed from CircleUser to UserRound
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthProvider";
 
@@ -101,7 +101,7 @@ export const Navigation = memo(({
               className="cursor-pointer hover:opacity-70 transition-colors duration-300 rounded-full p-2"
               style={{ color: getTextColor() }}
             >
-              <CircleUser size={24} /> {/* Changed from UserCircle to CircleUser */}
+              <UserRound size={24} /> {/* Changed from CircleUser to UserRound */}
             </NavigationButton>
           </div>
 
