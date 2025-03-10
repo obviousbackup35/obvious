@@ -1,4 +1,3 @@
-
 import { useState, useCallback, useMemo, useEffect } from "react";
 import { useVideoTransition } from "@/hooks/useVideoTransition";
 import { usePageAudio } from "@/hooks/usePageAudio";
@@ -40,42 +39,6 @@ const Index = () => {
     return getTextColor();
   }, [getTextColor]);
 
-  const navigationElement = useMemo(() => (
-    <Navigation 
-      audioRef={audioRef} 
-      isPlaying={isAudioPlaying} 
-      toggleAudio={toggleAudio} 
-      isVisible={isPlaying}
-      onViewChange={handleViewChange}
-      currentView={currentView}
-      textColor={textColor}
-    />
-  ), [audioRef, isAudioPlaying, toggleAudio, isPlaying, handleViewChange, currentView, textColor]);
-
-  const contentSectionsElement = useMemo(() => (
-    <ContentSections 
-      currentView={currentView} 
-      onViewChange={handleViewChange}
-    />
-  ), [currentView, handleViewChange]);
-
-  // Handle keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowDown' && !isDunesVisible) {
-        toggleDunes();
-      } else if (e.key === 'ArrowUp' && isDunesVisible) {
-        toggleDunes();
-      }
-    };
-    
-    window.addEventListener('keydown', handleKeyDown);
-    
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isDunesVisible, toggleDunes]);
-
   return (
     <InteractionHandler
       audioRef={audioRef}
@@ -86,7 +49,17 @@ const Index = () => {
       currentTime={currentTime}
       toggleDunes={toggleDunes}
     >
-      {navigationElement}
+      <Navigation 
+        audioRef={audioRef} 
+        isPlaying={isAudioPlaying} 
+        toggleAudio={toggleAudio} 
+        isVisible={isPlaying}
+        onViewChange={handleViewChange}
+        currentView={currentView}
+        textColor={textColor}
+        isDunesVisible={isDunesVisible}
+        toggleDunes={toggleDunes}
+      />
       
       <VideoSection
         isPlaying={isPlaying}
@@ -105,7 +78,10 @@ const Index = () => {
         isVisible={isDunesVisible} 
       />
       
-      {contentSectionsElement}
+      <ContentSections 
+        currentView={currentView} 
+        onViewChange={handleViewChange}
+      />
     </InteractionHandler>
   );
 };

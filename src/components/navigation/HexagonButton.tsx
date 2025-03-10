@@ -6,14 +6,20 @@ import type { ContentView } from '@/types/navigation';
 interface HexagonButtonProps {
   onViewChange: (view: ContentView) => void;
   textColor: string;
+  isDunesVisible: boolean;
+  toggleDunes: () => void;
 }
 
-const HexagonButton = memo(({ onViewChange, textColor }: HexagonButtonProps) => {
+const HexagonButton = memo(({ onViewChange, textColor, isDunesVisible, toggleDunes }: HexagonButtonProps) => {
   const handleClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    onViewChange('video');
-  }, [onViewChange]);
+    if (isDunesVisible) {
+      toggleDunes();
+    }
+  }, [isDunesVisible, toggleDunes]);
+
+  if (!isDunesVisible) return null;
 
   return (
     <button

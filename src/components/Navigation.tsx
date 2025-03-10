@@ -16,6 +16,8 @@ interface NavigationProps {
   onViewChange: (view: ContentView) => void;
   currentView: ContentView;
   textColor: string;
+  isDunesVisible: boolean;
+  toggleDunes: () => void;
 }
 
 export const Navigation = memo(({
@@ -25,7 +27,9 @@ export const Navigation = memo(({
   isVisible = true,
   onViewChange,
   currentView,
-  textColor
+  textColor,
+  isDunesVisible,
+  toggleDunes
 }: NavigationProps) => {
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -81,7 +85,12 @@ export const Navigation = memo(({
             isMobileMenuOpen={mobileMenuOpen}
           />
           
-          <HexagonButton onViewChange={onViewChange} textColor={textColor} />
+          <HexagonButton 
+            onViewChange={onViewChange} 
+            textColor={textColor} 
+            isDunesVisible={isDunesVisible}
+            toggleDunes={toggleDunes}
+          />
           
           {isMobile && (
             <MobileMenu 
