@@ -17,8 +17,8 @@ export const LoginForm = ({ onBack, onViewChange, loading, setLoading }: AuthFor
     
     if (!email || !password) {
       toast({
-        title: "Campos obrigatórios",
-        description: "Preencha email e senha para continuar",
+        title: "Required fields",
+        description: "Please enter email and password to continue",
         variant: "destructive",
       });
       return;
@@ -34,15 +34,15 @@ export const LoginForm = ({ onBack, onViewChange, loading, setLoading }: AuthFor
       if (error) throw error;
       
       toast({
-        title: "Login realizado com sucesso",
-        description: "Bem-vindo de volta!",
+        title: "Login successful",
+        description: "Welcome back!",
       });
       
       onBack();
     } catch (error: any) {
       toast({
-        title: "Erro no login",
-        description: error.message || "Falha ao fazer login",
+        title: "Login error",
+        description: error.message || "Failed to login",
         variant: "destructive",
       });
     } finally {
@@ -52,7 +52,7 @@ export const LoginForm = ({ onBack, onViewChange, loading, setLoading }: AuthFor
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-center mb-6">Entrar</h1>
+      <h1 className="text-2xl font-bold text-center mb-6">Sign In</h1>
       
       <form onSubmit={handleLogin}>
         <div className="space-y-4">
@@ -61,7 +61,7 @@ export const LoginForm = ({ onBack, onViewChange, loading, setLoading }: AuthFor
             <Input
               id="email"
               type="email"
-              placeholder="seu@email.com"
+              placeholder="your@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -71,7 +71,7 @@ export const LoginForm = ({ onBack, onViewChange, loading, setLoading }: AuthFor
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-white">Senha</Label>
+            <Label htmlFor="password" className="text-white">Password</Label>
             <Input
               id="password"
               type="password"
@@ -91,9 +91,9 @@ export const LoginForm = ({ onBack, onViewChange, loading, setLoading }: AuthFor
             {loading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                <span>Processando...</span>
+                <span>Processing...</span>
               </>
-            ) : "Entrar"}
+            ) : "Sign In"}
           </Button>
         </div>
       </form>
@@ -103,13 +103,13 @@ export const LoginForm = ({ onBack, onViewChange, loading, setLoading }: AuthFor
           onClick={() => onViewChange("forgot-password")}
           className="text-sm text-white/80 hover:text-white block w-full"
         >
-          Esqueceu sua senha?
+          Forgot your password?
         </button>
         <button
           onClick={() => onViewChange("register")}
           className="text-sm text-white/80 hover:text-white block w-full"
         >
-          Não tem uma conta? Cadastre-se
+          Don't have an account? Sign up
         </button>
       </div>
     </>

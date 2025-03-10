@@ -20,14 +20,14 @@ export const LogoutButton = ({ onLogoutSuccess }: LogoutButtonProps) => {
       if (error) throw error;
       
       toast({
-        title: "Logout bem-sucedido",
-        description: "Você saiu da sua conta",
+        title: "Logout successful",
+        description: "You've been signed out",
       });
       onLogoutSuccess();
     } catch (error: any) {
       toast({
-        title: "Erro ao sair",
-        description: error.message || "Falha ao fazer logout",
+        title: "Error signing out",
+        description: error.message || "Failed to logout",
         variant: "destructive",
       });
     } finally {
@@ -45,10 +45,10 @@ export const LogoutButton = ({ onLogoutSuccess }: LogoutButtonProps) => {
       {loading ? (
         <>
           <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-          <span>Saindo...</span>
+          <span>Signing out...</span>
         </>
       ) : (
-        "Sair da conta"
+        "Sign out"
       )}
     </Button>
   );

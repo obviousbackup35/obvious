@@ -21,8 +21,8 @@ export const PasswordChangeForm = ({ onCancel }: PasswordChangeFormProps) => {
     
     if (!password || !confirmPassword) {
       toast({
-        title: "Campos obrigatórios",
-        description: "Preencha ambos os campos de senha",
+        title: "Required fields",
+        description: "Please fill in both password fields",
         variant: "destructive",
       });
       return;
@@ -30,8 +30,8 @@ export const PasswordChangeForm = ({ onCancel }: PasswordChangeFormProps) => {
     
     if (password.length < 6) {
       toast({
-        title: "Senha muito curta",
-        description: "A senha deve ter pelo menos 6 caracteres",
+        title: "Password too short",
+        description: "Password must be at least 6 characters",
         variant: "destructive",
       });
       return;
@@ -39,8 +39,8 @@ export const PasswordChangeForm = ({ onCancel }: PasswordChangeFormProps) => {
     
     if (password !== confirmPassword) {
       toast({
-        title: "Senhas não coincidem",
-        description: "As senhas digitadas são diferentes",
+        title: "Passwords don't match",
+        description: "The passwords you entered are different",
         variant: "destructive",
       });
       return;
@@ -55,8 +55,8 @@ export const PasswordChangeForm = ({ onCancel }: PasswordChangeFormProps) => {
       if (error) throw error;
       
       toast({
-        title: "Senha atualizada",
-        description: "Sua senha foi alterada com sucesso.",
+        title: "Password updated",
+        description: "Your password has been changed successfully.",
       });
       
       setPassword("");
@@ -64,8 +64,8 @@ export const PasswordChangeForm = ({ onCancel }: PasswordChangeFormProps) => {
       onCancel();
     } catch (error: any) {
       toast({
-        title: "Erro ao atualizar senha",
-        description: error.message || "Falha ao alterar senha",
+        title: "Error updating password",
+        description: error.message || "Failed to change password",
         variant: "destructive",
       });
     } finally {
@@ -76,7 +76,7 @@ export const PasswordChangeForm = ({ onCancel }: PasswordChangeFormProps) => {
   return (
     <form onSubmit={handlePasswordChange} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="password" className="text-white">Nova senha</Label>
+        <Label htmlFor="password" className="text-white">New password</Label>
         <Input
           id="password"
           type="password"
@@ -89,7 +89,7 @@ export const PasswordChangeForm = ({ onCancel }: PasswordChangeFormProps) => {
       </div>
       
       <div className="space-y-2">
-        <Label htmlFor="confirmPassword" className="text-white">Confirmar senha</Label>
+        <Label htmlFor="confirmPassword" className="text-white">Confirm password</Label>
         <Input
           id="confirmPassword"
           type="password"
@@ -108,7 +108,7 @@ export const PasswordChangeForm = ({ onCancel }: PasswordChangeFormProps) => {
           onClick={onCancel}
           className="flex-1 bg-white/10 text-white hover:bg-white/20 border-white/30"
         >
-          Cancelar
+          Cancel
         </Button>
         
         <Button 
@@ -119,10 +119,10 @@ export const PasswordChangeForm = ({ onCancel }: PasswordChangeFormProps) => {
           {passwordLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              <span>Salvando...</span>
+              <span>Saving...</span>
             </>
           ) : (
-            "Salvar"
+            "Save"
           )}
         </Button>
       </div>

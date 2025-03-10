@@ -15,7 +15,7 @@ export const UserInfo = ({ user, onPasswordChangeClick }: UserInfoProps) => {
     <div className="mb-6 space-y-4">
       <div className="flex items-center gap-3 text-white/90 text-lg mb-2">
         <UserCircle size={24} />
-        <p className="text-white font-medium">Conta</p>
+        <p className="text-white font-medium">Account</p>
       </div>
       
       <div className="flex items-center gap-3 text-white/90 text-lg mb-4">
@@ -29,7 +29,7 @@ export const UserInfo = ({ user, onPasswordChangeClick }: UserInfoProps) => {
         className="w-full bg-white/10 text-white hover:bg-white/20 border-white/30"
       >
         <Key className="mr-2 h-5 w-5" />
-        Alterar senha
+        Change password
       </Button>
     </div>
   );

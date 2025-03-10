@@ -17,8 +17,8 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
     
     if (!email || !password) {
       toast({
-        title: "Campos obrigatórios",
-        description: "Preencha email e senha para continuar",
+        title: "Required fields",
+        description: "Please enter email and password to continue",
         variant: "destructive",
       });
       return;
@@ -26,8 +26,8 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
     
     if (password.length < 6) {
       toast({
-        title: "Senha muito curta",
-        description: "A senha deve ter pelo menos 6 caracteres",
+        title: "Password too short",
+        description: "Password must be at least 6 characters",
         variant: "destructive",
       });
       return;
@@ -43,14 +43,14 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
       if (error) throw error;
       
       toast({
-        title: "Cadastro realizado com sucesso",
-        description: "Verifique seu email para confirmar o cadastro.",
+        title: "Registration successful",
+        description: "Please check your email to confirm your registration.",
       });
       onViewChange("login");
     } catch (error: any) {
       toast({
-        title: "Erro no cadastro",
-        description: error.message || "Falha ao criar conta",
+        title: "Registration error",
+        description: error.message || "Failed to create account",
         variant: "destructive",
       });
     } finally {
@@ -60,7 +60,7 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-center mb-6">Criar Conta</h1>
+      <h1 className="text-2xl font-bold text-center mb-6">Create Account</h1>
       
       <form onSubmit={handleRegister}>
         <div className="space-y-4">
@@ -69,7 +69,7 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
             <Input
               id="email"
               type="email"
-              placeholder="seu@email.com"
+              placeholder="your@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -79,7 +79,7 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-white">Senha</Label>
+            <Label htmlFor="password" className="text-white">Password</Label>
             <Input
               id="password"
               type="password"
@@ -99,9 +99,9 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
             {loading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                <span>Processando...</span>
+                <span>Processing...</span>
               </>
-            ) : "Cadastrar"}
+            ) : "Sign Up"}
           </Button>
         </div>
       </form>
@@ -111,7 +111,7 @@ export const RegisterForm = ({ onViewChange, loading, setLoading }: AuthFormProp
           onClick={() => onViewChange("login")}
           className="text-sm text-white/80 hover:text-white block w-full"
         >
-          Já tem uma conta? Entrar
+          Already have an account? Sign in
         </button>
       </div>
     </>

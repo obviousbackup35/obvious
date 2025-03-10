@@ -17,8 +17,8 @@ export const ResetPasswordForm = ({ onBack, loading, setLoading }: AuthFormProps
     
     if (!password || !confirmPassword) {
       toast({
-        title: "Campos obrigatórios",
-        description: "Preencha ambos os campos de senha",
+        title: "Required fields",
+        description: "Please fill in both password fields",
         variant: "destructive",
       });
       return;
@@ -26,8 +26,8 @@ export const ResetPasswordForm = ({ onBack, loading, setLoading }: AuthFormProps
     
     if (password.length < 6) {
       toast({
-        title: "Senha muito curta",
-        description: "A senha deve ter pelo menos 6 caracteres",
+        title: "Password too short",
+        description: "Password must be at least 6 characters",
         variant: "destructive",
       });
       return;
@@ -35,8 +35,8 @@ export const ResetPasswordForm = ({ onBack, loading, setLoading }: AuthFormProps
     
     if (password !== confirmPassword) {
       toast({
-        title: "Senhas não coincidem",
-        description: "As senhas digitadas são diferentes",
+        title: "Passwords don't match",
+        description: "The passwords you entered are different",
         variant: "destructive",
       });
       return;
@@ -51,16 +51,16 @@ export const ResetPasswordForm = ({ onBack, loading, setLoading }: AuthFormProps
       if (error) throw error;
       
       toast({
-        title: "Senha atualizada",
-        description: "Sua senha foi redefinida com sucesso.",
+        title: "Password updated",
+        description: "Your password has been reset successfully.",
       });
       
       // Automatically redirect back to main view after successful password reset
       onBack();
     } catch (error: any) {
       toast({
-        title: "Erro ao redefinir senha",
-        description: error.message || "Falha ao atualizar senha",
+        title: "Error resetting password",
+        description: error.message || "Failed to update password",
         variant: "destructive",
       });
     } finally {
@@ -70,12 +70,12 @@ export const ResetPasswordForm = ({ onBack, loading, setLoading }: AuthFormProps
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-center mb-6">Redefinir Senha</h1>
+      <h1 className="text-2xl font-bold text-center mb-6">Reset Password</h1>
       
       <form onSubmit={handleResetPassword}>
         <div className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-white">Senha</Label>
+            <Label htmlFor="password" className="text-white">Password</Label>
             <Input
               id="password"
               type="password"
@@ -88,7 +88,7 @@ export const ResetPasswordForm = ({ onBack, loading, setLoading }: AuthFormProps
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="confirmPassword" className="text-white">Confirmar Senha</Label>
+            <Label htmlFor="confirmPassword" className="text-white">Confirm Password</Label>
             <Input
               id="confirmPassword"
               type="password"
@@ -108,9 +108,9 @@ export const ResetPasswordForm = ({ onBack, loading, setLoading }: AuthFormProps
             {loading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                <span>Processando...</span>
+                <span>Processing...</span>
               </>
-            ) : "Redefinir Senha"}
+            ) : "Reset Password"}
           </Button>
         </div>
       </form>

@@ -16,8 +16,8 @@ export const ForgotPasswordForm = ({ onViewChange, loading, setLoading }: AuthFo
     
     if (!email) {
       toast({
-        title: "Email obrigatório",
-        description: "Digite seu email para redefinir a senha",
+        title: "Email required",
+        description: "Enter your email to reset your password",
         variant: "destructive",
       });
       return;
@@ -32,14 +32,14 @@ export const ForgotPasswordForm = ({ onViewChange, loading, setLoading }: AuthFo
       if (error) throw error;
       
       toast({
-        title: "Email enviado",
-        description: "Verifique seu email para redefinir sua senha.",
+        title: "Email sent",
+        description: "Check your email to reset your password.",
       });
       onViewChange("login");
     } catch (error: any) {
       toast({
-        title: "Erro ao enviar email",
-        description: error.message || "Falha ao enviar email de recuperação",
+        title: "Error sending email",
+        description: error.message || "Failed to send recovery email",
         variant: "destructive",
       });
     } finally {
@@ -49,7 +49,7 @@ export const ForgotPasswordForm = ({ onViewChange, loading, setLoading }: AuthFo
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-center mb-6">Recuperar Senha</h1>
+      <h1 className="text-2xl font-bold text-center mb-6">Password Recovery</h1>
       
       <form onSubmit={handleForgotPassword}>
         <div className="space-y-4">
@@ -58,7 +58,7 @@ export const ForgotPasswordForm = ({ onViewChange, loading, setLoading }: AuthFo
             <Input
               id="email"
               type="email"
-              placeholder="seu@email.com"
+              placeholder="your@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -75,9 +75,9 @@ export const ForgotPasswordForm = ({ onViewChange, loading, setLoading }: AuthFo
             {loading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                <span>Processando...</span>
+                <span>Processing...</span>
               </>
-            ) : "Enviar Email"}
+            ) : "Send Email"}
           </Button>
         </div>
       </form>
@@ -87,7 +87,7 @@ export const ForgotPasswordForm = ({ onViewChange, loading, setLoading }: AuthFo
           onClick={() => onViewChange("login")}
           className="text-sm text-white/80 hover:text-white block w-full"
         >
-          Já tem uma conta? Entrar
+          Already have an account? Sign in
         </button>
       </div>
     </>
