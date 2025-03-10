@@ -10,7 +10,7 @@ export const useViewTransition = (isPlaying: boolean) => {
   // Log for debugging
   console.log(`View transition - Current view: ${currentView}, isMobile: ${isMobile}`);
 
-  // Simplified transition handler without black and dunes
+  // Direct transition handler - video to content and back
   const handleViewTransition = useCallback((direction: 'up' | 'down') => {
     console.log(`View transition triggered - Direction: ${direction}, Current view: ${currentView}`);
     

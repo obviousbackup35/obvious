@@ -48,7 +48,7 @@ export const SectionContent = memo(({
         <button 
           onClick={onBack}
           className="absolute left-0 top-36 text-white hover:opacity-70 transition-opacity p-3"
-          aria-label="Back to dunes"
+          aria-label="Back to video"
         >
           <ChevronLeft size={40} />
         </button>
