@@ -1,4 +1,3 @@
-
 import { SectionContent } from "./SectionContent";
 import type { ContentView } from "@/types/navigation";
 import { PolicyMenu } from "../PolicyMenu";
@@ -40,8 +39,10 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
     'sitemap'
   ];
 
+  // Improved rendering with proper z-index management
   return (
     <div className="absolute inset-0 w-full h-full z-30">
+      {/* Black background layer */}
       <div 
         className="absolute inset-0 w-full h-full"
         style={{ 
@@ -49,12 +50,13 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
           opacity: currentView === 'black' ? 1 : 0,
           transition: 'opacity 1s ease-in-out',
           pointerEvents: currentView === 'black' ? 'auto' : 'none',
-          willChange: currentView === 'black' || (lastMainView === 'black' && currentView === 'video') ? 'opacity' : 'auto',
+          willChange: 'opacity',
           zIndex: 10,
         }}
         aria-hidden={currentView !== 'black'}
       />
       
+      {/* Dunes layer with higher z-index */}
       <div 
         className="absolute inset-0 w-full h-full bg-cover"
         style={{ 
@@ -63,11 +65,12 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
           opacity: currentView === 'dunes' ? 1 : 0,
           transition: 'opacity 1s ease-in-out',
           pointerEvents: currentView === 'dunes' ? 'auto' : 'none',
-          willChange: currentView === 'dunes' || (lastMainView === 'dunes' && currentView === 'black') ? 'opacity' : 'auto',
-          zIndex: 20, // Garantindo que as dunas fiquem acima do fundo preto
+          willChange: 'opacity',
+          zIndex: 20,
         }}
         aria-hidden={currentView !== 'dunes'}
       >
+        {/* Only render PolicyMenu when dunes view is active */}
         {currentView === 'dunes' && (
           <PolicyMenu 
             onViewChange={onViewChange} 
@@ -76,6 +79,7 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
         )}
       </div>
       
+      {/* Other section content */}
       <SectionContent
         isVisible={currentView === 'company'}
         backgroundImage="/visualelectric-1741372805454.webp"

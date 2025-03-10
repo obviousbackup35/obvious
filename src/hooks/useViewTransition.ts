@@ -24,7 +24,7 @@ export const useViewTransition = (isPlaying: boolean) => {
   }, []);
 
   const handleViewTransition = useCallback((direction: 'up' | 'down') => {
-    // Importante: Verificar se já não estamos em transição para evitar problemas
+    // Check if already transitioning to prevent issues
     if (isTransitioning.current) {
       console.log('Transition already in progress, ignoring scroll');
       return;
@@ -57,11 +57,11 @@ export const useViewTransition = (isPlaying: boolean) => {
       }
     }
     
-    // Reset transition state after animation completes - usando um timeout mais longo
+    // Reset transition state after animation completes
     transitionTimeout.current = setTimeout(() => {
       isTransitioning.current = false;
       console.log(`Transition complete, ready for next scroll. Current view is: ${currentView}`);
-    }, 1200); // Aumentando ligeiramente para garantir que a transição termine
+    }, 1500); // Increased timeout to ensure transitions complete
   }, [currentView]);
 
   return { 

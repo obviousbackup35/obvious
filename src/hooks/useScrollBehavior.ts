@@ -13,7 +13,7 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
   const scrollCount = useRef(0);
   const scrollDebounce = useRef<NodeJS.Timeout | null>(null);
 
-  // Optimized wheel handler with immediate response
+  // Wheel event handler with improved detection
   const throttledWheelHandler = useCallback((e: WheelEvent) => {
     // Don't handle scroll events if user hasn't interacted with the site yet
     if (!hasInitialInteraction) {
@@ -24,9 +24,10 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
     
     e.preventDefault(); // Prevent default scrolling
     
+    // Enhanced scroll event processing
     const now = Date.now();
     const direction = e.deltaY > 0 ? 'down' : 'up';
-    const significantScroll = Math.abs(e.deltaY) > 5; // Reduzindo o limite para capturar mais eventos de scroll
+    const significantScroll = Math.abs(e.deltaY) > 1; // Lower threshold to detect scrolls
     
     if (!significantScroll) return;
     
@@ -47,9 +48,9 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
       clearTimeout(scrollDebounce.current);
     }
 
-    // Use debounce to ensure we're not triggering on accidental scrolls
+    // Use debounce to ensure more reliable scroll detection
     scrollDebounce.current = setTimeout(() => {
-      // Trigger view transition after minimal scroll events to melhorar responsividade
+      // Trigger view transition after minimal scroll events for better responsiveness
       if (scrollCount.current >= 1 && !isScrolling.current) {
         isScrolling.current = true;
         
@@ -61,14 +62,16 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
           window.clearTimeout(scrollTimeout.current);
         }
         
+        // Increased timeout to match the view transition duration
         scrollTimeout.current = window.setTimeout(() => {
           isScrolling.current = false;
           scrollCount.current = 0;
+          lastDirection.current = null;
           scrollTimeout.current = null;
           console.log('Scroll cooldown complete, ready for next scroll event');
-        }, 1200); // Aumentando para coincidir com o tempo de transição
+        }, 1500);
       }
-    }, 20); // Diminuindo para tornar mais responsivo
+    }, 10); // Lower debounce time for better responsiveness
   }, [handleViewTransition, hasInitialInteraction]);
 
   useEffect(() => {
