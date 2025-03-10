@@ -11,7 +11,7 @@ const HexagonButton = memo(() => {
       aria-label="Hexagon Button"
     >
       <Hexagon
-        className="w-7 h-7"
+        className="w-8 h-8"
         style={{
           color: getTextColor(),
           transition: 'color 0.7s ease-in-out'
