@@ -7,16 +7,16 @@ export const useViewTransition = (isPlaying: boolean) => {
   const [currentView, setCurrentView] = useState<ContentView>('video');
   const isMobile = useIsMobile();
   
-  // Depuração aprimorada
+  // Logs para depuração
   useEffect(() => {
-    console.log(`View transition - Current view changed to: ${currentView}`);
-  }, [currentView]);
+    console.log(`View transition - Current view changed to: ${currentView}, isMobile: ${isMobile}`);
+  }, [currentView, isMobile]);
 
-  // Manipulador de transição simplificado
+  // Manipulador de transição simplificado e mais confiável
   const handleViewTransition = useCallback((direction: 'up' | 'down') => {
-    console.log(`View transition - Direction: ${direction}, Current view: ${currentView}`);
+    console.log(`View transition triggered - Direction: ${direction}, Current view: ${currentView}`);
     
-    // Máquina de estado simples para transições de visualização
+    // Lógica de transição simplificada
     if (direction === 'down') {
       if (currentView === 'video') {
         console.log('Transitioning: video -> black');

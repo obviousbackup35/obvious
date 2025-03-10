@@ -1,4 +1,3 @@
-
 import { SectionContent } from "./SectionContent";
 import type { ContentView } from "@/types/navigation";
 import { PolicyMenu } from "../PolicyMenu";
@@ -76,17 +75,14 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
           transition: 'opacity 1s ease-in-out',
           pointerEvents: currentView === 'dunes' ? 'auto' : 'none',
           zIndex: 30,
-          visibility: currentView === 'dunes' ? 'visible' : 'hidden', // Garantir visibilidade
         }}
         aria-hidden={currentView !== 'dunes'}
       >
-        {/* Renderiza PolicyMenu apenas quando a visualização de dunas está ativa */}
-        {currentView === 'dunes' && (
-          <PolicyMenu 
-            onViewChange={onViewChange} 
-            isVisible={true} 
-          />
-        )}
+        {/* Sempre renderiza PolicyMenu mas controla visibilidade */}
+        <PolicyMenu 
+          onViewChange={onViewChange} 
+          isVisible={currentView === 'dunes'} 
+        />
       </div>
       
       {/* Conteúdo de outras seções com z-index mais alto */}
