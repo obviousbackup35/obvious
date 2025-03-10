@@ -30,6 +30,3 @@ export type ContentView =
   | 'social-media'
   | 'environmental'
   | 'sitemap';
-
-// Utility type to extract policy views from ContentView
-export type PolicyView = Exclude<ContentView, 'video' | 'black' | 'dunes' | 'company' | 'projects' | 'gallery' | 'contact'>;

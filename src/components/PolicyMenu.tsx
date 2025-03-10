@@ -1,7 +1,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import type { ContentView, PolicyView } from '@/types/navigation';
+import type { ContentView } from '@/types/navigation';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Hexagon } from 'lucide-react';
 
@@ -70,7 +70,7 @@ export const PolicyMenu = ({
     touchEndX.current = null;
   };
 
-  const handlePolicyClick = (policy: PolicyView) => {
+  const handlePolicyClick = (policy: ContentView) => {
     onViewChange(policy);
   };
 
@@ -90,7 +90,7 @@ export const PolicyMenu = ({
                   {group.items.map(item => (
                     <li
                       key={item}
-                      onClick={() => handlePolicyClick(item)}
+                      onClick={() => handlePolicyClick(item as ContentView)}
                       onMouseEnter={() => setHoveredItem(item)}
                       onMouseLeave={() => setHoveredItem(null)}
                       className={`
@@ -133,7 +133,7 @@ export const PolicyMenu = ({
               {currentGroup.items.map(item => (
                 <li
                   key={item}
-                  onClick={() => handlePolicyClick(item)}
+                  onClick={() => handlePolicyClick(item as ContentView)}
                   className="cursor-pointer text-xs font-montserrat font-medium transition-opacity duration-300 py-1 text-white/80 hover:text-white active:text-white mx-[75px]"
                 >
                   {item.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
