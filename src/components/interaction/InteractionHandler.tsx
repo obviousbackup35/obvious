@@ -12,7 +12,7 @@ interface InteractionHandlerProps {
   children: React.ReactNode;
 }
 
-const FADE_DURATION = 1500; // Mantendo em 1.5 segundos para fade suave
+const FADE_DURATION = 1500; // 1.5 seconds for smooth fade
 
 const InteractionHandler = ({
   audioRef,
@@ -26,7 +26,7 @@ const InteractionHandler = ({
   const { hasInitialInteraction, setHasInitialInteraction } = useAudio();
   const fadeInterval = useRef<number | null>(null);
 
-  // Otimizado: Memoized fade audio function com useCallback
+  // Highly optimized fade audio function
   const fadeAudioIn = useCallback((audio: HTMLAudioElement) => {
     // Clear any existing fade interval
     if (fadeInterval.current !== null) {
@@ -37,18 +37,18 @@ const InteractionHandler = ({
     // Start with volume at 0
     audio.volume = 0;
     
-    const steps = 30; // Mantido para transição suave
+    const steps = 30; // Higher steps for smoother transition
     const stepTime = FADE_DURATION / steps;
     let currentStep = 0;
     
-    // Usar setInterval é mais eficiente que setTimeout recursivo
+    // Use setInterval for more consistent timing
     fadeInterval.current = window.setInterval(() => {
       currentStep++;
-      // Math.min garante que o volume nunca ultrapasse 1 (proteção extra)
+      // Use Math.min to ensure volume never exceeds 1
       audio.volume = Math.min(currentStep / steps, 1);
       
-      // Limpar o intervalo quando a animação terminar
-      if (audio.volume >= 1) {
+      // Clear interval when animation completes
+      if (currentStep >= steps) {
         if (fadeInterval.current !== null) {
           window.clearInterval(fadeInterval.current);
           fadeInterval.current = null;
@@ -57,7 +57,7 @@ const InteractionHandler = ({
     }, stepTime);
   }, []);
 
-  // Garantir limpeza adequada para evitar memory leaks
+  // Proper cleanup to prevent memory leaks
   useEffect(() => {
     return () => {
       if (fadeInterval.current !== null) {
@@ -67,57 +67,62 @@ const InteractionHandler = ({
     };
   }, []);
 
-  // Otimizado: Uso correto de async/await com tratamento adequado de promises
+  // Optimized playback start with better promise handling
   const startPlayback = useCallback(async () => {
     if (isPlaying) return;
 
     try {
+      // Start audio playback with optimized error handling
       if (audioRef.current) {
-        audioRef.current.currentTime = 0;
-        audioRef.current.volume = 0;
-        const audioPromise = audioRef.current.play();
+        const audio = audioRef.current;
+        audio.currentTime = 0;
+        audio.volume = 0;
         
-        if (audioPromise !== undefined) {
-          audioPromise
-            .then(() => {
-              fadeAudioIn(audioRef.current!);
-            })
-            .catch(error => {
-              console.error("Error playing audio:", error);
-            });
-        } else {
-          fadeAudioIn(audioRef.current);
+        try {
+          await audio.play();
+          fadeAudioIn(audio);
+        } catch (error) {
+          console.error("Audio autoplay prevented:", error);
+          // Skip fade and set volume directly if autoplay fails
+          audio.volume = 1;
         }
       }
 
-      // Otimizado: Processamento de vídeos em paralelo
+      // Process videos in parallel for faster startup
       const videos = [video1Ref.current, video2Ref.current].filter(Boolean);
-      await Promise.all(
-        videos.map(video => {
+      
+      // Use Promise.allSettled to continue even if some videos fail
+      await Promise.allSettled(
+        videos.map(async (video) => {
           if (video) {
             video.currentTime = currentTime;
-            return video.play();
+            try {
+              await video.play();
+            } catch (error) {
+              console.error("Video playback error:", error);
+            }
           }
-          return Promise.resolve();
         })
       );
 
       setIsPlaying(true);
     } catch (error) {
-      console.error('Error starting playback:', error);
+      console.error('Playback initialization error:', error);
     }
   }, [isPlaying, audioRef, currentTime, video1Ref, video2Ref, setIsPlaying, fadeAudioIn]);
 
-  // Otimizado: Consolidação de lógicas de click e touch em uma única função
+  // Single unified interaction handler for both click and touch
   const handleInteraction = useCallback((event: React.MouseEvent | React.TouchEvent) => {
-    event.preventDefault(); // Evitar comportamento padrão para melhor controle
+    event.preventDefault();
     
     if (!hasInitialInteraction) {
       setHasInitialInteraction(true);
     }
+    
     startPlayback();
   }, [hasInitialInteraction, setHasInitialInteraction, startPlayback]);
 
+  // Auto-start playback when hasInitialInteraction changes
   useEffect(() => {
     if (hasInitialInteraction && !isPlaying) {
       startPlayback();

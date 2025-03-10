@@ -14,32 +14,29 @@ export const VideoPlayer = memo(forwardRef<HTMLVideoElement, VideoPlayerProps>(
     const isMobile = useIsMobile();
     const videoLoaded = useRef(false);
     
-    // Optimized: useEffect with proper dependencies and cleanup
+    // High-performance effect with proper dependencies and cleanup
     useEffect(() => {
-      // Optimized: On-demand loading (lazy loading)
+      // On-demand loading to reduce initial load time
       if (ref && 'current' in ref && ref.current && !videoLoaded.current) {
         // Mark as loaded to prevent redundant reloads
         videoLoaded.current = true;
         
-        // Optimized: Check if URL is already set to avoid unnecessary reloads
+        // Only set src if it's different to avoid unnecessary reloads
         if (ref.current.src !== src) {
           ref.current.src = src;
           ref.current.load();
-          console.log("Video source loaded:", src);
         }
       }
-      
-      // No cleanup logic here - will be handled in parent component
-    }, [ref, src]); // Minimized and correct dependencies
+    }, [ref, src]); // Minimized dependencies for optimal effect execution
 
-    // Optimized: Memoized styles to avoid recalculations
+    // Memoized styles to prevent recalculations on each render
     const videoStyles = useMemo(() => ({
       opacity: isPlaying ? (isActive ? 1 : 0) : 0,
       transition: 'opacity 1s ease-in-out',
-      // Optimized: Selective use of willChange only when needed
+      // Only apply will-change when actually changing for better performance
       willChange: isPlaying && isActive ? 'opacity' : 'auto',
       objectFit: isMobile ? 'contain' as const : 'cover' as const,
-      // Optimized: Use transform to trigger GPU compositing
+      // GPU acceleration hints only when needed
       transform: isMobile ? 'translate3d(0,0,0) scale(1.15)' : 'translate3d(0,0,0)',
       ...style
     }), [isPlaying, isActive, isMobile, style]);
@@ -53,7 +50,8 @@ export const VideoPlayer = memo(forwardRef<HTMLVideoElement, VideoPlayerProps>(
         preload="auto"
         className="absolute inset-0 w-full h-full object-cover"
         style={videoStyles}
-        src={src}
+        // Remove src from here since we're setting it programmatically in useEffect
+        // This prevents double loading
       />
     );
   }

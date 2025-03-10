@@ -1,6 +1,5 @@
 
-import { useState, useRef, useEffect } from 'react';
-import { Button } from "@/components/ui/button";
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import type { ContentView } from '@/types/navigation';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Hexagon } from 'lucide-react';
@@ -10,6 +9,7 @@ interface PolicyMenuProps {
   isVisible: boolean;
 }
 
+// Move policy groups outside component to prevent recreation on every render
 const policyGroups = [{
   title: "Legal",
   items: ['privacy', 'terms', 'cookie', 'legal', 'intellectual-property']
@@ -35,21 +35,22 @@ export const PolicyMenu = ({
   const [currentGroupIndex, setCurrentGroupIndex] = useState(0);
   const isMobile = useIsMobile();
 
-  // Swipe handling
+  // Touch handling optimizations
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
-  const minSwipeDistance = 50; // Minimum swipe distance in pixels
+  const minSwipeDistance = 50;
 
-  const handleTouchStart = (e: React.TouchEvent) => {
+  // Optimized touch handlers
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
     touchEndX.current = null;
-  };
+  }, []);
 
-  const handleTouchMove = (e: React.TouchEvent) => {
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
     touchEndX.current = e.touches[0].clientX;
-  };
+  }, []);
 
-  const handleTouchEnd = () => {
+  const handleTouchEnd = useCallback(() => {
     if (!touchStartX.current || !touchEndX.current) return;
     
     const distance = touchEndX.current - touchStartX.current;
@@ -68,17 +69,24 @@ export const PolicyMenu = ({
     // Reset values
     touchStartX.current = null;
     touchEndX.current = null;
-  };
+  }, []);
 
-  const handlePolicyClick = (policy: ContentView) => {
+  // Memoized event handler to prevent recreation on every render
+  const handlePolicyClick = useCallback((policy: ContentView) => {
     onViewChange(policy);
-  };
+  }, [onViewChange]);
 
-  const currentGroup = policyGroups[currentGroupIndex];
+  // Memoize current group to prevent unnecessary recalculations
+  const currentGroup = useMemo(() => policyGroups[currentGroupIndex], [currentGroupIndex]);
+
+  // Skip rendering when not visible for better performance
+  if (!isVisible) {
+    return null;
+  }
 
   if (!isMobile) {
     return (
-      <div className={`absolute inset-0 w-full h-full transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+      <div className="absolute inset-0 w-full h-full transition-opacity duration-500 opacity-100">
         <div className="absolute top-[75%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-5xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 px-4">
             {policyGroups.map(group => (
@@ -117,7 +125,7 @@ export const PolicyMenu = ({
   }
 
   return (
-    <div className={`absolute inset-0 w-full h-full transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+    <div className="absolute inset-0 w-full h-full transition-opacity duration-500 opacity-100">
       <div 
         className="absolute bottom-64 left-1/2 transform -translate-x-1/2 translate-y-[11.34px] w-full max-w-xs mx-auto px-4"
         onTouchStart={handleTouchStart}

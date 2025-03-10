@@ -1,5 +1,5 @@
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useCallback } from "react";
 import { VideoManager } from "./VideoManager";
 import type { ContentView } from "@/types/navigation";
 
@@ -24,29 +24,43 @@ const VideoSection = ({
   handleTimeUpdate,
   setCurrentTime
 }: VideoSectionProps) => {
-  // Set up video time update event listeners
+  // Memoize the time update handler to prevent recreating on every render
+  const handleVideoTimeUpdate = useCallback(() => {
+    handleTimeUpdate();
+    if (video1Ref.current) {
+      setCurrentTime(video1Ref.current.currentTime);
+    }
+  }, [handleTimeUpdate, video1Ref, setCurrentTime]);
+
+  // Optimized event listener setup with fewer re-renders
   useEffect(() => {
     if (!isPlaying) return;
 
     const video1 = video1Ref.current;
     const video2 = video2Ref.current;
 
-    const handleVideoTimeUpdate = () => {
-      handleTimeUpdate();
-      if (video1) {
-        setCurrentTime(video1.currentTime);
-      }
-    };
-
-    video1?.addEventListener('timeupdate', handleVideoTimeUpdate);
-    video2?.addEventListener('timeupdate', handleVideoTimeUpdate);
+    // Only add listeners if videos exist
+    if (video1) {
+      video1.addEventListener('timeupdate', handleVideoTimeUpdate);
+    }
+    
+    if (video2) {
+      video2.addEventListener('timeupdate', handleVideoTimeUpdate);
+    }
 
     return () => {
-      video1?.removeEventListener('timeupdate', handleVideoTimeUpdate);
-      video2?.removeEventListener('timeupdate', handleVideoTimeUpdate);
+      // Clean up listeners properly
+      if (video1) {
+        video1.removeEventListener('timeupdate', handleVideoTimeUpdate);
+      }
+      
+      if (video2) {
+        video2.removeEventListener('timeupdate', handleVideoTimeUpdate);
+      }
     };
-  }, [isPlaying, handleTimeUpdate, video1Ref, video2Ref, setCurrentTime]);
+  }, [isPlaying, handleVideoTimeUpdate, video1Ref, video2Ref]);
 
+  // Prevent unnecessary re-renders of VideoManager
   return useMemo(() => (
     <VideoManager
       isPlaying={isPlaying}

@@ -1,70 +1,77 @@
 
-import { useEffect } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { useIsMobile } from "./use-mobile";
 
-// Update to accept handleViewTransition as a parameter
 export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down') => void) => {
   const isMobile = useIsMobile();
+  const isScrolling = useRef(false);
+  const lastScrollTime = useRef(0);
+  const scrollTimeout = useRef<number | null>(null);
+
+  // Optimized wheel handler with proper throttling
+  const throttledWheelHandler = useCallback((e: WheelEvent) => {
+    const now = Date.now();
+    // Prevent scroll events that are too close together (250ms throttle)
+    if (isScrolling.current || now - lastScrollTime.current < 250) return;
+    
+    isScrolling.current = true;
+    lastScrollTime.current = now;
+    
+    // Use requestAnimationFrame for smoother performance
+    requestAnimationFrame(() => {
+      if (e.deltaY > 0) {
+        // Scrolling down
+        handleViewTransition('down');
+      } else if (e.deltaY < 0) {
+        // Scrolling up
+        handleViewTransition('up');
+      }
+      
+      // Reset scrolling state after delay
+      if (scrollTimeout.current) {
+        window.clearTimeout(scrollTimeout.current);
+      }
+      
+      scrollTimeout.current = window.setTimeout(() => {
+        isScrolling.current = false;
+        scrollTimeout.current = null;
+      }, 300);
+    });
+  }, [handleViewTransition]);
 
   useEffect(() => {
-    // Only prevent scrolling on mobile devices
+    // Clean up function to be called on unmount
+    const cleanup = () => {
+      if (scrollTimeout.current) {
+        window.clearTimeout(scrollTimeout.current);
+      }
+      
+      document.documentElement.classList.remove('no-bounce');
+      document.body.classList.remove('no-bounce');
+      window.removeEventListener('wheel', throttledWheelHandler);
+      window.removeEventListener('wheel', preventDefault);
+      window.removeEventListener('touchmove', preventDefault);
+    };
+    
+    // Reusable preventDefault function
+    const preventDefault = (e: Event) => {
+      e.preventDefault();
+    };
+    
     if (isMobile) {
-      // Add no-bounce classes to prevent overscroll
+      // Mobile-specific setup
       document.documentElement.classList.add('no-bounce');
       document.body.classList.add('no-bounce');
       
-      // Prevent default wheel and touch events to disable scrolling navigation on mobile
-      const preventDefault = (e: Event) => {
-        e.preventDefault();
-      };
-      
-      // Add event listeners to prevent scrolling on mobile
+      // Prevent default wheel and touch events
       window.addEventListener('wheel', preventDefault, { passive: false });
       window.addEventListener('touchmove', preventDefault, { passive: false });
-      
-      return () => {
-        // Clean up when component unmounts
-        document.documentElement.classList.remove('no-bounce');
-        document.body.classList.remove('no-bounce');
-        window.removeEventListener('wheel', preventDefault);
-        window.removeEventListener('touchmove', preventDefault);
-      };
     } else {
-      // On desktop, we'll handle the wheel event for navigation
-      const handleWheel = (e: WheelEvent) => {
-        if (e.deltaY > 0) {
-          // Scrolling down
-          handleViewTransition('down');
-        } else if (e.deltaY < 0) {
-          // Scrolling up
-          handleViewTransition('up');
-        }
-      };
-      
-      // Use a more optimized approach with requestAnimationFrame for better performance
-      let isScrolling = false;
-      
-      const throttledWheelHandler = (e: WheelEvent) => {
-        if (!isScrolling) {
-          isScrolling = true;
-          
-          // Use requestAnimationFrame for smoother performance
-          window.requestAnimationFrame(() => {
-            handleWheel(e);
-            
-            // Add a small delay to prevent rapid navigation changes
-            setTimeout(() => {
-              isScrolling = false;
-            }, 300); // Slightly reduced throttle time for better responsiveness
-          });
-        }
-      };
-      
+      // Desktop-specific setup
       window.addEventListener('wheel', throttledWheelHandler, { passive: true });
-      
-      return () => {
-        window.removeEventListener('wheel', throttledWheelHandler);
-      };
     }
-  }, [isMobile, handleViewTransition]);
+    
+    // Return cleanup function
+    return cleanup;
+  }, [isMobile, throttledWheelHandler]);
 };
