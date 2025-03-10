@@ -1,13 +1,15 @@
+
 import { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import type { ContentView, PolicyView } from '@/types/navigation';
-import { useAuth } from './AuthProvider';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Hexagon } from 'lucide-react';
+
 interface PolicyMenuProps {
   onViewChange: (view: ContentView) => void;
   isVisible: boolean;
 }
+
 const policyGroups = [{
   title: "Legal",
   items: ['privacy', 'terms', 'cookie', 'legal', 'intellectual-property']
@@ -24,15 +26,13 @@ const policyGroups = [{
   title: "Other",
   items: ['social-media', 'environmental', 'sitemap']
 }] as const;
+
 export const PolicyMenu = ({
   onViewChange,
   isVisible
 }: PolicyMenuProps) => {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [currentGroupIndex, setCurrentGroupIndex] = useState(0);
-  const {
-    user
-  } = useAuth();
   const isMobile = useIsMobile();
 
   // Swipe handling
@@ -44,13 +44,17 @@ export const PolicyMenu = ({
     touchStartX.current = e.touches[0].clientX;
     touchEndX.current = null;
   };
+
   const handleTouchMove = (e: React.TouchEvent) => {
     touchEndX.current = e.touches[0].clientX;
   };
+
   const handleTouchEnd = () => {
     if (!touchStartX.current || !touchEndX.current) return;
+    
     const distance = touchEndX.current - touchStartX.current;
     const isSwipe = Math.abs(distance) > minSwipeDistance;
+    
     if (isSwipe) {
       if (distance > 0) {
         // Swipe right (go to previous group)
@@ -65,20 +69,31 @@ export const PolicyMenu = ({
     touchStartX.current = null;
     touchEndX.current = null;
   };
+
   const handlePolicyClick = (policy: PolicyView) => {
     onViewChange(policy);
   };
+
   const currentGroup = policyGroups[currentGroupIndex];
+
   if (!isMobile) {
-    return <div className={`absolute inset-0 w-full h-full transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+    return (
+      <div className={`absolute inset-0 w-full h-full transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
         <div className="absolute top-[75%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-5xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 px-4">
-            {policyGroups.map(group => <div key={group.title} className="text-center">
+            {policyGroups.map(group => (
+              <div key={group.title} className="text-center">
                 <h3 className="text-sm font-black mb-3 tracking-wider uppercase text-[#555555]">
                   {group.title}
                 </h3>
                 <ul className="space-y-2">
-                  {group.items.map(item => <li key={item} onClick={() => handlePolicyClick(item)} onMouseEnter={() => setHoveredItem(item)} onMouseLeave={() => setHoveredItem(null)} className={`
+                  {group.items.map(item => (
+                    <li
+                      key={item}
+                      onClick={() => handlePolicyClick(item)}
+                      onMouseEnter={() => setHoveredItem(item)}
+                      onMouseLeave={() => setHoveredItem(null)}
+                      className={`
                         cursor-pointer
                         text-xs
                         font-montserrat
@@ -87,53 +102,66 @@ export const PolicyMenu = ({
                         duration-300
                         py-0.5
                         ${hoveredItem === item ? 'text-white' : 'text-white/80'}
-                      `}>
+                      `}
+                    >
                       {item.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
-                    </li>)}
-                  {group.title === "Other" && <li className="relative mt-4">
-                      <div className="pt-2">
-                        {user ? <Button variant="outline" className="border-0 bg-white/10 hover:bg-white/20 text-white font-montserrat font-medium text-xs px-6 py-2 rounded-full transition-all duration-300" onClick={() => onViewChange('profile')}>
-                            My Profile
-                          </Button> : <Button variant="outline" className="border-0 bg-white/10 hover:bg-white/20 text-white font-montserrat font-medium text-xs px-6 py-2 rounded-full transition-all duration-300" onClick={() => onViewChange('auth')}>
-                            Login / Register
-                          </Button>}
-                      </div>
-                    </li>}
+                    </li>
+                  ))}
                 </ul>
-              </div>)}
+              </div>
+            ))}
           </div>
         </div>
-      </div>;
+      </div>
+    );
   }
-  return <div className={`absolute inset-0 w-full h-full transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-      <div className="absolute bottom-64 left-1/2 transform -translate-x-1/2 translate-y-[11.34px] w-full max-w-xs mx-auto px-4" onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
+
+  return (
+    <div className={`absolute inset-0 w-full h-full transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+      <div 
+        className="absolute bottom-64 left-1/2 transform -translate-x-1/2 translate-y-[11.34px] w-full max-w-xs mx-auto px-4"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
         <div className="relative flex items-center justify-center">
           <div key={currentGroup.title} className="text-center w-full animate-fade-in">
             <h3 className="text-sm font-black mb-3 tracking-wider uppercase text-[#555555]">
               {currentGroup.title}
             </h3>
             <ul className="space-y-2">
-              {currentGroup.items.map(item => <li key={item} onClick={() => handlePolicyClick(item)} className="cursor-pointer text-xs font-montserrat font-medium transition-opacity duration-300 py-1 text-white/80 hover:text-white active:text-white mx-[75px]">
+              {currentGroup.items.map(item => (
+                <li
+                  key={item}
+                  onClick={() => handlePolicyClick(item)}
+                  className="cursor-pointer text-xs font-montserrat font-medium transition-opacity duration-300 py-1 text-white/80 hover:text-white active:text-white mx-[75px]"
+                >
                   {item.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
-                </li>)}
-              {currentGroup.title === "Other" && <li className="relative mt-4">
-                  <div className="pt-2">
-                    {user ? <Button variant="outline" className="border-0 bg-white/10 hover:bg-white/20 text-white font-montserrat font-medium text-xs px-6 py-2 rounded-full transition-all duration-300" onClick={() => onViewChange('profile')}>
-                        My Profile
-                      </Button> : <Button variant="outline" className="border-0 bg-white/10 hover:bg-white/20 text-white font-montserrat font-medium text-xs px-6 py-2 rounded-full transition-all duration-300" onClick={() => onViewChange('auth')}>
-                        Login / Register
-                      </Button>}
-                  </div>
-                </li>}
+                </li>
+              ))}
             </ul>
           </div>
         </div>
         
         <div className="flex justify-center mt-6 space-x-3">
-          {policyGroups.map((_, index) => <button key={index} onClick={() => setCurrentGroupIndex(index)} className="flex items-center justify-center transition-colors duration-300 hover:opacity-90" aria-label={`Go to policy group ${index + 1}`}>
-              <Hexagon size={18} fill={index === currentGroupIndex ? "white" : "transparent"} color="white" strokeWidth={1.5} className="transform rotate-0" />
-            </button>)}
+          {policyGroups.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentGroupIndex(index)}
+              className="flex items-center justify-center transition-colors duration-300 hover:opacity-90"
+              aria-label={`Go to policy group ${index + 1}`}
+            >
+              <Hexagon
+                size={18}
+                fill={index === currentGroupIndex ? "white" : "transparent"}
+                color="white"
+                strokeWidth={1.5}
+                className="transform rotate-0"
+              />
+            </button>
+          ))}
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };

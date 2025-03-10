@@ -1,17 +1,9 @@
 
 import { Navigate } from "react-router-dom";
-import { useAuth } from "./AuthProvider";
 
+// This is a placeholder protected route component
+// You can implement actual authentication later if needed
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth();
-
-  if (loading) {
-    return <div>Carregando...</div>;
-  }
-
-  if (!user) {
-    return <Navigate to="/auth" />;
-  }
-
+  // For now, we'll just render the children since auth was removed
   return <>{children}</>;
 }
