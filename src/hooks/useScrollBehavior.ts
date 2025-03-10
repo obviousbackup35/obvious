@@ -1,9 +1,11 @@
 
 import { useEffect, useRef, useCallback } from "react";
 import { useIsMobile } from "./use-mobile";
+import { useAudio } from "@/contexts/AudioContext";
 
 export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down') => void) => {
   const isMobile = useIsMobile();
+  const { isPlaying, hasInitialInteraction } = useAudio();
   const isScrolling = useRef(false);
   const lastScrollTime = useRef(0);
   const scrollTimeout = useRef<number | null>(null);
@@ -12,6 +14,12 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
 
   // Optimized wheel handler with immediate response
   const throttledWheelHandler = useCallback((e: WheelEvent) => {
+    // Don't handle scroll events if user hasn't interacted with the site yet
+    if (!hasInitialInteraction || !isPlaying) {
+      e.preventDefault();
+      return;
+    }
+    
     e.preventDefault(); // Prevent default scrolling
     
     const now = Date.now();
@@ -29,8 +37,8 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
 
     console.log(`Wheel event - direction: ${direction}, count: ${scrollCount.current}, currentView: from Index.tsx`);
 
-    // Trigger view transition after fewer scroll events in same direction
-    if (scrollCount.current >= 1 && !isScrolling.current) {
+    // Trigger view transition after accumulating enough scroll events in the same direction
+    if (scrollCount.current >= 2 && !isScrolling.current) {
       isScrolling.current = true;
       
       handleViewTransition(direction);
@@ -46,7 +54,7 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
         scrollTimeout.current = null;
       }, 800); // Longer cooldown to prevent accidental double transitions
     }
-  }, [handleViewTransition]);
+  }, [handleViewTransition, hasInitialInteraction, isPlaying]);
 
   useEffect(() => {
     // Clean up function to be called on unmount
