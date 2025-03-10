@@ -28,6 +28,25 @@ const InteractionHandler = ({
   const fadeInterval = useRef<number | null>(null);
   const { scrollProgress } = useScrollTransition();
 
+  // Setting up wheel handler for binary scrolling
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      if (e.deltaY > 0) {
+        // Scroll down to dunes
+        window.scrollTo({ top: 100, behavior: 'smooth' });
+      } else if (e.deltaY < 0) {
+        // Scroll up to video
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    };
+    
+    window.addEventListener('wheel', handleWheel, { passive: true });
+    
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+    };
+  }, []);
+
   const fadeAudioIn = useCallback((audio: HTMLAudioElement) => {
     if (fadeInterval.current !== null) {
       window.clearInterval(fadeInterval.current);

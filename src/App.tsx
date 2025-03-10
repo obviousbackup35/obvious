@@ -18,28 +18,21 @@ const App = () => {
   
   // Configure scrolling behavior without visible scrollbars
   useEffect(() => {
-    // Permitir scroll, mas ocultar a barra de rolagem
-    document.documentElement.style.overflow = 'hidden';
-    document.documentElement.style.height = '100vh';
-    document.body.style.overflow = 'hidden';
-    document.body.style.height = '100vh';
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
-    
-    // Permitir rolagem com 100vh de altura e conteúdo suficiente para scroll
     const styleElement = document.createElement('style');
     styleElement.textContent = `
       html, body {
         scrollbar-width: none;
         -ms-overflow-style: none;
+        overflow: auto;
+        height: 100%;
       }
       html::-webkit-scrollbar, body::-webkit-scrollbar {
         display: none;
       }
       #app-wrapper {
-        height: 100vh;
+        height: 200vh;
         position: relative;
-        overflow: hidden;
+        overflow-x: hidden;
       }
     `;
     document.head.appendChild(styleElement);

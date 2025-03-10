@@ -10,7 +10,7 @@ export const useScrollTransition = () => {
     const currentScrollY = window.scrollY;
     setScrollY(currentScrollY);
     
-    // Transição binária: ou está no vídeo (0) ou nas dunas (1)
+    // Binary transition - either at video (0) or at dunes (1)
     if (currentScrollY < 50) {
       setScrollProgress(0);
       setIsDarkMode(false);
@@ -21,6 +21,7 @@ export const useScrollTransition = () => {
   }, []);
 
   useEffect(() => {
+    // Add scroll event listener
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
     
@@ -30,7 +31,7 @@ export const useScrollTransition = () => {
   }, [handleScroll]);
 
   const getTextColor = useCallback(() => {
-    // Transição de #c8c5ad (claro) para #333333 (escuro)
+    // Transition from #c8c5ad (light) to #333333 (dark)
     const lightColor = { r: 200, g: 197, b: 173 }; // #c8c5ad
     const darkColor = { r: 51, g: 51, b: 51 };     // #333333
     
