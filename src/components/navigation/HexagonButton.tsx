@@ -7,7 +7,7 @@ const HexagonButton = memo(() => {
 
   return (
     <button
-      className="absolute left-[calc(25%-80px)] top-[calc(50%+80px)] transform -translate-y-1/2 p-2 transition-all duration-700"
+      className="absolute left-[calc(25%-280px)] top-[calc(50%+80px)] transform -translate-y-1/2 p-2 transition-all duration-700"
       aria-label="Hexagon Button"
     >
       <Hexagon
@@ -26,4 +26,3 @@ const HexagonButton = memo(() => {
 HexagonButton.displayName = 'HexagonButton';
 
 export default HexagonButton;
-
