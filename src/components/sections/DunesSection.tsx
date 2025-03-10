@@ -9,13 +9,14 @@ interface DunesSectionProps {
 const DunesSection = memo(({ scrollProgress, style }: DunesSectionProps) => {
   return (
     <div 
-      className="fixed inset-0 w-full h-full transition-opacity duration-700"
+      className="fixed inset-0 w-full h-full z-10"
       style={{
         backgroundImage: 'url(/dunes.webp)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         opacity: scrollProgress,
-        zIndex: 6,
+        transition: 'opacity 700ms ease-in-out',
+        pointerEvents: 'none',
         ...style
       }}
       role="region"

@@ -44,28 +44,32 @@ export const VideoManager = memo(({
   
   const sharedVideoProps = useMemo(() => ({
     transition: 'opacity 1s ease-in-out',
-    zIndex: 20,
+    zIndex: 5, // Reduzindo para ficar abaixo das dunas
   }), []);
   
   const overlayStyle = useMemo(() => ({ 
     opacity: !isPlaying && currentView === 'video' ? (isBackgroundLoaded ? 1 : 0) : 0,
     transition: 'opacity 2s ease-in-out',
+    zIndex: 4, // Reduzindo para ficar abaixo das dunas e dos vídeos
   }), [isPlaying, currentView, isBackgroundLoaded]);
   
   const video1Style = useMemo(() => ({
     ...sharedVideoProps,
     opacity: currentView === 'video' && isPlaying ? (activeVideo === 1 ? 1 : 0) : 0,
+    pointerEvents: 'none', // Permitir scroll mesmo sobre o vídeo
   }), [currentView, isPlaying, activeVideo, sharedVideoProps]);
   
   const video2Style = useMemo(() => ({
     ...sharedVideoProps,
     opacity: currentView === 'video' && isPlaying ? (activeVideo === 2 ? 1 : 0) : 0,
+    pointerEvents: 'none', // Permitir scroll mesmo sobre o vídeo
   }), [currentView, isPlaying, activeVideo, sharedVideoProps]);
   
   const logoStyle = useMemo(() => ({
     opacity: currentView === 'video' ? (isBackgroundLoaded ? 1 : 0) : 0,
     transition: 'opacity 2s ease-in-out',
     transitionDelay: '2s',
+    zIndex: 7, // Aumentando para ficar acima das dunas
   }), [currentView, isBackgroundLoaded]);
   
   return (

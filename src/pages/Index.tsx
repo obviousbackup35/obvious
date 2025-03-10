@@ -27,6 +27,20 @@ const Index = () => {
     setCurrentTime
   } = useAudio();
 
+  // Forçar um layout mínimo para permitir scroll
+  useEffect(() => {
+    const setMinHeight = () => {
+      document.body.style.minHeight = "200vh";
+    };
+    
+    setMinHeight();
+    window.addEventListener('resize', setMinHeight);
+    
+    return () => {
+      window.removeEventListener('resize', setMinHeight);
+    };
+  }, []);
+
   const handleViewChange = useCallback((view: ContentView) => {
     setCurrentView(view);
   }, [setCurrentView]);
@@ -79,6 +93,10 @@ const Index = () => {
       <DunesSection scrollProgress={scrollProgress} />
       
       {contentSectionsElement}
+      
+      <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 text-white bg-black/50 px-4 py-2 rounded-full z-50 pointer-events-none">
+        Scroll para ver a transição ({Math.round(scrollProgress * 100)}%)
+      </div>
     </InteractionHandler>
   );
 };

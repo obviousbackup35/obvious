@@ -25,9 +25,10 @@ export const useScrollTransition = (threshold = 200, maxScroll = 400) => {
   }, [threshold, maxScroll]);
 
   useEffect(() => {
-    // Enable scrolling
-    document.body.style.overflow = 'auto';
+    // Explicitly enable scrolling
+    document.body.style.overflow = 'visible';
     document.body.style.position = 'static';
+    document.body.style.height = 'auto';
     document.body.style.touchAction = 'auto';
     
     window.addEventListener('scroll', handleScroll, { passive: true });
