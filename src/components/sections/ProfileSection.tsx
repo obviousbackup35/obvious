@@ -2,10 +2,12 @@
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/use-toast";
-import { ChevronLeft, Loader2 } from "lucide-react";
+import { ChevronLeft, Loader2, UserCircle, Mail, Key } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface ProfileSectionProps {
   isVisible: boolean;
@@ -15,7 +17,11 @@ interface ProfileSectionProps {
 export const ProfileSection = ({ isVisible, onBack }: ProfileSectionProps) => {
   const isMobile = useIsMobile();
   const [loading, setLoading] = useState(false);
+  const [passwordLoading, setPasswordLoading] = useState(false);
   const { user } = useAuth();
+  const [showPasswordChange, setShowPasswordChange] = useState(false);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   
   const handleLogout = async () => {
     try {
@@ -25,18 +31,101 @@ export const ProfileSection = ({ isVisible, onBack }: ProfileSectionProps) => {
       if (error) throw error;
       
       toast({
-        title: "Logout successful",
-        description: "You have been logged out",
+        title: "Logout bem-sucedido",
+        description: "Você saiu da sua conta",
       });
       onBack();
     } catch (error: any) {
       toast({
-        title: "Error logging out",
-        description: error.message || "Failed to log out",
+        title: "Erro ao sair",
+        description: error.message || "Falha ao fazer logout",
         variant: "destructive",
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handlePasswordChange = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!password || !confirmPassword) {
+      toast({
+        title: "Campos obrigatórios",
+        description: "Preencha ambos os campos de senha",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (password.length < 6) {
+      toast({
+        title: "Senha muito curta",
+        description: "A senha deve ter pelo menos 6 caracteres",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (password !== confirmPassword) {
+      toast({
+        title: "Senhas não coincidem",
+        description: "As senhas digitadas são diferentes",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    try {
+      setPasswordLoading(true);
+      const { error } = await supabase.auth.updateUser({
+        password,
+      });
+
+      if (error) throw error;
+      
+      toast({
+        title: "Senha atualizada",
+        description: "Sua senha foi alterada com sucesso.",
+      });
+      
+      setPassword("");
+      setConfirmPassword("");
+      setShowPasswordChange(false);
+    } catch (error: any) {
+      toast({
+        title: "Erro ao atualizar senha",
+        description: error.message || "Falha ao alterar senha",
+        variant: "destructive",
+      });
+    } finally {
+      setPasswordLoading(false);
+    }
+  };
+
+  const sendResetPasswordEmail = async () => {
+    if (!user?.email) return;
+    
+    try {
+      setPasswordLoading(true);
+      const { error } = await supabase.auth.resetPasswordForEmail(user.email, {
+        redirectTo: `${window.location.origin}?view=reset-password`,
+      });
+
+      if (error) throw error;
+      
+      toast({
+        title: "Email enviado",
+        description: "Verifique seu email para redefinir sua senha.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Erro ao enviar email",
+        description: error.message || "Falha ao enviar email de recuperação",
+        variant: "destructive",
+      });
+    } finally {
+      setPasswordLoading(false);
     }
   };
 
@@ -62,9 +151,81 @@ export const ProfileSection = ({ isVisible, onBack }: ProfileSectionProps) => {
           <h2 className="text-2xl font-bold text-white mb-6 text-center">Perfil</h2>
           
           {user && (
-            <div className="mb-6">
-              <p className="text-white/90 text-lg mb-2">Email:</p>
-              <p className="text-white font-medium">{user.email}</p>
+            <div className="mb-6 space-y-4">
+              <div className="flex items-center gap-3 text-white/90 text-lg mb-2">
+                <UserCircle size={24} />
+                <p className="text-white font-medium">Conta</p>
+              </div>
+              
+              <div className="flex items-center gap-3 text-white/90 text-lg mb-4">
+                <Mail size={20} />
+                <p className="text-white font-medium">{user.email}</p>
+              </div>
+              
+              {!showPasswordChange ? (
+                <Button 
+                  variant="outline" 
+                  onClick={() => setShowPasswordChange(true)}
+                  className="w-full bg-white/10 text-white hover:bg-white/20 border-white/30"
+                >
+                  <Key className="mr-2 h-5 w-5" />
+                  Alterar senha
+                </Button>
+              ) : (
+                <form onSubmit={handlePasswordChange} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="password" className="text-white">Nova senha</Label>
+                    <Input
+                      id="password"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      className="bg-white/20 border-white/30 text-white"
+                      autoComplete="new-password"
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="confirmPassword" className="text-white">Confirmar senha</Label>
+                    <Input
+                      id="confirmPassword"
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      required
+                      className="bg-white/20 border-white/30 text-white"
+                      autoComplete="new-password"
+                    />
+                  </div>
+                  
+                  <div className="flex gap-2">
+                    <Button 
+                      type="button" 
+                      variant="outline"
+                      onClick={() => setShowPasswordChange(false)}
+                      className="flex-1 bg-white/10 text-white hover:bg-white/20 border-white/30"
+                    >
+                      Cancelar
+                    </Button>
+                    
+                    <Button 
+                      type="submit" 
+                      className="flex-1 bg-white text-black hover:bg-white/90"
+                      disabled={passwordLoading}
+                    >
+                      {passwordLoading ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          <span>Salvando...</span>
+                        </>
+                      ) : (
+                        "Salvar"
+                      )}
+                    </Button>
+                  </div>
+                </form>
+              )}
             </div>
           )}
           
