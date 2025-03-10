@@ -19,7 +19,7 @@ const Index = () => {
   const { currentView, setCurrentView } = useViewTransition(isPlaying);
   const { activeVideo, video1Ref, video2Ref, handleTimeUpdate } = useVideoTransition();
   const { audioRef } = usePageAudio(isPlaying, currentView);
-  const { scrollProgress, getTextColor } = useScrollTransition(200, 400);
+  const { scrollProgress, getTextColor } = useScrollTransition(200, 300);
   const { 
     isPlaying: isAudioPlaying, 
     toggleAudio, 
@@ -93,10 +93,6 @@ const Index = () => {
       <DunesSection scrollProgress={scrollProgress} />
       
       {contentSectionsElement}
-      
-      <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 text-white bg-black/50 px-4 py-2 rounded-full z-50 pointer-events-none">
-        Scroll para ver a transição ({Math.round(scrollProgress * 100)}%)
-      </div>
     </InteractionHandler>
   );
 };

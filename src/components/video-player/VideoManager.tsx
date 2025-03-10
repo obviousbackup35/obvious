@@ -56,13 +56,13 @@ export const VideoManager = memo(({
   const video1Style = useMemo(() => ({
     ...sharedVideoProps,
     opacity: currentView === 'video' && isPlaying ? (activeVideo === 1 ? 1 : 0) : 0,
-    pointerEvents: 'none', // Permitir scroll mesmo sobre o vídeo
+    pointerEvents: 'none' as const, // Corrigindo o tipo
   }), [currentView, isPlaying, activeVideo, sharedVideoProps]);
   
   const video2Style = useMemo(() => ({
     ...sharedVideoProps,
     opacity: currentView === 'video' && isPlaying ? (activeVideo === 2 ? 1 : 0) : 0,
-    pointerEvents: 'none', // Permitir scroll mesmo sobre o vídeo
+    pointerEvents: 'none' as const, // Corrigindo o tipo
   }), [currentView, isPlaying, activeVideo, sharedVideoProps]);
   
   const logoStyle = useMemo(() => ({

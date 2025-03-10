@@ -1,7 +1,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 
-export const useScrollTransition = (threshold = 200, maxScroll = 400) => {
+export const useScrollTransition = (threshold = 200, maxScroll = 300) => {
   const [scrollY, setScrollY] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -10,22 +10,25 @@ export const useScrollTransition = (threshold = 200, maxScroll = 400) => {
     const currentScrollY = window.scrollY;
     setScrollY(currentScrollY);
     
-    // Calculate progress (0 to 1) based on scroll position
+    // Simplificando a transição para ser mais abrupta
     if (currentScrollY <= threshold) {
+      // Quando está no topo, mostra o vídeo (0% das dunas)
       setScrollProgress(0);
       setIsDarkMode(false);
     } else if (currentScrollY >= maxScroll) {
+      // Quando rola para baixo além do limite, mostra as dunas (100%)
       setScrollProgress(1);
       setIsDarkMode(true);
     } else {
-      const progress = (currentScrollY - threshold) / (maxScroll - threshold);
+      // Durante a transição, tornando-a mais rápida
+      const progress = Math.pow((currentScrollY - threshold) / (maxScroll - threshold), 2);
       setScrollProgress(progress);
       setIsDarkMode(progress > 0.5);
     }
   }, [threshold, maxScroll]);
 
   useEffect(() => {
-    // Explicitly enable scrolling
+    // Explicitamente habilitar scrolling
     document.body.style.overflow = 'visible';
     document.body.style.position = 'static';
     document.body.style.height = 'auto';
@@ -33,7 +36,7 @@ export const useScrollTransition = (threshold = 200, maxScroll = 400) => {
     
     window.addEventListener('scroll', handleScroll, { passive: true });
     
-    // Call handleScroll immediately to set initial values
+    // Chamar handleScroll imediatamente para definir valores iniciais
     handleScroll();
     
     return () => {
@@ -42,7 +45,7 @@ export const useScrollTransition = (threshold = 200, maxScroll = 400) => {
   }, [handleScroll]);
 
   const getTextColor = useCallback(() => {
-    // Transition from #c8c5ad (light) to #333333 (dark)
+    // Transição de #c8c5ad (claro) para #333333 (escuro)
     const lightColor = { r: 200, g: 197, b: 173 }; // #c8c5ad
     const darkColor = { r: 51, g: 51, b: 51 };     // #333333
     

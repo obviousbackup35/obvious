@@ -119,9 +119,9 @@ const InteractionHandler = ({
     }
   }, [hasInitialInteraction, isPlaying, startPlayback]);
 
-  // Create a scrollable container while maintaining the interactive container
+  // Ajustado para um height de 180vh para permitir apenas um scroll para transição completa
   return (
-    <div className="relative w-full" style={{ height: '200vh' }}>
+    <div className="relative w-full" style={{ height: '180vh' }}>
       <div 
         className="relative viewport-height w-full overflow-hidden cursor-pointer bg-black prevent-overscroll no-bounce sticky top-0"
         onClick={handleInteraction}
@@ -131,8 +131,8 @@ const InteractionHandler = ({
       >
         {children}
       </div>
-      {/* Empty div to create scrollable space */}
-      <div style={{ height: '100vh' }} />
+      {/* Espaço vazio ajustado para um scroll único */}
+      <div style={{ height: '80vh' }} />
     </div>
   );
 };
