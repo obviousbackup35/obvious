@@ -24,14 +24,11 @@ export const VideoManager = memo(({
 }: VideoManagerProps) => {
   const isMobile = useIsMobile();
   
-  // Log when video state changes to help debug
   useEffect(() => {
     console.log(`VideoManager: isPlaying=${isPlaying}, currentView=${currentView}, activeVideo=${activeVideo}`);
   }, [isPlaying, currentView, activeVideo]);
   
-  // Ensure video sources are loaded properly
   const loadVideoSources = useCallback(() => {
-    // When returning to video view, ensure videos are ready
     if (currentView === 'video' && video1Ref.current && video2Ref.current) {
       if (!video1Ref.current.src || video1Ref.current.src === '') {
         video1Ref.current.src = '/loft-video.webm';
@@ -47,25 +44,16 @@ export const VideoManager = memo(({
     }
   }, [currentView, video1Ref, video2Ref]);
   
-  // Call the callback when dependencies change
   useEffect(() => {
     loadVideoSources();
   }, [loadVideoSources]);
   
-  // Memoize style calculations to prevent unnecessary re-renders
   const overlayStyle = useMemo(() => ({ 
     opacity: !isPlaying && currentView === 'video' ? (isBackgroundLoaded ? 1 : 0) : 0,
     transition: 'opacity 2s ease-in-out',
     contain: 'content',
     willChange: (!isPlaying && currentView === 'video') ? 'opacity' : 'auto',
   }), [isPlaying, currentView, isBackgroundLoaded]);
-  
-  const mobileBackgroundStyle = useMemo(() => ({
-    opacity: currentView === 'video' && isPlaying ? 1 : 0,
-    transition: 'opacity 1s ease-in-out',
-    transform: 'translate3d(0,0,0)',
-    willChange: (currentView === 'video' && isPlaying) ? 'opacity' : 'auto',
-  }), [currentView, isPlaying]);
   
   const video1Style = useMemo(() => ({
     opacity: currentView === 'video' && isPlaying ? (activeVideo === 1 ? 1 : 0) : 0,
@@ -88,9 +76,6 @@ export const VideoManager = memo(({
     willChange: (currentView === 'video' && isBackgroundLoaded) ? 'opacity' : 'auto',
   }), [currentView, isBackgroundLoaded]);
   
-  // Use React.memo to prevent unnecessary re-renders
-  const shouldRenderMobileBackground = isMobile;
-  
   return (
     <>
       <VideoOverlay 
@@ -98,15 +83,6 @@ export const VideoManager = memo(({
         style={overlayStyle}
       />
       
-      {/* Only render mobile background when needed */}
-      {shouldRenderMobileBackground && (
-        <div 
-          className="absolute inset-0 bg-black z-10 gpu-accelerated"
-          style={mobileBackgroundStyle}
-        />
-      )}
-      
-      {/* Always load videos when on video view to ensure they're ready */}
       <VideoPlayer
         ref={video1Ref}
         isPlaying={isPlaying}
@@ -132,3 +108,4 @@ export const VideoManager = memo(({
 });
 
 VideoManager.displayName = 'VideoManager';
+
