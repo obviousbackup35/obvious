@@ -50,6 +50,7 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
           transition: 'opacity 1s ease-in-out',
           pointerEvents: currentView === 'black' ? 'auto' : 'none',
           willChange: currentView === 'black' || (lastMainView === 'black' && currentView === 'video') ? 'opacity' : 'auto',
+          zIndex: 10,
         }}
         aria-hidden={currentView !== 'black'}
       />
@@ -62,15 +63,17 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
           opacity: currentView === 'dunes' ? 1 : 0,
           transition: 'opacity 1s ease-in-out',
           pointerEvents: currentView === 'dunes' ? 'auto' : 'none',
-          willChange: currentView === 'dunes' || (lastMainView === 'dunes' && currentView === 'video') ? 'opacity' : 'auto',
-          zIndex: 20, // Ensure dunes is above black background
+          willChange: currentView === 'dunes' || (lastMainView === 'dunes' && currentView === 'black') ? 'opacity' : 'auto',
+          zIndex: 20, // Garantindo que as dunas fiquem acima do fundo preto
         }}
         aria-hidden={currentView !== 'dunes'}
       >
-        <PolicyMenu 
-          onViewChange={onViewChange} 
-          isVisible={currentView === 'dunes'} 
-        />
+        {currentView === 'dunes' && (
+          <PolicyMenu 
+            onViewChange={onViewChange} 
+            isVisible={true} 
+          />
+        )}
       </div>
       
       <SectionContent

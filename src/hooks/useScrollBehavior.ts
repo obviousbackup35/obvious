@@ -16,7 +16,8 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
   // Optimized wheel handler with immediate response
   const throttledWheelHandler = useCallback((e: WheelEvent) => {
     // Don't handle scroll events if user hasn't interacted with the site yet
-    if (!hasInitialInteraction || !isPlaying) {
+    if (!hasInitialInteraction) {
+      console.log("No initial interaction yet, ignoring scroll");
       e.preventDefault();
       return;
     }
@@ -25,7 +26,7 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
     
     const now = Date.now();
     const direction = e.deltaY > 0 ? 'down' : 'up';
-    const significantScroll = Math.abs(e.deltaY) > 10; // Filter out tiny scroll movements
+    const significantScroll = Math.abs(e.deltaY) > 5; // Reduzindo o limite para capturar mais eventos de scroll
     
     if (!significantScroll) return;
     
@@ -48,11 +49,11 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
 
     // Use debounce to ensure we're not triggering on accidental scrolls
     scrollDebounce.current = setTimeout(() => {
-      // Trigger view transition after accumulating enough scroll events in the same direction
+      // Trigger view transition after minimal scroll events to melhorar responsividade
       if (scrollCount.current >= 1 && !isScrolling.current) {
         isScrolling.current = true;
         
-        console.log(`Transitioning with direction: ${direction}`);
+        console.log(`Initiating transition with direction: ${direction}`);
         handleViewTransition(direction);
         
         // Reset scroll state after delay
@@ -65,10 +66,10 @@ export const useScrollBehavior = (handleViewTransition: (direction: 'up' | 'down
           scrollCount.current = 0;
           scrollTimeout.current = null;
           console.log('Scroll cooldown complete, ready for next scroll event');
-        }, 1000); // Cooldown to prevent accidental double transitions
+        }, 1200); // Aumentando para coincidir com o tempo de transição
       }
-    }, 50); // Short debounce time to feel responsive but filter accidental scrolls
-  }, [handleViewTransition, hasInitialInteraction, isPlaying]);
+    }, 20); // Diminuindo para tornar mais responsivo
+  }, [handleViewTransition, hasInitialInteraction]);
 
   useEffect(() => {
     // Clean up function to be called on unmount
