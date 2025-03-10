@@ -29,7 +29,7 @@ export const VideoPlayer = memo(forwardRef<HTMLVideoElement, VideoPlayerProps>(
       opacity: isPlaying && isActive ? 1 : 0,
       transition: 'opacity 1s ease-in-out',
       willChange: isPlaying && isActive ? 'opacity' : 'auto',
-      objectFit: isMobile ? 'contain' : 'cover',
+      objectFit: isMobile ? 'contain' as const : 'cover' as const,
       transform: isMobile ? 'translate3d(0,0,0) scale(1.15)' : 'translate3d(0,0,0)',
       ...style
     }), [isPlaying, isActive, isMobile, style]);
