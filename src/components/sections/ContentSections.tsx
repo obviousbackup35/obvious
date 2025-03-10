@@ -2,8 +2,6 @@
 import { SectionContent } from "./SectionContent";
 import type { ContentView } from "@/types/navigation";
 import { PolicyMenu } from "../PolicyMenu";
-import { AuthContent } from "../auth/AuthContent";
-import { ProfileSection } from "./ProfileSection";
 import { useState, useEffect, useCallback, memo } from "react";
 
 interface ContentSectionsProps {
@@ -68,11 +66,6 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
         />
       </div>
       
-      <ProfileSection
-        isVisible={currentView === 'profile'}
-        onBack={handleBack}
-      />
-      
       <SectionContent
         isVisible={currentView === 'company'}
         backgroundImage="/visualelectric-1741372805454.webp"
@@ -100,20 +93,6 @@ export const ContentSections = memo(({ currentView, onViewChange }: ContentSecti
         title="Contact"
         onBack={handleBack}
       />
-
-      <div 
-        className="absolute inset-0 w-full h-full"
-        style={{ 
-          background: 'linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%)',
-          opacity: currentView === 'auth' ? 1 : 0,
-          transition: 'opacity 1s ease-in-out',
-          pointerEvents: currentView === 'auth' ? 'auto' : 'none',
-          willChange: currentView === 'auth' ? 'opacity' : 'auto',
-        }}
-        aria-hidden={currentView !== 'auth'}
-      >
-        {currentView === 'auth' && <AuthContent onBack={handleBack} />}
-      </div>
 
       {/* Policy Sections */}
       {policySections.map((policy) => (

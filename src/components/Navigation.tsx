@@ -1,3 +1,4 @@
+
 import { useCallback, memo, useState, useEffect } from "react";
 import type { ContentView } from "@/types/navigation";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -5,9 +6,7 @@ import NavigationButton from "./navigation/NavigationButton";
 import MobileMenu from "./navigation/MobileMenu";
 import DesktopMenu from "./navigation/DesktopMenu";
 import ActionButtons from "./navigation/ActionButtons";
-import { UserRound, Globe } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "./AuthProvider";
+import { Globe } from "lucide-react";
 
 interface NavigationProps {
   audioRef: React.RefObject<HTMLAudioElement>;
@@ -28,9 +27,6 @@ export const Navigation = memo(({
 }: NavigationProps) => {
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const navigate = useNavigate();
-  const { user } = useAuth();
-
   const [language, setLanguage] = useState('pt');
 
   useEffect(() => {
@@ -65,36 +61,6 @@ export const Navigation = memo(({
     e.stopPropagation();
     setMobileMenuOpen(prev => !prev);
   }, []);
-
-  const handleAuthClick = useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    if (currentView === 'auth') {
-      const lastMainView = sessionStorage.getItem('lastMainView') || 'video';
-      onViewChange(lastMainView as ContentView);
-    } else {
-      if (currentView !== 'profile') {
-        sessionStorage.setItem('lastMainView', currentView);
-      }
-      onViewChange('auth');
-    }
-  }, [onViewChange, currentView]);
-
-  const handleProfileClick = useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    if (currentView === 'profile') {
-      const lastMainView = sessionStorage.getItem('lastMainView') || 'video';
-      onViewChange(lastMainView as ContentView);
-    } else {
-      if (currentView !== 'auth') {
-        sessionStorage.setItem('lastMainView', currentView);
-      }
-      onViewChange('profile');
-    }
-  }, [onViewChange, currentView]);
 
   const handleLanguageToggle = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
@@ -133,15 +99,6 @@ export const Navigation = memo(({
           >
             <Globe size={30} />
             <span className="sr-only">Toggle Language</span>
-          </NavigationButton>
-          
-          <NavigationButton
-            onClick={user ? handleProfileClick : handleAuthClick}
-            className="cursor-pointer hover:opacity-70 transition-colors duration-300 rounded-full p-2 absolute right-[1.75rem] top-0"
-            style={{ color: getTextColor() }}
-            aria-label={user ? "Profile" : "Login"}
-          >
-            <UserRound size={30} />
           </NavigationButton>
 
           <ActionButtons 
