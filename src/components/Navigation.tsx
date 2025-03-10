@@ -7,7 +7,6 @@ import MobileMenu from "./navigation/MobileMenu";
 import DesktopMenu from "./navigation/DesktopMenu";
 import ActionButtons from "./navigation/ActionButtons";
 import HexagonButton from "./navigation/HexagonButton";
-import { useScrollTransition } from "@/hooks/useScrollTransition";
 
 interface NavigationProps {
   audioRef: React.RefObject<HTMLAudioElement>;
@@ -30,7 +29,6 @@ export const Navigation = memo(({
 }: NavigationProps) => {
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { getTextColor } = useScrollTransition();
 
   const handleViewChange = useCallback((view: ContentView) => (e: React.MouseEvent) => {
     e.preventDefault();
@@ -78,7 +76,7 @@ export const Navigation = memo(({
             isPlaying={isPlaying}
             isMobile={isMobile}
             toggleMobileMenu={toggleMobileMenu}
-            getTextColor={getTextColor}
+            getTextColor={() => textColor}
             currentView={currentView}
             isMobileMenuOpen={mobileMenuOpen}
           />
@@ -90,7 +88,7 @@ export const Navigation = memo(({
               isOpen={mobileMenuOpen}
               handleViewChange={handleViewChange}
               closeMobileMenu={() => setMobileMenuOpen(false)}
-              getTextColor={getTextColor}
+              getTextColor={() => textColor}
             />
           )}
           

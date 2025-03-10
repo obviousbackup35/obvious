@@ -35,19 +35,6 @@ const Index = () => {
     return getTextColor();
   }, [getTextColor]);
 
-  // Enable scrolling when component mounts
-  useEffect(() => {
-    document.body.style.overflow = 'auto';
-    document.body.style.position = 'static';
-    document.body.style.touchAction = 'auto';
-    
-    return () => {
-      document.body.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-      document.body.style.touchAction = 'none';
-    };
-  }, []);
-
   const navigationElement = useMemo(() => (
     <Navigation 
       audioRef={audioRef} 
