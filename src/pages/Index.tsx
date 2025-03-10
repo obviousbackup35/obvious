@@ -31,6 +31,18 @@ const Index = () => {
     setCurrentView(view);
   }, [setCurrentView]);
 
+  const textColor = useMemo(() => {
+    // Interpolate between light and dark color based on scroll progress
+    const startColor = { r: 200, g: 197, b: 173 }; // #c8c5ad
+    const endColor = { r: 51, g: 51, b: 51 }; // #333333
+    
+    const r = Math.round(startColor.r + (endColor.r - startColor.r) * scrollProgress);
+    const g = Math.round(startColor.g + (endColor.g - startColor.g) * scrollProgress);
+    const b = Math.round(startColor.b + (endColor.b - startColor.b) * scrollProgress);
+    
+    return `rgb(${r}, ${g}, ${b})`;
+  }, [scrollProgress]);
+
   const navigationElement = useMemo(() => (
     <Navigation 
       audioRef={audioRef} 
@@ -39,8 +51,9 @@ const Index = () => {
       isVisible={isPlaying}
       onViewChange={handleViewChange}
       currentView={currentView}
+      textColor={textColor}
     />
-  ), [audioRef, isAudioPlaying, toggleAudio, isPlaying, handleViewChange, currentView]);
+  ), [audioRef, isAudioPlaying, toggleAudio, isPlaying, handleViewChange, currentView, textColor]);
 
   const contentSectionsElement = useMemo(() => (
     <ContentSections 
