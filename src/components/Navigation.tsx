@@ -16,6 +16,7 @@ interface NavigationProps {
   isVisible?: boolean;
   onViewChange: (view: ContentView) => void;
   currentView: ContentView;
+  textColor: string; // Added this prop
 }
 
 export const Navigation = memo(({
@@ -24,7 +25,8 @@ export const Navigation = memo(({
   toggleAudio,
   isVisible = true,
   onViewChange,
-  currentView
+  currentView,
+  textColor
 }: NavigationProps) => {
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -68,7 +70,7 @@ export const Navigation = memo(({
       <nav className="w-full">
         <div 
           className="flex justify-center items-center font-montserrat text-[1.38rem] relative transition-colors duration-700" 
-          style={{ color: getTextColor() }}
+          style={{ color: textColor }}
         >
           <ActionButtons 
             handleHomeClick={handleHomeClick}
@@ -81,7 +83,7 @@ export const Navigation = memo(({
             isMobileMenuOpen={mobileMenuOpen}
           />
           
-          <HexagonButton onViewChange={onViewChange} getTextColor={getTextColor} />
+          <HexagonButton onViewChange={onViewChange} textColor={textColor} />
           
           {isMobile && (
             <MobileMenu 
@@ -95,7 +97,7 @@ export const Navigation = memo(({
           {!isMobile && (
             <DesktopMenu 
               handleViewChange={handleViewChange}
-              getTextColor={getTextColor}
+              textColor={textColor}
             />
           )}
         </div>
