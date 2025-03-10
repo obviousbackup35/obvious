@@ -62,11 +62,12 @@ export const Navigation = memo(({
     setMobileMenuOpen(prev => !prev);
   }, []);
 
+  // Updated to use onViewChange instead of navigate
   const handleAuthClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    navigate('/auth');
-  }, [navigate]);
+    onViewChange('auth');
+  }, [onViewChange]);
 
   const handleProfileClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
