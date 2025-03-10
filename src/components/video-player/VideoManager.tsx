@@ -22,15 +22,18 @@ export const VideoManager = memo(({
   video2Ref
 }: VideoManagerProps) => {
   
+  // Optimize by moving this to a useCallback that only runs when dependencies change
   const loadVideoSources = useCallback(() => {
     if (currentView === 'video' && video1Ref.current && video2Ref.current) {
+      const videoSrc = '/loft-video.webm';
+      
       if (!video1Ref.current.src || video1Ref.current.src === '') {
-        video1Ref.current.src = '/loft-video.webm';
+        video1Ref.current.src = videoSrc;
         video1Ref.current.load();
       }
       
       if (!video2Ref.current.src || video2Ref.current.src === '') {
-        video2Ref.current.src = '/loft-video.webm';
+        video2Ref.current.src = videoSrc;
         video2Ref.current.load();
       }
     }
@@ -40,6 +43,7 @@ export const VideoManager = memo(({
     loadVideoSources();
   }, [loadVideoSources]);
   
+  // Pre-calculate styles with useMemo to avoid recalculations
   const overlayStyle = useMemo(() => ({ 
     opacity: !isPlaying && currentView === 'video' ? (isBackgroundLoaded ? 1 : 0) : 0,
     transition: 'opacity 2s ease-in-out',

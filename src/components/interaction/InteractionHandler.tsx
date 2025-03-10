@@ -26,6 +26,7 @@ const InteractionHandler = ({
   const { hasInitialInteraction, setHasInitialInteraction } = useAudio();
   const fadeInterval = useRef<number | null>(null);
 
+  // Optimized fade function with better performance
   const fadeAudioIn = useCallback((audio: HTMLAudioElement) => {
     if (fadeInterval.current !== null) {
       window.clearInterval(fadeInterval.current);
@@ -51,6 +52,7 @@ const InteractionHandler = ({
     }, stepTime);
   }, []);
 
+  // Cleanup on unmount
   useEffect(() => {
     return () => {
       if (fadeInterval.current !== null) {
@@ -59,6 +61,7 @@ const InteractionHandler = ({
     };
   }, []);
 
+  // Optimized playback function with Promise.allSettled for better error handling
   const startPlayback = useCallback(async () => {
     if (isPlaying) return;
 

@@ -8,6 +8,26 @@ export const useVideoTransition = () => {
   const transitionPoint = useRef<number>(0);
   const isTransitioning = useRef(false);
   
+  const attemptVideoPlay = useCallback(async (video: HTMLVideoElement, targetVideoNum: number) => {
+    try {
+      await video.play();
+      setActiveVideo(targetVideoNum);
+      isTransitioning.current = false;
+    } catch (error) {
+      // Retry once with a short delay
+      setTimeout(async () => {
+        try {
+          await video.play();
+          setActiveVideo(targetVideoNum);
+        } catch (secondError) {
+          console.error("Failed to play video after retry:", secondError);
+        } finally {
+          isTransitioning.current = false;
+        }
+      }, 200);
+    }
+  }, []);
+  
   const handleTimeUpdate = useCallback(() => {
     const video1 = video1Ref.current;
     const video2 = video2Ref.current;
@@ -23,50 +43,21 @@ export const useVideoTransition = () => {
     if (activeVideo === 1 && video1.currentTime >= transitionPoint.current) {
       isTransitioning.current = true;
       video2.currentTime = 0;
-      
-      video2.play()
-        .then(() => {
-          setActiveVideo(2);
-          isTransitioning.current = false;
-        })
-        .catch(() => {
-          setTimeout(() => {
-            video2.play()
-              .then(() => {
-                setActiveVideo(2);
-                isTransitioning.current = false;
-              })
-              .catch(() => isTransitioning.current = false);
-          }, 200);
-        });
+      attemptVideoPlay(video2, 2);
     } 
     // Video2 -> Video1 transition
     else if (activeVideo === 2 && video2.currentTime >= transitionPoint.current) {
       isTransitioning.current = true;
       video1.currentTime = 0;
-      
-      video1.play()
-        .then(() => {
-          setActiveVideo(1);
-          isTransitioning.current = false;
-        })
-        .catch(() => {
-          setTimeout(() => {
-            video1.play()
-              .then(() => {
-                setActiveVideo(1);
-                isTransitioning.current = false;
-              })
-              .catch(() => isTransitioning.current = false);
-          }, 200);
-        });
+      attemptVideoPlay(video1, 1);
     }
-  }, [activeVideo]);
+  }, [activeVideo, attemptVideoPlay]);
 
   // Cleanup
   useEffect(() => {
     return () => {
-      [video1Ref.current, video2Ref.current].forEach(video => {
+      const videos = [video1Ref.current, video2Ref.current].filter(Boolean);
+      videos.forEach(video => {
         if (video) {
           video.pause();
           video.src = '';

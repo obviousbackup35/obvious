@@ -25,6 +25,16 @@ export const VideoPlayer = memo(forwardRef<HTMLVideoElement, VideoPlayerProps>(
       }
     }, [ref, src]);
 
+    // Optimize style calculation
+    const videoStyle = {
+      opacity: isPlaying && isActive ? 1 : 0,
+      transition: 'opacity 1s ease-in-out',
+      willChange: isPlaying && isActive ? 'opacity' : 'auto',
+      objectFit: isMobile ? 'contain' : 'cover',
+      transform: isMobile ? 'translate3d(0,0,0) scale(1.15)' : 'translate3d(0,0,0)',
+      ...style
+    } as CSSProperties;
+
     return (
       <video
         ref={ref}
@@ -33,14 +43,7 @@ export const VideoPlayer = memo(forwardRef<HTMLVideoElement, VideoPlayerProps>(
         playsInline
         preload="auto"
         className="absolute inset-0 w-full h-full object-cover"
-        style={{
-          opacity: isPlaying && isActive ? 1 : 0,
-          transition: 'opacity 1s ease-in-out',
-          willChange: isPlaying && isActive ? 'opacity' : 'auto',
-          objectFit: isMobile ? 'contain' : 'cover',
-          transform: isMobile ? 'translate3d(0,0,0) scale(1.15)' : 'translate3d(0,0,0)',
-          ...style
-        }}
+        style={videoStyle}
       />
     );
   }

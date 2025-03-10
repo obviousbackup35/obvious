@@ -23,6 +23,9 @@ const ActionButtons = memo(({
   getTextColor,
   isMobileMenuOpen
 }: ActionButtonsProps) => {
+  // Audio icon size reduced by 5% from 40.61px
+  const audioIconSize = "38.58px";
+  
   return (
     <>
       {isMobile && (
@@ -59,8 +62,8 @@ const ActionButtons = memo(({
         className="absolute right-[2.15rem] top-[calc(50%+80px)] transform -translate-y-1/2 p-2 transition-all duration-700"
       >
         {!isPlaying ? 
-          <VolumeX className="w-[40.61px] h-[40.61px]" style={{ color: getTextColor(), transition: 'color 0.7s ease-in-out' }} aria-hidden="true" /> : 
-          <Volume2 className="w-[40.61px] h-[40.61px]" style={{ color: getTextColor(), transition: 'color 0.7s ease-in-out' }} aria-hidden="true" />
+          <VolumeX className={`w-[${audioIconSize}] h-[${audioIconSize}]`} style={{ color: getTextColor(), transition: 'color 0.7s ease-in-out' }} aria-hidden="true" /> : 
+          <Volume2 className={`w-[${audioIconSize}] h-[${audioIconSize}]`} style={{ color: getTextColor(), transition: 'color 0.7s ease-in-out' }} aria-hidden="true" />
         }
         <span className="sr-only">{!isPlaying ? 'Play' : 'Pause'}</span>
       </NavigationButton>
