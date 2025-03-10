@@ -101,7 +101,7 @@ export const Navigation = memo(({
               className="cursor-pointer hover:opacity-70 transition-colors duration-300 rounded-full p-2"
               style={{ color: getTextColor() }}
             >
-              <UserRound size={32} /> {/* Increased size from 24 to 32 */}
+              <UserRound size={30} /> {/* Reduced size from 32 to 30 (approx 5% smaller) */}
             </NavigationButton>
           </div>
 
