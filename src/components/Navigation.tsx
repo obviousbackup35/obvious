@@ -79,9 +79,6 @@ export const Navigation = memo(({
     return '#c8c5ad';
   };
 
-  // Only show the login icon when not on the main video view
-  const showAuthIcon = currentView !== 'video';
-
   return (
     <div 
       className="absolute top-8 w-full z-50 transition-opacity duration-1000" 
@@ -98,17 +95,15 @@ export const Navigation = memo(({
           className="flex justify-center items-center font-montserrat text-[1.38rem] relative transition-colors duration-700" 
           style={{ color: getTextColor() }}
         >
-          {showAuthIcon && (
-            <div className="absolute right-8 top-1/2 -translate-y-1/2">
-              <NavigationButton
-                onClick={user ? handleProfileClick : handleAuthClick}
-                className="cursor-pointer hover:opacity-70 transition-colors duration-300 rounded-full p-2"
-                style={{ color: getTextColor() }}
-              >
-                <User size={24} />
-              </NavigationButton>
-            </div>
-          )}
+          <div className="absolute right-8 top-1/2 -translate-y-1/2">
+            <NavigationButton
+              onClick={user ? handleProfileClick : handleAuthClick}
+              className="cursor-pointer hover:opacity-70 transition-colors duration-300 rounded-full p-2"
+              style={{ color: getTextColor() }}
+            >
+              <User size={24} />
+            </NavigationButton>
+          </div>
 
           <ActionButtons 
             handleHomeClick={handleHomeClick}
